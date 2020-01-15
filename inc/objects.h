@@ -91,7 +91,7 @@ struct enemy3_t { // This enemy has a shield
 // Functions to initialize objects
 void initSpaceship(struct spaceship_t *spaceship);
 void initSpaceshipBullet(struct spaceshipBullet_t *bullet);
-void initEnemyBullet(struct spaceshipBullet_t *bullet);
+void initEnemyBullet(struct enemyBullet_t *bullet);
 void initEnemy1(struct enemy1_t *enemy);
 void initEnemy2(struct enemy2_t *enemy);
 void initEnemy3(struct enemy3_t *enemy);
