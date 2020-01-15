@@ -40,7 +40,6 @@ void initEnemyBullet(struct enemyBullet_t *bullet){
     bullet->posY = 1 << FIX14_SHIFT;
     bullet->timeAtPosition = 0 << FIX14_SHIFT;
     bullet->drawBullet = 0 << FIX14_SHIFT;
-    bullet->shoot = 0 << FIX14_SHIFT;
 }
 
 /*
