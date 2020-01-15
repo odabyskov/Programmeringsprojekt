@@ -32,6 +32,17 @@ void initSpaceshipBullet(struct spaceshipBullet_t *bullet){
 }
 
 /*
+This function initializes an enemy bullet
+*/
+void initEnemyBullet(struct enemyBullet_t *bullet){
+
+    bullet->posX = 1 << FIX14_SHIFT; // Random values - they will be set to the top of the enemy once the bullet is fired
+    bullet->posY = 1 << FIX14_SHIFT;
+    bullet->timeAtPosition = 0 << FIX14_SHIFT;
+    bullet->drawBullet = 0 << FIX14_SHIFT;
+}
+
+/*
 The following functions initialize the three types of enemies
 */
 void initEnemy1(struct enemy1_t *enemy){
