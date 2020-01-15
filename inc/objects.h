@@ -29,7 +29,9 @@ struct enemy_t {
 This struct represents the player's spaceship. posX and posY are the center coordinates of the spaceship
 */
 struct spaceship_t {
-    uint8_t posX;
+    uint8_t prevPosX; // previous position
+    uint8_t prevPosY;
+    uint8_t posX; // current position
     uint8_t posY;
 };
 
@@ -39,7 +41,9 @@ If drawBullet is 0, the bullet is not drawn. If drawBullet is equal to
 or greater than 1, the bullet is drawn.
 */
 struct spaceshipBullet_t {
-    uint8_t posX;
+    uint8_t prevPosX; // previous position
+    uint8_t prevPosY;
+    uint8_t posX; // current position
     uint8_t posY;
     uint8_t timeAtPosition;
     uint8_t drawBullet;
