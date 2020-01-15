@@ -5,7 +5,6 @@
 #define _ANSI_H_
 
 #include "calc.h"
-#include "ansi.h"
 #include "timing.h"
 #include "objects.h"
 
