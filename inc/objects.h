@@ -7,7 +7,6 @@
 #include "ansi.h"
 #include "timing.h"
 #include "calc.h"
-#include "objects.h"
 
 /*
 *
@@ -16,23 +15,15 @@
 *
 */
 
-/*
-This struct represents an enemy. posX and posY are the center coordinates of the enemy
-*/
-struct enemy_t {
-    uint8_t posX;
-    uint8_t posY;
-    uint8_t timeAtPosition;
-};
 
 /*
 This struct represents the player's spaceship. posX and posY are the center coordinates of the spaceship
 */
 struct spaceship_t {
-    uint8_t prevPosX; // previous position
-    uint8_t prevPosY;
-    uint8_t posX; // current position
-    uint8_t posY;
+    uint32_t prevPosX; // previous position
+    uint32_t prevPosY;
+    uint32_t posX; // current position
+    uint32_t posY;
 };
 
 /*
@@ -41,19 +32,53 @@ If drawBullet is 0, the bullet is not drawn. If drawBullet is equal to
 or greater than 1, the bullet is drawn.
 */
 struct spaceshipBullet_t {
-    uint8_t prevPosX; // previous position
-    uint8_t prevPosY;
-    uint8_t posX; // current position
-    uint8_t posY;
-    uint8_t timeAtPosition;
-    uint8_t drawBullet;
+    uint32_t prevPosX; // previous position
+    uint32_t prevPosY;
+    uint32_t posX; // current position
+    uint32_t posY;
+    uint32_t timeAtPosition;
+    uint32_t drawBullet;
+};
+
+/*
+The following structs represent the enemies.
+posX and posY are the center coordinates of the enemy.
+*/
+
+struct enemy1_t {
+    uint32_t prevPosX; // previous position
+    uint32_t prevPosY;
+    uint32_t posX; // current position
+    uint32_t posY;
+    uint32_t timeAtPosition;
+    uint32_t drawEnemy1;
+};
+
+struct enemy2_t {
+    uint32_t prevPosX; // previous position
+    uint32_t prevPosY;
+    uint32_t posX; // current position
+    uint32_t posY;
+    uint32_t timeAtPosition;
+    uint32_t drawEnemy2;
+};
+
+struct enemy3_t {
+    uint32_t prevPosX; // previous position
+    uint32_t prevPosY;
+    uint32_t posX; // current position
+    uint32_t posY;
+    uint32_t timeAtPosition;
+    uint32_t drawEnemy3;
 };
 
 
+
 // Functions to initialize objects
-void initEnemy(struct enemy_t *enemy);
 void initSpaceship(struct spaceship_t *spaceship);
 void initSpaceshipBullet(struct spaceshipBullet_t *bullet);
-
+void initEnemy1(struct enemy1_t *enemy);
+void initEnemy2(struct enemy2_t *enemy);
+void initEnemy3(struct enemy3_t *enemy);
 
 #endif
