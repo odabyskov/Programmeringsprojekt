@@ -1065,6 +1065,7 @@ void drawEnemy1(struct enemy1_t *enemy){
     uint32_t curX = convertTo3200((*enemy).posX);
     uint32_t curY = convertTo3200((*enemy).posY);
 
+    fgcolor(9);
     gotoxy(curX, curY);
     printf("%c",219);
     gotoxy(curX-1, curY);
@@ -1073,6 +1074,7 @@ void drawEnemy1(struct enemy1_t *enemy){
     printf("%c",219);
     gotoxy(curX, curY+1);
     printf("%c",219);
+    fgcolor(15);
 }
 
 /*
