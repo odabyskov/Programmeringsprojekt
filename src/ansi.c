@@ -417,7 +417,7 @@ void mainmenu(){
 * This function draws the title
 */
 void drawTitle(uint8_t type){
-    color(15, 0);
+    fgcolor(15);
     if (type == 1){
         gotoxy(28,4);
         printf(" %c%c%c %c%c%c   %c%c   %c%c  %c%c%c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219);
@@ -471,10 +471,10 @@ void drawTitle(uint8_t type){
 * This function updates start game box when selected
 */
 void drawmenuStart(){
-    drawbox(30,22,50,26);
+    drawBox(30,22,50,26);
 
     fgcolor(2);
-    drawbox(30,17,50,21);
+    drawBox(30,17,50,21);
     fgcolor(15);
 }
     
@@ -482,11 +482,11 @@ void drawmenuStart(){
 * This function updates help box when selected
 */
 void drawmenuHelp(){
-        drawbox(30,17,50,21);
-        drawbox(30,27,50,31);
+        drawBox(30,17,50,21);
+        drawBox(30,27,50,31);
 
         fgcolor(2);
-        drawbox(30,22,50,26);
+        drawBox(30,22,50,26);
         fgcolor(15);
 }
     
@@ -494,11 +494,11 @@ void drawmenuHelp(){
 * This function updates credit box when selected
 */ 
 void drawmenuCredits(){
-    drawbox(30,22,50,26);
-    drawbox(30,32,50,36);
+    drawBox(30,22,50,26);
+    drawBox(30,32,50,36);
 
     fgcolor(2);
-    drawbox(30,27,50,31);
+    drawBox(30,27,50,31);
     fgcolor(15);
 }
     
@@ -506,10 +506,10 @@ void drawmenuCredits(){
 * Thus function updates quit box when selected
 */ 
 void drawmenuQuit(){
-    drawbox(30,27,50,31);
+    drawBox(30,27,50,31);
 
     fgcolor(2);
-    drawbox(30,32,50,36);
+    drawBox(30,32,50,36);
     fgcolor(15);
 }
     
@@ -535,7 +535,7 @@ void getHelp(){
     printf("noget");
 
     fgcolor(2);
-    drawbox(30,34,50,38);
+    drawBox(30,34,50,38);
     fgcolor(15);
     gotoxy(36,36);
     printf("Back");
@@ -573,7 +573,7 @@ void getCredits(){
     //resetbgcolor();
 
     fgcolor(2);
-    drawbox(30,34,50,38);
+    drawBox(30,34,50,38);
     gotoxy(34,36);
     fgcolor(15);
     printf("Back");
@@ -595,20 +595,20 @@ void getDifficulty(){
     // Initialize the menu (Normal is chosen as default)
     drawTitle(2);
 
-    drawbox(30,17,50,21);
+    drawBox(30,17,50,21);
     gotoxy(38,19);
     printf("Easy");
 
     fgcolor(2);
-    drawbox(30,22,50,26);
+    drawBox(30,22,50,26);
     gotoxy(37,24);
     fgcolor(15);
     printf("Normal");
 
-    drawbox(30,27,50,31);
+    drawBox(30,27,50,31);
     gotoxy(38,29);
     printf("Hard");
-    drawbox(30,32,50,36);
+    drawBox(30,32,50,36);
     gotoxy(35,34);
     printf("Main Menu");
 
@@ -722,10 +722,10 @@ void getDifficulty(){
 * This function draws the Easy difficulty box
 */
 void drawmenuEasy(){
-    drawbox(30,22,50,26);
+    drawBox(30,22,50,26);
 
     fgcolor(2);
-    drawbox(30,17,50,21);
+    drawBox(30,17,50,21);
     fgcolor(15);
 }
 
@@ -733,11 +733,11 @@ void drawmenuEasy(){
 * This function draws the Normal difficulty box
 */
 void drawmenuNormal(){
-    drawbox(30,17,50,21);
-    drawbox(30,27,50,31);
+    drawBox(30,17,50,21);
+    drawBox(30,27,50,31);
 
     fgcolor(2);
-    drawbox(30,22,50,26);
+    drawBox(30,22,50,26);
     fgcolor(15);
 }
 
@@ -745,11 +745,11 @@ void drawmenuNormal(){
 * This function draws the Hard difficulty box
 */
 void drawmenuHard(){
-    drawbox(30,22,50,26);
-    drawbox(30,32,50,36);
+    drawBox(30,22,50,26);
+    drawBox(30,32,50,36);
 
     fgcolor(2);
-    drawbox(30,27,50,31);
+    drawBox(30,27,50,31);
     fgcolor(15);
 }
 
@@ -757,10 +757,10 @@ void drawmenuHard(){
 * This function draws the main menu menubar
 */
 void drawmenuMainMenu(){
-    drawbox(30,27,50,31);
+    drawBox(30,27,50,31);
 
     fgcolor(2);
-    drawbox(30,32,50,36);
+    drawBox(30,32,50,36);
     fgcolor(15);
 }
 
