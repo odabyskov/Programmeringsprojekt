@@ -20,6 +20,7 @@ int32_t convertTo3200(int32_t i);
 // Functions to update the position of objects
 void updateSpaceshipPosition(struct spaceship_t *spaceship, char input);
 void updateSpaceshipBulletPosition(struct spaceshipBullet_t *bullet, struct spaceship_t *ship, char input);
+void updateEnemyBulletPosition(struct enemyBullet_t *bullet, struct enemy1_t *enemy);
 void updateEnemy1Position(struct enemy1_t *enemy);
 void updateEnemy2Position(struct enemy2_t *enemy);
 void updateEnemy3Position(struct enemy3_t *enemy);
