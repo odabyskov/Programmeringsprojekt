@@ -113,6 +113,33 @@ void updateSpaceshipBulletPosition(struct spaceshipBullet_t *bullet, struct spac
 }
 
 /*
+This function updates the bullet's position.
+The bullet moves vertically downwards from where it was fired.
+*/
+void updateEnemyBulletPosition(struct enemyBullet_t *bullet, struct enemy1_t *enemy){
+
+    if ((*enemy).shoot == 1 << FIX14_SHIFT && (*bullet).drawBullet == 0 << FIX14_SHIFT){
+
+        bullet->posX = (*enemy).posX; // the x-position is set to the middle of the spaceship
+        bullet->posY = (*enemy).posY + (2 << FIX14_SHIFT); // the y-position is set to the top of the spaceship
+
+        bullet->drawBullet = convertTo1814(1);
+
+    } else if ((*bullet).drawBullet >= (1 << FIX14_SHIFT)){
+
+        // We set the current positions to previous position
+        bullet->prevPosX=(*bullet).posX;
+        bullet->prevPosY=(*bullet).posY;
+
+        // We update the current position
+        bullet->posX = (*bullet).posX; // the x-position is set to the middle of the spaceship
+        bullet->posY = (*bullet).posY + convertTo1814(1); // the y-position is set to the position above the previous position
+
+    }
+
+}
+
+/*
 This function updates the position of enemy1
 */
 void updateEnemy1Position(struct enemy1_t *enemy){
