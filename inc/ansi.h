@@ -11,6 +11,7 @@
 // General ansi-functions
 void fgcolor(uint8_t foreground);
 void bgcolor(uint8_t background);
+void resetbgcolor();
 void clrscr();
 void clreol();
 void gotoxy(uint8_t x, uint8_t y);
@@ -22,6 +23,9 @@ void drawWindow(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, char* string_p, 
 void drawEnemy(struct enemy_t *enemy);
 void drawSpaceship(struct spaceship_t *spaceship);
 void drawSpaceshipBullet(struct spaceshipBullet_t *bullet);
+void drawEnemy1(struct enemy1_t *enemy);
+void drawEnemy2(struct enemy2_t *enemy);
+void drawEnemy3(struct enemy3_t *enemy);
 
 void mainmenu(); // enter the main menu
 void drawTitle(uint8_t type); // draw title
