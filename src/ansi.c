@@ -844,5 +844,43 @@ void drawSpaceshipBullet(struct spaceshipBullet_t *bullet){
     }
 }
 
+void drawEnemy1(struct enemy1_t *enemy){
+
+    gotoxy(enemy->posX1, enemy->posY1);
+    printf("%c",219);
+    gotoxy((*enemy).posX1+1, (*enemy).posY1);
+    printf("%c",219);
+    gotoxy((*enemy).posX1+2, (*enemy).posY1);
+    printf("%c",219);
+    gotoxy((*enemy).posX1+1, (*enemy).posY1+1);
+    printf("%c",219);
+}
+
+void drawEnemy2(struct enemy2_t *enemy){
+
+    gotoxy((*enemy).posX2, (*enemy).posY2);
+    printf("%c",219);
+    gotoxy((*enemy).posX2+1, (*enemy).posY2);
+    printf("%c",219);
+    gotoxy((*enemy).posX2+2, (*enemy).posY2);
+    printf("%c",219);
+    gotoxy((*enemy).posX2+1, (*enemy).posY2+1);
+    printf("%c",219);
+    gotoxy((*enemy).posX2+1, (*enemy).posY2-1);
+    printf("%c",219);
+}
+
+void drawEnemy3(struct enemy3_t *enemy){
+
+    gotoxy((*enemy).posX3, (*enemy).posY3);
+    printf("%c",219);
+    gotoxy((*enemy).posX3+1, (*enemy).posY3);
+    printf("%c",219);
+    gotoxy((*enemy).posX3+2, (*enemy).posY3);
+    printf("%c",219);
+    gotoxy((*enemy).posX3+1, (*enemy).posY3-1);
+    printf("%c",219);
+}
+
 
 
