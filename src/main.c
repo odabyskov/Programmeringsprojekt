@@ -27,7 +27,7 @@ clrscr();
 setTimer();
 initCounter(&counter);
 
-struct enemy_t ball; // We make it global to be able to use timing
+//struct enemy_t ball; // We make it global to be able to use timing
 struct spaceship_t ship; // We initialize the spaceship as a global variable
 struct spaceshipBullet_t bullet; // We initialize the spaceship bullet as a global variable
 
@@ -37,7 +37,8 @@ drawSpaceship(&ship);
 initSpaceshipBullet(&bullet);
 
 char temp;
-
+int time;
+    
 while(1){
 
     //mainmenu();
