@@ -764,6 +764,90 @@ void drawmenuMainMenu(){
 }
 
 
+
+
+
+/*
+*
+*
+gameWindow and the two stat-windows is made by using the drawWindowfunction
+*
+*/
+void drawGameWindow(){
+
+//gameWindow is made
+drawWindow(2, 1, 68, 39,"GAME",1);
+
+//Heads-up display is made
+drawWindow(69, 1, 79, 22,"HUD",1);
+
+    //printing life
+    gotoxy(72,3);
+    printf("LIFE:");
+
+    //green
+    fgcolor(2);
+    gotoxy(72,4);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+
+    //yellow
+    fgcolor(11);
+    gotoxy(72,5);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+
+    //red
+    fgcolor(1);
+    gotoxy(72,6);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+    fgcolor(15);
+
+
+    //printing shield
+    gotoxy(71,8);
+    printf("SHIELD:");
+    gotoxy(72,9);
+    printf("%c%c%c%c", 218, 196, 196, 191);
+
+
+//Stats display is made
+drawWindow(69, 23, 79, 39,"STATS",1);
+
+
+    //printing enemy2
+    gotoxy(73, 25);
+    printf("%c",219);
+    gotoxy(74, 25);
+    printf("%c",219);
+    gotoxy(75, 25);
+    printf("%c",219);
+    gotoxy(74, 26);
+    printf("%c",219);
+    gotoxy(74, 24);
+    printf("%c",219);
+
+    //printing enemy1
+    gotoxy(73,29);
+    printf("%c",219);
+    gotoxy(74,29);
+    printf("%c",219);
+    gotoxy(75,29);
+    printf("%c",219);
+    gotoxy(74,30);
+    printf("%c",219);
+
+    //printing enemy3
+    gotoxy(73, 33);
+    printf("%c",219);
+    gotoxy(74, 33);
+    printf("%c",219);
+    gotoxy(75, 33);
+    printf("%c",219);
+    gotoxy(74, 32);
+    printf("%c",219);
+}
+
+
+
 /*
 *
 *
@@ -844,7 +928,6 @@ void drawSpaceshipBullet(struct spaceshipBullet_t *bullet){
 
         gotoxy(curX,curY);
         //printf("%c", 004); // draws a bullet shaped like a diamond
-	if ((*bullet).posY > 2)
         printf("o"); // draws a bullet shaped like a diamond
     }
 }
