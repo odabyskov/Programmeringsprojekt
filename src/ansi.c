@@ -840,7 +840,8 @@ void drawSpaceshipBullet(struct spaceshipBullet_t *bullet){
 
         gotoxy((*bullet).posX,(*bullet).posY);
         //printf("%c", 004); // draws a bullet shaped like a diamond
-        printf("o"); // draws a bullet shaped like a diamond
+        if ((*bullet).posY > 2)
+	printf("o"); // draws a bullet shaped like a diamond
     }
 }
 
