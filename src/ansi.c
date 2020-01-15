@@ -290,18 +290,18 @@ void mainmenu(){
     drawTitle(1);
 
     fgcolor(2);
-    drawbox(30,17,50,21);
+    drawBox(30,17,50,21);
     gotoxy(35,19);
     fgcolor(15);
     printf("Start Game");
 
-    drawbox(30,22,50,26);
+    drawBox(30,22,50,26);
     gotoxy(38,24);
     printf("help");
-    drawbox(30,27,50,31);
+    drawBox(30,27,50,31);
     gotoxy(36,29);
     printf("credits");
-    drawbox(30,32,50,36);
+    drawBox(30,32,50,36);
     gotoxy(38,34);
     printf("Quit");
 
