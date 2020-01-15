@@ -844,6 +844,10 @@ void drawSpaceshipBullet(struct spaceshipBullet_t *bullet){
     }
 }
 
+
+/*
+This function draws the the first enemy
+*/
 void drawEnemy1(struct enemy1_t *enemy){
 
     gotoxy(enemy->posX1, enemy->posY1);
@@ -855,6 +859,10 @@ void drawEnemy1(struct enemy1_t *enemy){
     gotoxy((*enemy).posX1+1, (*enemy).posY1+1);
     printf("%c",219);
 }
+
+/*
+This function draws the the second enemy
+*/
 
 void drawEnemy2(struct enemy2_t *enemy){
 
@@ -869,6 +877,10 @@ void drawEnemy2(struct enemy2_t *enemy){
     gotoxy((*enemy).posX2+1, (*enemy).posY2-1);
     printf("%c",219);
 }
+
+/*
+This function draws the the third enemy
+*/
 
 void drawEnemy3(struct enemy3_t *enemy){
 
