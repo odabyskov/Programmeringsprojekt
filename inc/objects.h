@@ -45,7 +45,7 @@ The following structs represent the enemies.
 posX and posY are the center coordinates of the enemy.
 */
 
-struct enemy1_t {
+struct enemy1_t { // This enemy shoots bullets
     uint32_t prevPosX; // previous position
     uint32_t prevPosY;
     uint32_t posX; // current position
@@ -54,7 +54,7 @@ struct enemy1_t {
     uint32_t drawEnemy1;
 };
 
-struct enemy2_t {
+struct enemy2_t { // This enemy can't shoot bullets nor does it have a shield
     uint32_t prevPosX; // previous position
     uint32_t prevPosY;
     uint32_t posX; // current position
@@ -63,7 +63,7 @@ struct enemy2_t {
     uint32_t drawEnemy2;
 };
 
-struct enemy3_t {
+struct enemy3_t { // This enemy has a shield
     uint32_t prevPosX; // previous position
     uint32_t prevPosY;
     uint32_t posX; // current position
@@ -77,6 +77,7 @@ struct enemy3_t {
 // Functions to initialize objects
 void initSpaceship(struct spaceship_t *spaceship);
 void initSpaceshipBullet(struct spaceshipBullet_t *bullet);
+void initEnemyBullet(struct spaceshipBullet_t *bullet);
 void initEnemy1(struct enemy1_t *enemy);
 void initEnemy2(struct enemy2_t *enemy);
 void initEnemy3(struct enemy3_t *enemy);
