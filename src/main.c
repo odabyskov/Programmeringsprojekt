@@ -11,6 +11,17 @@ int main(void)
 //uart_init( 9600 );
     uart_init(115200);
 
+/*
+mainmenu
+* /
+clrscr();
+gotoxy(1,1);
+printf("w/s to choose between menubars.\n");
+printf("spacebar to select the highlighted menubar.");
+mainmenu();
+clrscr();
+*/
+    
 clrscr();
 
 setTimer();
