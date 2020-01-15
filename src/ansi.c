@@ -1016,13 +1016,13 @@ void drawEnemy3(struct enemy3_t *enemy){
     uint32_t curX = convertTo3200((*enemy).posX);
     uint32_t curY = convertTo3200((*enemy).posY);
 
+    gotoxy(curX, curY+1);
+    printf("%c",219);
+    gotoxy(curX-1, curY+1);
+    printf("%c",219);
+    gotoxy(curX+1, curY+1);
+    printf("%c",219);
     gotoxy(curX, curY);
-    printf("%c",219);
-    gotoxy(curX-1, curY);
-    printf("%c",219);
-    gotoxy(curX+1, curY);
-    printf("%c",219);
-    gotoxy(curX, curY-1);
     printf("%c",219);
 }
 
