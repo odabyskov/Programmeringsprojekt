@@ -974,10 +974,7 @@ void drawEnemy2(struct enemy2_t *enemy){
     printf("%c",219);
     gotoxy(curX+1, curY);
     printf("%c",219);
-    gotoxy(curX, curY+1);
-    printf("%c",219);
-    gotoxy(curX, curY-1);
-    printf("%c",219);
+
 }
 
 
