@@ -967,13 +967,15 @@ This function draws enemy1
 */
 void drawEnemy1(struct enemy1_t *enemy){
 
-    // We convert the bullet's last position to 32.0 fixed point
+    // We convert last position to 32.0 fixed point
     uint32_t prevX = convertTo3200((*enemy).prevPosX);
     uint32_t prevY = convertTo3200((*enemy).prevPosY);
 
-    // We delete the bullet at its last position
+    // We delete the enemy at its last position
     deleteSymbol(prevX, prevY);
-
+    deleteSymbol(prevX-1, prevY);
+    deleteSymbol(prevX+1, prevY);
+    deleteSymbol(prevX, prevY+1);
     // We convert the bullet's position to 32.0 fixed point
     uint32_t curX = convertTo3200((*enemy).posX);
     uint32_t curY = convertTo3200((*enemy).posY);
@@ -993,6 +995,14 @@ This function draws enemy2
 */
 void drawEnemy2(struct enemy2_t *enemy){
 
+    // We convert last position to 32.0 fixed point
+    uint32_t prevX = convertTo3200((*enemy).prevPosX);
+    uint32_t prevY = convertTo3200((*enemy).prevPosY);
+
+    deleteSymbol(prevX, prevY);
+    deleteSymbol(prevX-1, prevY);
+    deleteSymbol(prevX+1, prevY);
+
     // We convert the bullet's position to 32.0 fixed point
     uint32_t curX = convertTo3200((*enemy).posX);
     uint32_t curY = convertTo3200((*enemy).posY);
@@ -1003,9 +1013,8 @@ void drawEnemy2(struct enemy2_t *enemy){
     printf("%c",219);
     gotoxy(curX+1, curY);
     printf("%c",219);
-
 }
-
+/*
 This function draws enemy3
 */
 void drawEnemy3(struct enemy3_t *enemy){
