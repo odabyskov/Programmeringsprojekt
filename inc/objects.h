@@ -66,6 +66,7 @@ struct enemy1_t { // This enemy shoots bullets
     uint32_t posY;
     uint32_t timeAtPosition;
     uint32_t drawEnemy1;
+    uint32_t shoot;
 };
 
 struct enemy2_t { // This enemy can't shoot bullets nor does it have a shield
