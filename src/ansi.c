@@ -513,25 +513,112 @@ void drawmenuQuit(){
 }
 
 /*
-* Thus function makes you enter the help menu
+* This function makes you enter the help menu
 */
 void getHelp(){
     clrscr();
     uart_clear();
     uint8_t input = 0;
 
-    drawWindow(22, 8, 57, 32, " HELP ME! ", 1);
+    
+//making the help window from our drawWindow function
+drawWindow(9, 3, 74, 38, " HELP! ", 1);
 
-    gotoxy(28,12);
-    printf("Hvis du ikke kan finde");
-    gotoxy(28,13);
-    printf("ud af vores spil,");
-    gotoxy(28,16);
-    printf("så kan vi godt forstå det.");
-    gotoxy(28,20);
-    printf("Det er nemlig ikke færdigt endnu.");
-    gotoxy(28,24);
-    printf("noget");
+//the meaning of the game
+gotoxy(15,5);
+printf("The object of this game is to shoot down the enemy");
+gotoxy(15,6);
+printf("battleships before they reaches your planet.");
+
+gotoxy(15,8);
+printf("If you get shot or miss an enemy, you will loose");
+gotoxy(15,9);
+printf("one of our lives.");
+
+
+//how to move your ship
+gotoxy(15,12);
+printf("How to move your ship:");
+
+//Drawing our ship
+gotoxy(40,16);
+printf("%c",167);
+gotoxy(38,17);
+printf("%c%c%c%c%c",173,205,186,205,173);
+
+//how to go left
+gotoxy(15,17);
+printf("left press A <-");
+
+//how to go  right
+gotoxy(50,17);
+printf(" -> right press D");
+
+//how to shoot
+gotoxy(40,14);
+printf("%c",167);
+gotoxy(50,14);
+printf("to shoot press Space");
+
+//what kind of enemies do we have:
+gotoxy(15,21);
+printf("Your enemies:");
+
+
+//enemy 1:
+gotoxy(33, 23);
+printf("*This enemy has a gun");
+
+gotoxy(19, 23);
+printf("%c",219);
+gotoxy(18, 23);
+printf("%c",219);
+gotoxy(20, 23);
+printf("%c",219);
+gotoxy(19, 24);
+printf("%c",219);
+
+//enemy 2:
+gotoxy(33, 28);
+printf("*This enemy has a shield");
+
+gotoxy(19, 28);
+printf("%c",219);
+gotoxy(18, 28);
+printf("%c",219);
+gotoxy(20, 28);
+printf("%c",219);
+gotoxy(19, 27);
+printf("%c",219);
+
+//enemy 3:
+gotoxy(33, 31);
+printf("*This enemy will fall");
+
+gotoxy(19, 31);
+printf("%c",219);
+gotoxy(18, 31);
+printf("%c",219);
+gotoxy(20, 31);
+printf("%c",219);
+
+
+//enemy 4:
+gotoxy(33, 35);
+printf("*This enemy has a gun and a shield");
+
+gotoxy(19, 35);
+printf("%c",219);
+gotoxy(18, 35);
+printf("%c",219);
+gotoxy(20, 35);
+printf("%c",219);
+gotoxy(19, 34);
+printf("%c",219);
+gotoxy(19, 36);
+printf("%c",219);
+
+}
 
     fgcolor(2);
     drawBox(30,34,50,38);
@@ -967,15 +1054,13 @@ This function draws enemy1
 */
 void drawEnemy1(struct enemy1_t *enemy){
 
-    // We convert last position to 32.0 fixed point
+    // We convert the bullet's last position to 32.0 fixed point
     uint32_t prevX = convertTo3200((*enemy).prevPosX);
     uint32_t prevY = convertTo3200((*enemy).prevPosY);
 
-    // We delete the enemy at its last position
+    // We delete the bullet at its last position
     deleteSymbol(prevX, prevY);
-    deleteSymbol(prevX-1, prevY);
-    deleteSymbol(prevX+1, prevY);
-    deleteSymbol(prevX, prevY+1);
+
     // We convert the bullet's position to 32.0 fixed point
     uint32_t curX = convertTo3200((*enemy).posX);
     uint32_t curY = convertTo3200((*enemy).posY);
@@ -995,14 +1080,6 @@ This function draws enemy2
 */
 void drawEnemy2(struct enemy2_t *enemy){
 
-    // We convert last position to 32.0 fixed point
-    uint32_t prevX = convertTo3200((*enemy).prevPosX);
-    uint32_t prevY = convertTo3200((*enemy).prevPosY);
-
-    deleteSymbol(prevX, prevY);
-    deleteSymbol(prevX-1, prevY);
-    deleteSymbol(prevX+1, prevY);
-
     // We convert the bullet's position to 32.0 fixed point
     uint32_t curX = convertTo3200((*enemy).posX);
     uint32_t curY = convertTo3200((*enemy).posY);
@@ -1013,38 +1090,26 @@ void drawEnemy2(struct enemy2_t *enemy){
     printf("%c",219);
     gotoxy(curX+1, curY);
     printf("%c",219);
+
 }
+
+
 /*
 This function draws enemy3
 */
 void drawEnemy3(struct enemy3_t *enemy){
 
-    uint32_t prevX = convertTo3200((*enemy).prevPosX);
-    uint32_t prevY = convertTo3200((*enemy).prevPosY);
-
-    deleteSymbol(prevX, prevY);
-    deleteSymbol(prevX-1, prevY);
-    deleteSymbol(prevX+1, prevY);
-    deleteSymbol(prevX, prevY-1);
-    deleteSymbol(prevX-1, prevY+1);
-    deleteSymbol(prevX, prevY+1);
-    deleteSymbol(prevX+1, prevY+1);
     // We convert the bullet's position to 32.0 fixed point
     uint32_t curX = convertTo3200((*enemy).posX);
     uint32_t curY = convertTo3200((*enemy).posY);
 
+    gotoxy(curX, curY+1);
+    printf("%c",219);
+    gotoxy(curX-1, curY+1);
+    printf("%c",219);
+    gotoxy(curX+1, curY+1);
+    printf("%c",219);
     gotoxy(curX, curY);
     printf("%c",219);
-    gotoxy(curX-1, curY);
-    printf("%c",219);
-    gotoxy(curX+1, curY);
-    printf("%c",219);
-    gotoxy(curX, curY-1);
-    printf("%c",219);
-
-    fgcolor(6);
-    gotoxy(curX-1, curY+1);
-    printf("%c%c%c",192,196,217);
-    fgcolor(15);
 }
 
