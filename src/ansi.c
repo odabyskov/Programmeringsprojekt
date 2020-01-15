@@ -267,6 +267,81 @@ void drawWindow(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, char* string_p, 
 
 }
 
+
+
+void drawGameWindow(){
+
+drawWindow(2, 1, 68, 39,"GAME",1);
+
+drawWindow(69, 1, 79, 22,"HUD",1);
+
+    //printer liv
+    gotoxy(72,3);
+    printf("LIFE:");
+
+    //rød
+    fgcolor(2);
+    gotoxy(72,4);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+
+    //grøn
+    fgcolor(11);
+    gotoxy(72,5);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+
+    //rød
+    fgcolor(1);
+    gotoxy(72,6);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+    fgcolor(15);
+
+
+    //printer liv
+    gotoxy(71,8);
+    printf("SHIELD:");
+    gotoxy(72,9);
+    printf("%c%c%c%c", 218, 196, 196, 191);
+
+
+drawWindow(69, 23, 79, 39,"STATS",1);
+
+
+    //printing enemy2
+    gotoxy(73, 25);
+    printf("%c",219);
+    gotoxy(74, 25);
+    printf("%c",219);
+    gotoxy(75, 25);
+    printf("%c",219);
+    gotoxy(74, 26);
+    printf("%c",219);
+    gotoxy(74, 24);
+    printf("%c",219);
+
+    //printing enemy1
+    gotoxy(73,29);
+    printf("%c",219);
+    gotoxy(74,29);
+    printf("%c",219);
+    gotoxy(75,29);
+    printf("%c",219);
+    gotoxy(74,30);
+    printf("%c",219);
+
+    //printing enemy3
+    gotoxy(73, 33);
+    printf("%c",219);
+    gotoxy(74, 33);
+    printf("%c",219);
+    gotoxy(75, 33);
+    printf("%c",219);
+    gotoxy(74, 32);
+    printf("%c",219);
+}
+
+
+
+
 /*
 *
 *
@@ -883,6 +958,7 @@ void drawEnemy2(struct enemy2_t *enemy){
 /*
 This function draws the the third enemy
 */
+
 
 
 void drawEnemy3(struct enemy3_t *enemy){
