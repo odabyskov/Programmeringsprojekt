@@ -220,7 +220,540 @@ void drawWindow(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, char* string_p, 
     }
 
 }
+/*
+This function draws a window, but without a title
+*/
+void drawbox(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2){
+    /*
+    Draw the corners
+    */
+    gotoxy(x1,y1);
+    printf("%c\n",201);
+    gotoxy(x2,y1);
+    printf("%c", 187);
+    gotoxy(x1,y2);
+    printf("%c", 200);
+    gotoxy(x2,y2);
+    printf("%c", 188);
+    
+    /*
+    Draw the sides
+    */
+    uint8_t i;
+    for (i=y1+1; i<y2; i++){
+        gotoxy(x1, i);
+        printf("%c", 186);
+        gotoxy(x2, i);
+        printf("%c", 186);
+    }
+    /*
+    Draw the top & bottom
+    */
+    for (i=x1+1; i<x2; i++){
+        gotoxy(i, y1);
+        printf("%c", 205);
+        gotoxy(i, y2);
+        printf("%c", 205);
+    }
+}
 
+/*
+Draw and enter the main menu
+*/
+void mainmenu(){
+clrscr();
+uart_clear();
+uint8_t menu = 1, input = 0;
+
+/*
+Initialize the menu (start game is chosen as default)
+*/
+drawTitle(1);
+
+fgcolor(2);
+drawbox(30,17,50,21);
+gotoxy(35,19);
+fgcolor(15);
+printf("Start Game");
+
+drawbox(30,22,50,26);
+gotoxy(38,24);
+printf("help");
+drawbox(30,27,50,31);
+gotoxy(36,29);
+printf("credits");
+drawbox(30,32,50,36);
+gotoxy(38,34);
+printf("Quit");
+
+while(input != 32){
+/*
+press s to choose the help menu, press enter to activate start game.
+*/
+while(input != 115 & input != 32 & menu == 1){
+    input = uart_get_char();
+    if (input == 115)
+        menu++;
+    if (input == 32)
+        break;
+    }
+
+if (menu == 2 & input != 32){
+drawmenuHelp();
+}
+
+/*
+Press w to choose start game, press s to choose credits, press enter to activate help
+*/
+while (input != 115 & input != 119 & input != 32 & menu == 2){
+    input = uart_get_char();
+    if (input == 115)
+        menu++;
+    if (input == 119)
+        menu--;
+    if (input == 32)
+        break;
+}
+
+switch (menu) {
+    case 1: {
+        if (input == 32)
+            break;
+        if (input =! 32){
+            input = 0;
+            uart_clear();
+            }
+        drawmenuStart();
+        break;
+    }
+
+    case 3: {
+        if (input == 32)
+            break;
+        drawmenuCredits();
+        input = 0;
+        uart_clear();
+        break;
+    }
+}
+
+/*
+Press w to go back to help, press s to go down to Quit game
+*/
+while (input != 115 & input != 119 & input != 32 & menu == 3){
+    input = uart_get_char();
+    if (input == 115)
+        menu++;
+    if (input == 119)
+        menu--;
+    if (input == 32)
+        break;
+}
+
+switch (menu) {
+    case 2: {
+        if (input == 32)
+            break;
+        drawmenuHelp();
+        input=0;
+        uart_clear();
+        break;
+    }
+    case 4: {
+        if (input == 32)
+            break;
+        drawmenuQuit();
+        input = 0;
+        uart_clear();
+        break;
+    }
+}
+
+/*
+Press w to go back to credits
+*/
+while (input != 119 & input != 32 & menu == 4){
+input = uart_get_char();
+    if (input == 119)
+        menu--;
+    if (input == 32)
+    break;
+}
+
+if (menu == 3 & input != 32){
+    drawmenuCredits();
+    if (input =! 32){
+    input = 0;
+    uart_clear();
+    }
+}
+
+/*
+end of while loop
+*/
+}
+
+/*
+If Enter is pressed leave the while loop & activate the chosen menu
+*/
+if (input == 32 & menu == 1){
+    getDifficulty();}
+else if (input == 32 & menu == 2){
+    getHelp();}
+else if (input == 32 & menu == 3){
+    getCredits();}
+else if (input == 32 & menu == 4){
+    clrscr();
+    exit(0);}
+
+}
+/*
+draw title
+*/
+void drawTitle(uint8_t type){
+color(15, 0);
+if (type == 1){
+    gotoxy(28,4);
+    printf(" %c%c%c %c%c%c   %c%c   %c%c  %c%c%c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+    gotoxy(28,5);
+    printf("%c    %c  %c %c  %c %c  %c %c   ",219,219,219,219,219,219,219,219);
+    gotoxy(28,6);
+    printf(" %c%c  %c%c%c  %c%c%c%c %c    %c%c%c ",219,219,219,219,219,219,219,219,219,219,219,219,219);
+    gotoxy(28,7);
+    printf("   %c %c    %c  %c %c  %c %c   ",219,219,219,219,219,219,219);
+    gotoxy(28,8);
+    printf("%c%c%c  %c    %c  %c  %c%c  %c%c%c%c",219,219,219,219,219,219,219,219,219,219,219,219);
+
+    gotoxy(23,10);
+    printf("%c   %c  %c%c  %c%c%c  %c%c%c  %c%c%c  %c%c  %c%c%c ",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+    gotoxy(23,11);
+    printf("%c   %c %c  %c %c  %c %c  %c  %c  %c  %c %c  %c",219,219,219,219,219,219,219,219,219,219,219,219,219);
+    gotoxy(23,12);
+    printf("%c %c %c %c%c%c%c %c%c%c  %c%c%c   %c  %c  %c %c%c%c ",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+    gotoxy(23,13);
+    printf("%c %c %c %c  %c %c  %c %c  %c  %c  %c  %c %c  %c",219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+    gotoxy(23,14);
+    printf(" %c %c  %c  %c %c  %c %c  %c %c%c%c  %c%c  %c  %c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);}
+if (type == 2){
+    gotoxy(26,4);
+    printf(" %c%c  %c  %c  %c%c   %c%c   %c%c%c %c%c%c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+    gotoxy(26,5);
+    printf("%c  %c %c  %c %c  %c %c  %c %c    %c   ",219,219,219,219,219,219,219,219,219,219);
+    gotoxy(26,6);
+    printf("%c    %c%c%c%c %c  %c %c  %c  %c%c  %c%c%c ",219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+    gotoxy(26,7);
+    printf("%c  %c %c  %c %c  %c %c  %c    %c %c   ",219,219,219,219,219,219,219,219,219,219);
+    gotoxy(26,8);
+    printf(" %c%c  %c  %c  %c%c   %c%c  %c%c%c  %c%c%c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+
+    gotoxy(16,10);
+    printf("%c%c%c  %c%c%c %c%c%c%c %c%c%c%c %c%c%c  %c%c  %c  %c %c   %c%c%c%c%c %c   %c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+    gotoxy(16,11);
+    printf("%c  %c  %c  %c    %c     %c  %c  %c %c  %c %c     %c    %c %c ",219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+    gotoxy(16,12);
+    printf("%c  %c  %c  %c%c%c  %c%c%c   %c  %c    %c  %c %c     %c     %c  ",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+    gotoxy(16,13);
+    printf("%c  %c  %c  %c    %c     %c  %c  %c %c  %c %c     %c     %c  ",219,219,219,219,219,219,219,219,219,219,219,219,219);
+    gotoxy(16,14);
+    printf("%c%c%c  %c%c%c %c    %c    %c%c%c  %c%c   %c%c  %c%c%c%c  %c     %c  ",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+}
+resetbgcolor();
+
+}
+/*
+Update start game box when selected
+*/
+void drawmenuStart(){
+        drawbox(30,22,50,26);
+
+        fgcolor(2);
+        drawbox(30,17,50,21);
+        fgcolor(15);
+}
+/*
+update help box when selected
+*/
+void drawmenuHelp(){
+        drawbox(30,17,50,21);
+        drawbox(30,27,50,31);
+
+        fgcolor(2);
+        drawbox(30,22,50,26);
+        fgcolor(15);
+}
+/*
+update credit box when selected
+*/
+void drawmenuCredits(){
+        drawbox(30,22,50,26);
+        drawbox(30,32,50,36);
+
+        fgcolor(2);
+        drawbox(30,27,50,31);
+        fgcolor(15);
+}
+/*
+Update quit box when selected
+*/
+void drawmenuQuit(){
+        drawbox(30,27,50,31);
+
+        fgcolor(2);
+        drawbox(30,32,50,36);
+        fgcolor(15);
+}
+/*
+Enter the help menu
+*/
+void getHelp(){
+clrscr();
+uart_clear();
+uint8_t input = 0;
+
+drawWindow(22, 8, 57, 32, " HELP ME! ", 1);
+
+gotoxy(28,12);
+printf("Hvis du ikke kan finde");
+gotoxy(28,13);
+printf("ud af vores spil,");
+gotoxy(28,16);
+printf("så kan vi godt forstå det.");
+gotoxy(28,20);
+printf("Det er nemlig ikke færdigt endnu.");
+gotoxy(28,24);
+printf("noget");
+
+fgcolor(2);
+drawbox(30,34,50,38);
+fgcolor(15);
+gotoxy(36,36);
+printf("Back");
+
+//while(input =! 32){
+while(input != 32){
+    input = uart_get_char();
+}
+mainmenu();
+}
+/*
+Enter the credits menu
+*/
+void getCredits(){
+clrscr();
+uart_clear();
+uint8_t input = 0;
+
+drawWindow(22, 8, 57, 32, " Credits ", 1);
+
+//bgcolor(1);
+gotoxy(36,15);
+printf("Oda");
+//resetbgcolor();
+
+//bgcolor(2);
+gotoxy(36,19);
+printf("Patrick");
+//resetbgcolor();
+
+//bgcolor(3);
+gotoxy(36,23);
+printf("Marc");
+//resetbgcolor();
+
+fgcolor(2);
+drawbox(30,34,50,38);
+gotoxy(34,36);
+fgcolor(15);
+printf("Back");
+
+while(input != 32){
+    input = uart_get_char();
+}
+mainmenu();
+}
+/*
+Enter the difficulty menu
+*/
+void getDifficulty(){
+clrscr();
+uart_clear();
+uint8_t menu = 2, input = 0;
+/*
+Initialize the menu (Normal is chosen as default)
+*/
+drawTitle(2);
+
+drawbox(30,17,50,21);
+gotoxy(38,19);
+printf("Easy");
+
+fgcolor(2);
+drawbox(30,22,50,26);
+gotoxy(37,24);
+fgcolor(15);
+printf("Normal");
+
+drawbox(30,27,50,31);
+gotoxy(38,29);
+printf("Hard");
+drawbox(30,32,50,36);
+gotoxy(35,34);
+printf("Main Menu");
+
+while(input != 32){
+/*
+press s to go back to normal, press enter to activate easy difficulty.
+*/
+while(input != 115 & input != 32 & menu == 1){
+    input = uart_get_char();
+    if (input == 115)
+        menu++;
+    if (input == 32)
+        break;
+}
+
+if (menu == 2 & input != 32){
+drawmenuNormal();
+}
+/*
+Press w to choose the easy, press s to choose hard, press enter to activate normal difficulty
+*/
+while (input != 115 & input != 119 & input != 32 & menu == 2){
+    input = uart_get_char();
+    if (input == 115)
+        menu++;
+    if (input == 119)
+        menu--;
+    if (input == 32)
+        break;
+}
+
+switch (menu) {
+    case 1: {
+        if (input == 32)
+            break;
+        if (input =! 32){
+            input = 0;
+            uart_clear();
+        }
+        drawmenuEasy();
+        break;
+    }
+
+    case 3: {
+        if (input == 32)
+            break;
+        drawmenuHard();
+        input = 0;
+        uart_clear();
+        break;
+    }
+}
+
+/*
+Press w to go back to Normal, press s to go down to Main Menu
+*/
+while (input != 115 & input != 119 & input != 32 & menu == 3){
+    input = uart_get_char();
+    if (input == 115)
+        menu++;
+    if (input == 119)
+        menu--;
+    if (input == 32)
+        break;
+}
+
+switch (menu) {
+    case 2: {
+        if (input == 32)
+            break;
+        drawmenuNormal();
+        input=0;
+        uart_clear();
+        break;
+    }
+    case 4: {
+        if (input == 32)
+            break;
+        drawmenuMainMenu();
+        input = 0;
+        uart_clear();
+        break;
+    }
+}
+
+/*
+Press w to go back to Hard, press enter to go back to main menu.
+*/
+while (input != 119 & input != 32 & menu == 4){
+input = uart_get_char();
+    if (input == 119)
+        menu--;
+    if (input == 32)
+    break;
+}
+
+if (menu == 3 & input != 32){
+    drawmenuHard();
+    input = 0;
+    uart_clear();
+}
+
+}
+if (menu == 1 & input == 32)
+    printf("Easy Mode");
+else if (menu == 2 & input == 32)
+    printf("Normal Mode");
+else if (menu == 3 & input == 32)
+    printf("Hard Mode");
+else if (menu == 4 & input == 32)
+    mainmenu();
+}
+/*
+Draw the Easy box
+*/
+void drawmenuEasy(){
+    drawbox(30,22,50,26);
+
+    fgcolor(2);
+    drawbox(30,17,50,21);
+    fgcolor(15);
+}
+/*
+Draw the Normal difficulty menubar
+*/
+void drawmenuNormal(){
+    drawbox(30,17,50,21);
+    drawbox(30,27,50,31);
+
+    fgcolor(2);
+    drawbox(30,22,50,26);
+    fgcolor(15);
+}
+/*
+Draw the Hard difficulty menubar
+*/
+void drawmenuHard(){
+    drawbox(30,22,50,26);
+    drawbox(30,32,50,36);
+
+    fgcolor(2);
+    drawbox(30,27,50,31);
+    fgcolor(15);
+}
+/*
+Draw the main menu menubar
+*/
+void drawmenuMainMenu(){
+    drawbox(30,27,50,31);
+
+    fgcolor(2);
+    drawbox(30,32,50,36);
+    fgcolor(15);
+}
+/*
+Deletes the symbol on x y coordinates on the screen
+*/
 
 /*
 *
