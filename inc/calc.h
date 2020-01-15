@@ -4,19 +4,25 @@
 #ifndef _CALC_H_
 #define _CALC_H_
 
+#define FIX14_SHIFT 14
+#define FIX14_MULT(a, b) ( (a)*(b) >> FIX14_SHIFT )
+#define FIX14_DIV(a, b) ( ((a) << FIX14_SHIFT) / b )
 
-#include "calc.h"
 #include "ansi.h"
 #include "timing.h"
 #include "objects.h"
 
 // General calc-functions
-uint8_t randomNumber(uint8_t lower, uint8_t upper);
+uint32_t randomNumber(uint8_t lower, uint8_t upper);
+int32_t convertTo1814(int32_t i);
+int32_t convertTo3200(int32_t i);
 
 // Functions to update the position of objects
 void updateSpaceshipPosition(struct spaceship_t *spaceship, char input);
-void updateEnemyPosition(struct enemy_t *enemy);
 void updateSpaceshipBulletPosition(struct spaceshipBullet_t *bullet, struct spaceship_t *ship, char input);
+void updateEnemy1Position(struct enemy1_t *enemy);
+void updateEnemy2Position(struct enemy2_t *enemy);
+void updateEnemy3Position(struct enemy3_t *enemy);
 
 
 #endif
