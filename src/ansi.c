@@ -1006,23 +1006,36 @@ void drawEnemy2(struct enemy2_t *enemy){
 
 }
 
-
-/*
 This function draws enemy3
 */
 void drawEnemy3(struct enemy3_t *enemy){
 
+    uint32_t prevX = convertTo3200((*enemy).prevPosX);
+    uint32_t prevY = convertTo3200((*enemy).prevPosY);
+
+    deleteSymbol(prevX, prevY);
+    deleteSymbol(prevX-1, prevY);
+    deleteSymbol(prevX+1, prevY);
+    deleteSymbol(prevX, prevY-1);
+    deleteSymbol(prevX-1, prevY+1);
+    deleteSymbol(prevX, prevY+1);
+    deleteSymbol(prevX+1, prevY+1);
     // We convert the bullet's position to 32.0 fixed point
     uint32_t curX = convertTo3200((*enemy).posX);
     uint32_t curY = convertTo3200((*enemy).posY);
 
-    gotoxy(curX, curY+1);
-    printf("%c",219);
-    gotoxy(curX-1, curY+1);
-    printf("%c",219);
-    gotoxy(curX+1, curY+1);
-    printf("%c",219);
     gotoxy(curX, curY);
     printf("%c",219);
+    gotoxy(curX-1, curY);
+    printf("%c",219);
+    gotoxy(curX+1, curY);
+    printf("%c",219);
+    gotoxy(curX, curY-1);
+    printf("%c",219);
+
+    fgcolor(6);
+    gotoxy(curX-1, curY+1);
+    printf("%c%c%c",192,196,217);
+    fgcolor(15);
 }
 
