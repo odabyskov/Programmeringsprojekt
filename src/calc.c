@@ -47,19 +47,11 @@ void updateSpaceshipPosition(struct spaceship_t *spaceship, char temp){
 
     if (temp == 'a' || temp == 'd'){
 
-        // We save the previous location of the center of the spaceship
-        uint8_t prevX = (*spaceship).posX;
-        uint8_t prevY = (*spaceship).posY;
+        // We set the current position to the previous position
+        spaceship->prevPosX=(*spaceship).posX;
+        spaceship->prevPosY=(*spaceship).posY;
 
-        // We delete the enemy at its last position
-        deleteSymbol(prevX,prevY);
-        deleteSymbol(prevX,prevY-1);
-        deleteSymbol(prevX-1,prevY);
-        deleteSymbol(prevX-2,prevY);
-        deleteSymbol(prevX+1,prevY);
-        deleteSymbol(prevX+2,prevY);
-
-
+        // We update current position
         if(temp=='a'){
             if ((*spaceship).posX>4){
                 spaceship->posX--;
@@ -76,6 +68,7 @@ void updateSpaceshipPosition(struct spaceship_t *spaceship, char temp){
         }
     }
 }
+
 
 /*
 This function updates the enemy's position
@@ -111,14 +104,13 @@ void updateSpaceshipBulletPosition(struct spaceshipBullet_t *bullet, struct spac
 
     } else if ((*bullet).drawBullet >= 1){
 
-        // We save the previous location of the bullet
-        uint8_t prevX = (*bullet).posX;
-        uint8_t prevY = (*bullet).posY;
+        // We set the current positions to previous position
+        bullet->prevPosX=(*bullet).posX;
+        bullet->prevPosY=(*bullet).posY;
 
-      //  deleteSymbol(prevX,prevY); // We delete the bullet at its last position
-
-        bullet->posX = prevX; // the x-position is set to the middle of the spaceship
-        bullet->posY = prevY-1; // the y-position is set to the position above the previous position
+        // We update the current position
+        bullet->posX = (*bullet).posX; // the x-position is set to the middle of the spaceship
+        bullet->posY = (*bullet).posY-1; // the y-position is set to the position above the previous position
 
     }
 
