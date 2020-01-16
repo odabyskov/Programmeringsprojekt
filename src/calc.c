@@ -256,6 +256,58 @@ uint32_t isEnemyOneHit(struct enemy1_t *e, struct spaceshipBullet_t *b1, struct 
     return temp;
 }
 
+/*
+This function checks whether enemy2 has been hit or not and returns 1 if there's a hit
+*/
+uint32_t isEnemyTwoHit(struct enemy2_t *e, struct spaceshipBullet_t *b1, struct spaceshipBullet_t *b2, struct spaceshipBullet_t *b3, struct spaceshipBullet_t *b4, struct spaceshipBullet_t *b5, struct spaceshipShieldBullet_t *sb1, struct spaceshipShieldBullet_t *sb2){
+
+    uint32_t temp = 0;
+
+    if ((*e).drawEnemy2==(1<<FIX14_SHIFT) && ((*b1).posX<=(*e).posX+(1<<FIX14_SHIFT) && ((*b1).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*b1).posY){
+
+        e->drawEnemy2=(0 << FIX14_SHIFT);
+        b1->drawBullet=(0 << FIX14_SHIFT);
+        temp = 1;
+
+     } else if ((*e).drawEnemy2==(1<<FIX14_SHIFT) && (((*b2).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b2).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*b2).posY){
+
+        e->drawEnemy2=(0 << FIX14_SHIFT);
+        b2->drawBullet=(0 << FIX14_SHIFT);
+        temp = 1;
+
+     } else if ((*e).drawEnemy2==(1<<FIX14_SHIFT) && (((*b3).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b3).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*b3).posY){
+
+        e->drawEnemy2=(0 << FIX14_SHIFT);
+        b3->drawBullet=(0 << FIX14_SHIFT);
+        temp = 1;
+
+     } else if ((*e).drawEnemy2==(1<<FIX14_SHIFT) && (((*b4).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b4).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*b4).posY){
+
+        e->drawEnemy2=(0 << FIX14_SHIFT);
+        b4->drawBullet=(0 << FIX14_SHIFT);
+        temp = 1;
+
+     } else if ((*e).drawEnemy2==(1<<FIX14_SHIFT) && (((*b5).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b5).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*b5).posY){
+
+        e->drawEnemy2=(0 << FIX14_SHIFT);
+        b5->drawBullet=(0 << FIX14_SHIFT);
+        temp = 1;
+
+     } else if ((*e).drawEnemy2==(1<<FIX14_SHIFT) && (((*sb1).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*sb1).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*sb1).posY){
+
+        sb1->drawBullet=(0 << FIX14_SHIFT);
+        temp = 0;
+
+     } else if ((*e).drawEnemy2==(1<<FIX14_SHIFT) && (((*sb2).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*sb2).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*sb2).posY){
+
+        sb2->drawBullet=(0 << FIX14_SHIFT);
+        temp = 0;
+
+     } else {
+        temp = 0;
+     }
+    return temp;
+}
 
 
 
