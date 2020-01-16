@@ -69,7 +69,11 @@ Boss key screen
 */
 if (temp == 'b'){
     clrscr();
-    printf("Boss screen");//indsæt boss key screen
+    printf("Microsoft [Version 10.0.18362.535]");
+printf("(c) 2019 Microsoft Corporation. Alle rettigheder forbeholdes");
+printf(" ");
+printf(" ");
+printf("C:/Users/LookBusy>");
     clrscr();
     while(uart_get_count() < 1){} 
 }  
