@@ -1054,29 +1054,43 @@ This function draws enemy1
 */
 void drawEnemy1(struct enemy1_t *enemy){
 
-    // We convert last position to 32.0 fixed point
-    uint32_t prevX = convertTo3200((*enemy).prevPosX);
-    uint32_t prevY = convertTo3200((*enemy).prevPosY);
+    if (enemy->posY > (37 << FIX14_SHIFT)){
+        enemy->drawEnemy1 = (0 << FIX14_SHIFT);
+    } else if (enemy->drawEnemy1 >= (1 << FIX14_SHIFT)){
+        // We convert the enemy's last position to 32.0 fixed point
+        uint32_t prevX = convertTo3200((*enemy).prevPosX);
+        uint32_t prevY = convertTo3200((*enemy).prevPosY);
 
-    // We delete the enemy at its last position
-    deleteSymbol(prevX, prevY);
-    deleteSymbol(prevX-1, prevY);
-    deleteSymbol(prevX+1, prevY);
-    deleteSymbol(prevX, prevY+1);
-    // We convert the bullet's position to 32.0 fixed point
-    uint32_t curX = convertTo3200((*enemy).posX);
-    uint32_t curY = convertTo3200((*enemy).posY);
+        // We delete the enemy at its last position
+        deleteSymbol(prevX, prevY);
+        deleteSymbol(prevX-1,prevY);
+        deleteSymbol(prevX+1,prevY);
+        deleteSymbol(prevX,prevY+1);
 
-    fgcolor(9);
-    gotoxy(curX, curY);
-    printf("%c",219);
-    gotoxy(curX-1, curY);
-    printf("%c",219);
-    gotoxy(curX+1, curY);
-    printf("%c",219);
-    gotoxy(curX, curY+1);
-    printf("%c",219);
-    fgcolor(15);
+        // We convert the bullet's position to 32.0 fixed point
+        uint32_t curX = convertTo3200((*enemy).posX);
+        uint32_t curY = convertTo3200((*enemy).posY);
+
+        gotoxy(curX, curY);
+        printf("%c",219);
+        gotoxy(curX-1, curY);
+        printf("%c",219);
+        gotoxy(curX+1, curY);
+        printf("%c",219);
+        gotoxy(curX, curY+1);
+        printf("%c",219);
+    } else if (enemy->drawEnemy1 == (0 << FIX14_SHIFT)){
+
+        // We convert the enemy's position to 32.0 fixed point
+        uint32_t curX = convertTo3200((*enemy).posX);
+        uint32_t curY = convertTo3200((*enemy).posY);
+
+        // We delete the enemy at its last position
+        deleteSymbol(curX, curY);
+        deleteSymbol(curX-1,curY);
+        deleteSymbol(curX+1,curY);
+        deleteSymbol(curX,curY+1);
+    }
 }
 
 /*
@@ -1084,26 +1098,42 @@ This function draws enemy2
 */
 void drawEnemy2(struct enemy2_t *enemy){
 
-    // We convert last position to 32.0 fixed point
-    uint32_t prevX = convertTo3200((*enemy).prevPosX);
-    uint32_t prevY = convertTo3200((*enemy).prevPosY);
+    if (enemy->posY > (37 << FIX14_SHIFT)){
+        enemy->drawEnemy2 = (0 << FIX14_SHIFT);
 
-    deleteSymbol(prevX, prevY);
-    deleteSymbol(prevX-1, prevY);
-    deleteSymbol(prevX+1, prevY);
+    } else if (enemy->drawEnemy2 >= (1 << FIX14_SHIFT)){
+        // We convert the enemy's last position to 32.0 fixed point
+        uint32_t prevX = convertTo3200((*enemy).prevPosX);
+        uint32_t prevY = convertTo3200((*enemy).prevPosY);
 
-    // We convert the bullet's position to 32.0 fixed point
-    uint32_t curX = convertTo3200((*enemy).posX);
-    uint32_t curY = convertTo3200((*enemy).posY);
+        // We delete the enemy at its last position
+        deleteSymbol(prevX, prevY);
+        deleteSymbol(prevX-1,prevY);
+        deleteSymbol(prevX+1,prevY);
 
-    gotoxy(curX, curY);
-    printf("%c",219);
-    gotoxy(curX-1, curY);
-    printf("%c",219);
-    gotoxy(curX+1, curY);
-    printf("%c",219);
+        // We convert the bullet's position to 32.0 fixed point
+        uint32_t curX = convertTo3200((*enemy).posX);
+        uint32_t curY = convertTo3200((*enemy).posY);
+
+        gotoxy(curX, curY);
+        printf("%c",219);
+        gotoxy(curX-1, curY);
+        printf("%c",219);
+        gotoxy(curX+1, curY);
+        printf("%c",219);
+
+    } else if (enemy->drawEnemy2 == (0 << FIX14_SHIFT)){
+
+        // We convert the enemy's position to 32.0 fixed point
+        uint32_t curX = convertTo3200((*enemy).posX);
+        uint32_t curY = convertTo3200((*enemy).posY);
+
+        // We delete the enemy at its last position
+        deleteSymbol(curX, curY);
+        deleteSymbol(curX-1,curY);
+        deleteSymbol(curX+1,curY);
+    }
 }
-
 
 /*
 This function draws enemy3
