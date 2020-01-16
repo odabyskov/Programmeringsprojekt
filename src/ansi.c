@@ -286,6 +286,9 @@ void mainmenu(){
     /*
     Initialize the menu (start game is chosen as default)
     */
+    gotoxy(1,1);
+    printf("w/s to choose between menubars.\n");
+    printf("spacebar to select the highlighted menubar.");
     drawTitle(1);
 
     fgcolor(2);
