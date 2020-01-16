@@ -409,7 +409,7 @@ void mainmenu(){
         getCredits();}
     else if (input == 32 & menu == 4){
         clrscr();
-        exit(0);}
+        //exit(0);}
 
 }
 /*
