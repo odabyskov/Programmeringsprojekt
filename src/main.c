@@ -108,12 +108,20 @@ if (temp == 97 || temp == 100 )
 
 if (iter == 2 || iter == 4 || iter == 6){
     updateSpaceshipBulletPosition(&bullet, &ship, temp);
-    updateEnemyBulletPosition(&enemyBullet,&fighter);
+    updateEnemyBulletPosition(&enemyBullet1,&fighter1);
+    updateEnemyBulletPosition(&enemyBullet2,&fighter2);
+    updateEnemyBulletPosition(&enemyBullet3,&fighter3);
 }
 if (iter == 6){
-    updateEnemy1Position(&fighter);
-    updateEnemy2Position(&grunt);
-    updateEnemy3Position(&shieldbearer);
+    updateEnemy1Position(&fighter1);
+    updateEnemy1Position(&fighter2);
+    updateEnemy1Position(&fighter3);
+    updateEnemy2Position(&grunt1);
+    updateEnemy2Position(&grunt2);
+    updateEnemy2Position(&grunt3);
+    updateEnemy3Position(&shield1);
+    updateEnemy3Position(&shield2);
+    updateEnemy3Position(&shield3);
 }
 
 
@@ -122,10 +130,18 @@ Drawing
 */
 drawSpaceship(&ship);
 drawSpaceshipBullet(&bullet);
-drawEnemyBullet(&enemyBullet);
-drawEnemy1(&fighter);
-drawEnemy2(&grunt);
-drawEnemy3(&shieldbearer);
+drawEnemyBullet(&enemyBullet1);
+drawEnemyBullet(&enemyBullet2);
+drawEnemyBullet(&enemyBullet3);
+drawEnemy1(&fighter1);
+drawEnemy1(&fighter2);
+drawEnemy1(&fighter3);
+drawEnemy2(&grunt1);
+drawEnemy2(&grunt2);
+drawEnemy2(&grunt3);
+drawEnemy3(&shield1);
+drawEnemy3(&shield2);
+drawEnemy3(&shield3);
 
 /*
 Wait for next tick
