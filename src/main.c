@@ -65,6 +65,15 @@ uart_clear();
 
 iter++;
 /*
+Boss key screen
+*/
+if (temp == 'b'){
+    clrscr();
+    printf("Boss screen");//indsæt boss key screen
+    while(uart_get_count() < 1){} 
+}  
+
+/*
 Calculation
 */
 if (temp == 97 || temp == 100 )
