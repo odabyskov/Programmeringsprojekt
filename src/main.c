@@ -182,6 +182,8 @@ if (iter == 6){
 /*
 Drawing
 */
+drawGameWindow();
+    
 drawSpaceship(&ship);
 drawSpaceshipBullet(&bullet1);
 drawSpaceshipBullet(&bullet2);
@@ -205,6 +207,12 @@ drawEnemyBullet(&enemyBullet1);
 drawEnemyBullet(&enemyBullet2);
 drawEnemyBullet(&enemyBullet3);
 
+/*
+Debugging
+*/
+gotoxy(2,2);
+printf("%d",counter.time);
+    
 /*
 Wait for next tick
 */
