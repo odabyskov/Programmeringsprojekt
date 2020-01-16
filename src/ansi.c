@@ -410,7 +410,7 @@ void mainmenu(){
     else if (input == 32 && menu == 4){
         clrscr();
         //exit(0);}
-
+    }
 }
 /*
 * This function draws the title
@@ -617,8 +617,6 @@ gotoxy(19, 34);
 printf("%c",219);
 gotoxy(19, 36);
 printf("%c",219);
-
-}
 
     fgcolor(2);
     drawBox(30,34,50,38);
