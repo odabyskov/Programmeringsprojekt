@@ -70,6 +70,7 @@ Boss key screen
 if (temp == 'b'){
     clrscr();
     printf("Boss screen");//indsæt boss key screen
+    clrscr();
     while(uart_get_count() < 1){} 
 }  
 
