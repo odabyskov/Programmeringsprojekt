@@ -7,10 +7,14 @@
 #include "objects.h"
 #include "calc.h"
 
+// set flags
+char temp; // input flags
+int time = 0, hits = 0, iter = 0; // time flag, damage flag and game state flag
+
 int main(void)
 {
 //uart_init( 9600 );
-    uart_init(115200);
+uart_init(115200);
 
 /*
 mainmenu
@@ -22,48 +26,66 @@ printf("spacebar to select the highlighted menubar.");
 mainmenu();
 clrscr();
 
+while(1){ // while playing
+    
 /*
 Initialize the game
 */
 setTimer();
 initCounter(&counter);
 
-// Player
+// Initialize the Player
 struct spaceship_t ship;
 struct spaceshipBullet_t bullet;
-struct enemyBullet_t enemyBullet;
+struct spaceshipBullet_t enemyBullet1;
+struct spaceshipBullet_t enemyBullet2;
+struct spaceshipBullet_t enemyBullet3;
 
 initSpaceship(&ship);
 drawSpaceship(&ship);
 initSpaceshipBullet(&bullet);
-initEnemyBullet(&enemyBullet);
+initSpaceshipBullet(&enemyBullet1);
+initSpaceshipBullet(&enemyBullet2);
+initSpaceshipBullet(&enemyBullet3);
 
-// Enemy
-struct enemy1_t fighter;
-struct enemy2_t grunt;
-struct enemy3_t shieldbearer;
+// Initialize the Enemy
+struct enemy1_t fighter1;
+struct enemy1_t fighter2;
+struct enemy1_t fighter3;
+struct enemy2_t grunt1;
+struct enemy2_t grunt2;
+struct enemy2_t grunt3;
+struct enemy3_t shield1;
+struct enemy3_t shield2;
+struct enemy3_t shield3;
 
-initEnemy1(&fighter);
-initEnemy2(&grunt);
-initEnemy3(&shieldbearer);
+initEnemy1(&fighter1);
+initEnemy1(&fighter2);
+initEnemy1(&fighter3);
+initEnemy2(&grunt1);
+initEnemy2(&grunt2);
+initEnemy2(&grunt3);
+initEnemy3(&shield1);
+initEnemy3(&shield2);
+initEnemy3(&shield3);
 
-// set flags
-char temp; // input flags
-int time = 0, hits = 0, iter = 0; // time flag, damage flag and game state flag
-
-while(1){
+/*
+Game Start
+*/
+while(1){ // while not dead
 
 /*
 Input
 */
-if (iter == 6){
+if (iter == 6){ //reset the micro game state
     iter = 0;
     time = counter.time;
 }
-temp = uart_get_char(); //a = 97, d = 100, space = 32
+temp = uart_get_char(); // get player input a = 97, d = 100, space = 32
 uart_clear();
 
 iter++;
+
 /*
 Boss key screen
 */
@@ -123,5 +145,9 @@ while (time > counter.time - 12){}
 
 }
 
+//Game Over should be here
+    
+}
+    
 while(1){}
 }
