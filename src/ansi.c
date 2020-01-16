@@ -1140,31 +1140,56 @@ This function draws enemy3
 */
 void drawEnemy3(struct enemy3_t *enemy){
 
-    uint32_t prevX = convertTo3200((*enemy).prevPosX);
-    uint32_t prevY = convertTo3200((*enemy).prevPosY);
+    if (enemy->posY > (37 << FIX14_SHIFT)){
+        enemy->drawEnemy3 = (0 << FIX14_SHIFT);
 
-    deleteSymbol(prevX, prevY);
-    deleteSymbol(prevX-1, prevY);
-    deleteSymbol(prevX+1, prevY);
-    deleteSymbol(prevX, prevY-1);
-    deleteSymbol(prevX-1, prevY+1);
-    deleteSymbol(prevX, prevY+1);
-    deleteSymbol(prevX+1, prevY+1);
-    // We convert the bullet's position to 32.0 fixed point
-    uint32_t curX = convertTo3200((*enemy).posX);
-    uint32_t curY = convertTo3200((*enemy).posY);
+    } else if (enemy->drawEnemy3 >= (1 << FIX14_SHIFT)){
 
-    gotoxy(curX, curY);
-    printf("%c",219);
-    gotoxy(curX-1, curY);
-    printf("%c",219);
-    gotoxy(curX+1, curY);
-    printf("%c",219);
-    gotoxy(curX, curY-1);
-    printf("%c",219);
+        // We convert the enemy's previous position to 32.0 fixed point
+        uint32_t prevX = convertTo3200((*enemy).prevPosX);
+        uint32_t prevY = convertTo3200((*enemy).prevPosY);
 
-    fgcolor(6);
-    gotoxy(curX-1, curY+1);
-    printf("%c%c%c",192,196,217);
-    fgcolor(15);
+        // We delete the enemy
+        deleteSymbol(prevX, prevY);
+        deleteSymbol(prevX-1, prevY+1);
+        deleteSymbol(prevX, prevY+1);
+        deleteSymbol(prevX+1, prevY+1);
+        deleteSymbol(prevX-1, prevY+2);
+        deleteSymbol(prevX, prevY+2);
+        deleteSymbol(prevX+1, prevY+2);
+
+        // We convert the enemy's position to 32.0 fixed point
+        uint32_t curX = convertTo3200((*enemy).posX);
+        uint32_t curY = convertTo3200((*enemy).posY);
+
+        gotoxy(curX, curY);
+        printf("%c",219);
+        gotoxy(curX-1, curY+1);
+        printf("%c",219);
+        gotoxy(curX+1, curY+1);
+        printf("%c",219);
+        gotoxy(curX, curY+1);
+        printf("%c",219);
+
+        fgcolor(6);
+        gotoxy(curX-1, curY+2);
+        printf("%c%c%c",192,196,217);
+        fgcolor(15);
+
+    } else if (enemy->drawEnemy3 == (0 << FIX14_SHIFT)){
+
+        // We convert the enemy's previous position to 32.0 fixed point
+        uint32_t prevX = convertTo3200((*enemy).prevPosX);
+        uint32_t prevY = convertTo3200((*enemy).prevPosY);
+
+        // We delete the enemy
+        deleteSymbol(prevX, prevY);
+        deleteSymbol(prevX-1, prevY+1);
+        deleteSymbol(prevX, prevY+1);
+        deleteSymbol(prevX+1, prevY+1);
+        deleteSymbol(prevX-1, prevY+2);
+        deleteSymbol(prevX, prevY+2);
+        deleteSymbol(prevX+1, prevY+2);
+    }
 }
+
