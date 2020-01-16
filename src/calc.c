@@ -36,6 +36,7 @@ int32_t convertTo3200(int32_t i) {
 
  /*
 This function converts a 32.0 fixed point number to 18.14 and returns it
+// should this be a function?
 */
 int32_t convertTo1814(int32_t i) {
 
@@ -145,13 +146,13 @@ The bullet moves vertically downwards from where it was fired.
 */
 void updateEnemyBulletPosition(struct enemyBullet_t *enemyBullet, struct enemy1_t *enemy){
 
-    if ( (*enemyBullet).drawBullet == 0 << FIX14_SHIFT){
+    if ( (*enemyBullet).drawBullet == 0 && (*enemy).drawEnemy1 == 1 ){
 
         enemyBullet->posX = (*enemy).posX; // the x-position is set to the middle of the spaceship
         enemyBullet->posY = (*enemy).posY + (2 << FIX14_SHIFT); // the y-position is set to the top of the spaceship
-        enemyBullet->drawBullet = (1 << FIX14_SHIFT);
+        enemyBullet->drawBullet = 1;
 
-    } else if ( (*enemyBullet).drawBullet >= (1 << FIX14_SHIFT)){
+    } else if ( (*enemyBullet).drawBullet == 1 && (*enemy).drawEnemy1 == 1 ){
 
         // We set the current positions to previous position
         enemyBullet->prevPosX=(*enemyBullet).posX;
@@ -169,12 +170,13 @@ This function updates the position of enemy1
 */
 void updateEnemy1Position(struct enemy1_t *enemy){
 
+    if ( (*enemy).drawEnemy1 == 1 ){
     // We set the current positions to previous position
     enemy->prevPosX = (*enemy).posX;
     enemy->prevPosY = (*enemy).posY;
 
-    enemy->posY = (*enemy).posY + convertTo1814(1); // the y-position is set to the position below the previous position
-
+    enemy->posY = (*enemy).posY + (1 << FIX14_SHIFT); // the y-position is set to the position below the previous position
+    }
 }
 
 /*
@@ -182,12 +184,13 @@ This function updates the position of enemy2
 */
 void updateEnemy2Position(struct enemy2_t *enemy){
 
+    if ( (*enemy).drawEnemy2 == 1 ){
     // We set the current positions to previous position
     enemy->prevPosX=(*enemy).posX;
     enemy->prevPosY=(*enemy).posY;
 
     enemy->posY = (*enemy).posY + (1 << FIX14_SHIFT); // the y-position is set to the position below the previous position
-
+    }
 }
 
 /*
@@ -195,12 +198,13 @@ This function updates the position of enemy3
 */
 void updateEnemy3Position(struct enemy3_t *enemy){
 
+    if ( (*enemy).drawEnemy3 == 1 ){
     // We set the current positions to previous position
     enemy->prevPosX=(*enemy).posX;
     enemy->prevPosY=(*enemy).posY;
 
     enemy->posY = (*enemy).posY + (1 << FIX14_SHIFT); // the y-position is set to the position below the previous position
-
+    }
 }
 
 /*
