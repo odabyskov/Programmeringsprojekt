@@ -85,7 +85,34 @@ temp = uart_get_char(); // get player input a = 97, d = 100, space = 32
 uart_clear();
 
 iter++;
-
+/*
+Spawn enemies in intervals
+*/
+if ( counter.time % 900 > 0 && counter.time % 900 < 12 )
+    grunt1.drawEnemy2 = 1;
+else if ( counter.time % 900 > 100 && counter.time % 900 < 112 )
+    grunt2.drawEnemy2 = 1;
+else if ( counter.time % 900 > 200 && counter.time % 900 < 212 ){
+    fighter1.drawEnemy1 = 1;
+    //enemyBullet1.drawBullet = 1;
+    }
+else if ( counter.time % 900 > 300 && counter.time % 900 < 312 )
+    shield1.drawEnemy3 = 1;
+else if ( counter.time % 900 > 400 && counter.time % 900 < 412 )
+    grunt3.drawEnemy2 = 1;
+else if ( counter.time % 900 > 500 && counter.time % 900 < 512 )
+    shield2.drawEnemy3 = 1;
+else if ( counter.time % 900 > 600 && counter.time % 900 < 612 ){
+    fighter2.drawEnemy1 = 1;
+    //enemyBullet2.drawBullet = 1;
+    }
+else if ( counter.time % 900 > 700 && counter.time % 900 < 712 ){
+    fighter3.drawEnemy1 = 1;
+    //enemyBullet3.drawBullet = 1;
+    }
+else if ( counter.time % 900 > 800 && counter.time % 900 < 812 )
+    shield3.drawEnemy3 = 1;
+    
 /*
 Boss key screen
 */
