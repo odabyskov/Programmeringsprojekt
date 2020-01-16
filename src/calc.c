@@ -174,9 +174,14 @@ void updateEnemy1Position(struct enemy1_t *enemy){
     // We set the current positions to previous position
     enemy->prevPosX = (*enemy).posX;
     enemy->prevPosY = (*enemy).posY;
-
     enemy->posY = (*enemy).posY + (1 << FIX14_SHIFT); // the y-position is set to the position below the previous position
     }
+    
+    if ( (*enemy).posY > 39 << FIX14_SHIFT ){
+        enemy->posX = randomNumber(3,68);
+        enemy->posY = 1 << FIX14_SHIFT;
+        enemy->drawEnemy1 =0;
+    }   
 }
 
 /*
@@ -188,8 +193,13 @@ void updateEnemy2Position(struct enemy2_t *enemy){
     // We set the current positions to previous position
     enemy->prevPosX=(*enemy).posX;
     enemy->prevPosY=(*enemy).posY;
-
     enemy->posY = (*enemy).posY + (1 << FIX14_SHIFT); // the y-position is set to the position below the previous position
+    }
+    
+    if ( (*enemy).posY > 39 << FIX14_SHIFT ){
+        enemy->posX = randomNumber(3,68);
+        enemy->posY = 1 << FIX14_SHIFT;
+        enemy->drawEnemy2 = 0;
     }
 }
 
@@ -202,8 +212,12 @@ void updateEnemy3Position(struct enemy3_t *enemy){
     // We set the current positions to previous position
     enemy->prevPosX=(*enemy).posX;
     enemy->prevPosY=(*enemy).posY;
-
     enemy->posY = (*enemy).posY + (1 << FIX14_SHIFT); // the y-position is set to the position below the previous position
+    }
+    if ( (*enemy).posY > 39 << FIX14_SHIFT ){
+        enemy->posX = randomNumber(3,68);
+        enemy->posY = 1 << FIX14_SHIFT;
+        enemy->drawEnemy3 = 0;
     }
 }
 
