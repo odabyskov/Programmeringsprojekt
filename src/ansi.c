@@ -307,7 +307,7 @@ void mainmenu(){
     while(input != 32){
 
     // press s to choose the help menu, press enter to activate start game.
-    while(input != 115 & input != 32 & menu == 1){
+    while(input != 115 && input != 32 && menu == 1){
         input = uart_get_char();
         if (input == 115)
             menu++;
@@ -315,12 +315,12 @@ void mainmenu(){
             break;
         }
 
-    if (menu == 2 & input != 32){
+    if (menu == 2 && input != 32){
     drawmenuHelp();
     }
 
     // Press w to choose start game, press s to choose credits, press enter to activate help
-    while (input != 115 & input != 119 & input != 32 & menu == 2){
+    while (input != 115 && input != 119 && input != 32 && menu == 2){
         input = uart_get_char();
         if (input == 115)
             menu++;
@@ -334,7 +334,7 @@ void mainmenu(){
         case 1: {
             if (input == 32)
                 break;
-            if (input =! 32){
+            if (input != 32){
                 input = 0;
                 uart_clear();
                 }
@@ -353,7 +353,7 @@ void mainmenu(){
     }
 
     // Press w to go back to help, press s to go down to Quit game
-    while (input != 115 & input != 119 & input != 32 & menu == 3){
+    while (input != 115 && input != 119 && input != 32 && menu == 3){
         input = uart_get_char();
         if (input == 115)
             menu++;
@@ -383,7 +383,7 @@ void mainmenu(){
     }
 
     // Press w to go back to credits
-    while (input != 119 & input != 32 & menu == 4){
+    while (input != 119 && input != 32 && menu == 4){
     input = uart_get_char();
         if (input == 119)
             menu--;
@@ -391,9 +391,9 @@ void mainmenu(){
         break;
     }
 
-    if (menu == 3 & input != 32){
+    if (menu == 3 && input != 32){
         drawmenuCredits();
-        if (input =! 32){
+        if (input != 32){
         input = 0;
         uart_clear();
         }
@@ -401,13 +401,13 @@ void mainmenu(){
 } // end of while loop
 
     // If Enter is pressed leave the while loop & activate the chosen menu
-    if (input == 32 & menu == 1){
+    if (input == 32 && menu == 1){
         getDifficulty();}
-    else if (input == 32 & menu == 2){
+    else if (input == 32 && menu == 2){
         getHelp();}
-    else if (input == 32 & menu == 3){
+    else if (input == 32 && menu == 3){
         getCredits();}
-    else if (input == 32 & menu == 4){
+    else if (input == 32 && menu == 4){
         clrscr();
         //exit(0);}
 
