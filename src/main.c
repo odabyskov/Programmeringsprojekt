@@ -84,15 +84,6 @@ if (iter == 6){
 /*
 Drawing
 */
-gotoxy(2,2);
-printf("%d",enemyBullet.drawBullet);
-gotoxy(2,3);
-printf("%d",enemyBullet.posY >> 14);
-gotoxy(2,4);
-printf("%d",enemyBullet.posY >> 14);
-gotoxy(2,5);
-printf("%d",bullet.posY) >> 14;
-
 drawSpaceship(&ship);
 drawSpaceshipBullet(&bullet);
 drawEnemyBullet(&enemyBullet);
