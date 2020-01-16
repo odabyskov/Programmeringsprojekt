@@ -9,7 +9,7 @@
 
 // set flags
 char temp; // input flags
-int time = 0, hits = 0, iter = 0; // time flag, damage flag and game state flag
+int time, hits, iter, enemy1Killed; // time flag, damage flag and game state flag and kills
 
 int main(void)
 {
@@ -27,26 +27,37 @@ mainmenu();
 clrscr();
 
 while(1){ // while playing
-    
+
 /*
 Initialize the game
 */
+time = 0; // time flag
+hits = 0; // damage flag
+iter = 0; // game state flag
+enemy1Killed = 0; // kill counter
+
 setTimer();
 initCounter(&counter);
 
 // Initialize the Player
 struct spaceship_t ship;
-struct spaceshipBullet_t bullet;
-struct spaceshipBullet_t enemyBullet1;
-struct spaceshipBullet_t enemyBullet2;
-struct spaceshipBullet_t enemyBullet3;
+struct spaceshipBullet_t bullet1;
+struct spaceshipBullet_t bullet2;
+struct spaceshipBullet_t bullet3;
+struct spaceshipBullet_t bullet4;
+struct spaceshipBullet_t bullet5;
+struct spaceshipShieldBullet_t sbullet1;
+struct spaceshipShieldBullet_t sbullet2;
 
 initSpaceship(&ship);
 drawSpaceship(&ship);
-initSpaceshipBullet(&bullet);
-initSpaceshipBullet(&enemyBullet1);
-initSpaceshipBullet(&enemyBullet2);
-initSpaceshipBullet(&enemyBullet3);
+initSpaceshipBullet(&bullet1);
+initSpaceshipBullet(&bullet2);
+initSpaceshipBullet(&bullet3);
+initSpaceshipBullet(&bullet4);
+initSpaceshipBullet(&bullet5);
+initSpaceshipShieldBullet(&sbullet1);
+initSpaceshipShieldBullet(&sbullet2);
 
 // Initialize the Enemy
 struct enemy1_t fighter1;
@@ -58,6 +69,14 @@ struct enemy2_t grunt3;
 struct enemy3_t shield1;
 struct enemy3_t shield2;
 struct enemy3_t shield3;
+
+struct spaceshipBullet_t enemyBullet1;
+struct spaceshipBullet_t enemyBullet2;
+struct spaceshipBullet_t enemyBullet3;
+
+initSpaceshipBullet(&enemyBullet1);
+initSpaceshipBullet(&enemyBullet2);
+initSpaceshipBullet(&enemyBullet3);
 
 initEnemy1(&fighter1);
 initEnemy1(&fighter2);
@@ -112,7 +131,7 @@ else if ( counter.time % 900 > 700 && counter.time % 900 < 712 ){
     }
 else if ( counter.time % 900 > 800 && counter.time % 900 < 812 )
     shield3.drawEnemy3 = 1;
-    
+
 /*
 Boss key screen
 */
@@ -124,8 +143,8 @@ printf(" ");
 printf(" ");
 printf("C:/Users/LookBusy>");
 clrscr();
-while(uart_get_count() < 1){} 
-}  
+while(uart_get_count() < 1){}
+}
 
 /*
 Calculation
@@ -134,7 +153,15 @@ if (temp == 97 || temp == 100 )
     updateSpaceshipPosition(&ship, temp);
 
 if (iter == 2 || iter == 4 || iter == 6){
-    updateSpaceshipBulletPosition(&bullet, &ship, temp);
+    updateSpaceshipBulletPosition(&bullet1, &ship, 1);
+    updateSpaceshipBulletPosition(&bullet2, &ship, 1);
+    updateSpaceshipBulletPosition(&bullet3, &ship, 1);
+    updateSpaceshipBulletPosition(&bullet4, &ship, 1);
+    updateSpaceshipBulletPosition(&bullet5, &ship, 1);
+
+    updateSpaceshipShieldBulletPosition(&sbullet1, &ship, 1);
+    updateSpaceshipShieldBulletPosition(&sbullet2, &ship, 1);
+
     updateEnemyBulletPosition(&enemyBullet1,&fighter1);
     updateEnemyBulletPosition(&enemyBullet2,&fighter2);
     updateEnemyBulletPosition(&enemyBullet3,&fighter3);
@@ -156,10 +183,14 @@ if (iter == 6){
 Drawing
 */
 drawSpaceship(&ship);
-drawSpaceshipBullet(&bullet);
-drawEnemyBullet(&enemyBullet1);
-drawEnemyBullet(&enemyBullet2);
-drawEnemyBullet(&enemyBullet3);
+drawSpaceshipBullet(&bullet1);
+drawSpaceshipBullet(&bullet2);
+drawSpaceshipBullet(&bullet3);
+drawSpaceshipBullet(&bullet4);
+drawSpaceshipBullet(&bullet5);
+drawSpaceshipShieldBullet(&sbullet1);
+drawSpaceshipShieldBullet(&sbullet2);
+
 drawEnemy1(&fighter1);
 drawEnemy1(&fighter2);
 drawEnemy1(&fighter3);
@@ -169,6 +200,10 @@ drawEnemy2(&grunt3);
 drawEnemy3(&shield1);
 drawEnemy3(&shield2);
 drawEnemy3(&shield3);
+
+drawEnemyBullet(&enemyBullet1);
+drawEnemyBullet(&enemyBullet2);
+drawEnemyBullet(&enemyBullet3);
 
 /*
 Wait for next tick
@@ -189,8 +224,8 @@ while (time > counter.time - 12){}
 }
 
 //Game Over should be here
-    
+
 }
-    
+
 while(1){}
 }
