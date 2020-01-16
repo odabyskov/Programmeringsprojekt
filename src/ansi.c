@@ -1022,31 +1022,30 @@ void drawSpaceshipBullet(struct spaceshipBullet_t *bullet){
 
 /*
 This function draws the bullet fired from the enemy
-*/
-void drawEnemyBullet(struct enemyBullet_t *bullet){
+*/void drawEnemyBullet(struct enemyBullet_t *enemyBullet){
 
-    if ((*bullet).posY > (38 << FIX14_SHIFT)){
-            (*bullet).drawBullet = (0 << FIX14_SHIFT);
+    if ((*enemyBullet).posY > convertTo1814(40)){
+            (*enemyBullet).drawBullet = (0 << FIX14_SHIFT);
     }
 
-    if ((*bullet).drawBullet >= (1 << FIX14_SHIFT)){
+    if ((*enemyBullet).drawBullet >= (1 << FIX14_SHIFT)){
 
         // We convert the bullet's last position to 32.0 fixed point
-        uint32_t prevX = convertTo3200((*bullet).prevPosX);
-        uint32_t prevY = convertTo3200((*bullet).prevPosY);
+        uint32_t prevX = convertTo3200((*enemyBullet).prevPosX);
+        uint32_t prevY = convertTo3200((*enemyBullet).prevPosY);
 
         // We delete the bullet at its last position
         deleteSymbol(prevX, prevY);
 
         // We convert the bullet's position to 32.0 fixed point
-        uint32_t curX = convertTo3200((*bullet).posX);
-        uint32_t curY = convertTo3200((*bullet).posY);
+        uint32_t curX = convertTo3200((*enemyBullet).posX);
+        uint32_t curY = convertTo3200((*enemyBullet).posY);
 
         gotoxy(curX,curY);
         //printf("%c", 004); // draws a bullet shaped like a diamond
         if (curY < 39)
-            printf("o"); // draws a bullet shaped like a diamond
-        }
+        printf("o"); // draws a bullet shaped like a diamond
+    }
 }
 
 /*
