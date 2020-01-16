@@ -61,25 +61,25 @@ If the user presses the 'd'-key the spaceship moves one step to the right.
 */
 void updateSpaceshipPosition(struct spaceship_t *spaceship, char temp){
 
-    if (temp == 'a' || temp == 'd'){
+    if (temp == 'a' || temp == 'A' || temp == 'd' || temp == 'D'){
 
         // We set the current position to the previous position
         spaceship->prevPosX=(*spaceship).posX;
         spaceship->prevPosY=(*spaceship).posY;
 
         // We update current position
-        if(temp=='a'){
-            if ((*spaceship).posX > convertTo1814(5)){
-                spaceship->posX = (*spaceship).prevPosX - convertTo1814(1);
+        if(temp=='a' || temp == 'A'){
+            if ((*spaceship).posX > (5 << FIX14_SHIFT)){
+                spaceship->posX = (*spaceship).prevPosX - (1 << FIX14_SHIFT);
             } else {
-                spaceship->posX = convertTo1814(5);
+                spaceship->posX = (5 << FIX14_SHIFT);
             }
         }
-        else if(temp=='d'){
-            if ((*spaceship).posX < convertTo1814(65)){
+        else if(temp=='d' || temp == 'D'){
+            if ((*spaceship).posX < (65 << FIX14_SHIFT)){
                 spaceship->posX = (*spaceship).prevPosX + convertTo1814(1);
             } else {
-                spaceship->posX = convertTo1814(65);
+                spaceship->posX = (65 << FIX14_SHIFT);
             }
         }
     }
@@ -91,12 +91,12 @@ The bullet moves vertically upwards from where it was fired.
 */
 void updateSpaceshipBulletPosition(struct spaceshipBullet_t *bullet, struct spaceship_t *ship, char temp){
 
-    if (temp == 32 && (*bullet).drawBullet == 0 << FIX14_SHIFT){
+    if (temp == 32 && bullet->drawBullet == 0 << FIX14_SHIFT){
 
         bullet->posX = (*ship).posX; // the x-position is set to the middle of the spaceship
         bullet->posY = (*ship).posY- (2 << FIX14_SHIFT); // the y-position is set to the top of the spaceship
 
-        bullet->drawBullet = convertTo1814(1);
+        bullet->drawBullet = (1 << FIX14_SHIFT);
 
     } else if ((*bullet).drawBullet >= (1 << FIX14_SHIFT)){
 
@@ -106,11 +106,38 @@ void updateSpaceshipBulletPosition(struct spaceshipBullet_t *bullet, struct spac
 
         // We update the current position
         bullet->posX = (*bullet).posX; // the x-position is set to the middle of the spaceship
-        bullet->posY = (*bullet).posY - convertTo1814(1); // the y-position is set to the position above the previous position
+        bullet->posY = (*bullet).posY - (1 << FIX14_SHIFT); // the y-position is set to the position above the previous position
 
     }
 
 }
+
+/*
+This function updates the bullet's position.
+The bullet moves vertically upwards from where it was fired.
+*/
+void updateSpaceshipShieldBulletPosition(struct spaceshipShieldBullet_t *bullet, struct spaceship_t *ship, char temp){
+
+    if ((temp == 'w' || temp == 'W') && bullet->drawBullet == 0 << FIX14_SHIFT){
+
+        bullet->posX = (*ship).posX; // the x-position is set to the middle of the spaceship
+        bullet->posY = (*ship).posY - (2 << FIX14_SHIFT); // the y-position is set to the top of the spaceship
+
+        bullet->drawBullet = convertTo1814(1);
+
+    } else if (bullet->drawBullet >= (1 << FIX14_SHIFT)){
+
+        // We set the current positions to previous position
+        bullet->prevPosX=(*bullet).posX;
+        bullet->prevPosY=(*bullet).posY;
+
+        // We update the current position
+        bullet->posX = (*bullet).posX; // the x-position is set to the middle of the spaceship
+        bullet->posY = (*bullet).posY - (1 << FIX14_SHIFT); // the y-position is set to the position above the previous position
+
+    }
+}
+
 
 /*
 This function updates the bullet's position.
@@ -122,7 +149,7 @@ void updateEnemyBulletPosition(struct enemyBullet_t *enemyBullet, struct enemy1_
 
         enemyBullet->posX = (*enemy).posX; // the x-position is set to the middle of the spaceship
         enemyBullet->posY = (*enemy).posY + (2 << FIX14_SHIFT); // the y-position is set to the top of the spaceship
-        enemyBullet->drawBullet = convertTo1814(1);
+        enemyBullet->drawBullet = (1 << FIX14_SHIFT);
 
     } else if ( (*enemyBullet).drawBullet >= (1 << FIX14_SHIFT)){
 
@@ -132,7 +159,7 @@ void updateEnemyBulletPosition(struct enemyBullet_t *enemyBullet, struct enemy1_
 
         // We update the current position
         enemyBullet->posX = (*enemyBullet).posX; // the x-position is set to the middle of the enemy
-        enemyBullet->posY = (*enemyBullet).posY + convertTo1814(1); // the y-position is set to the position below the previous position
+        enemyBullet->posY = (*enemyBullet).posY + (1 << FIX14_SHIFT); // the y-position is set to the position below the previous position
 
     }
 
@@ -159,12 +186,12 @@ void updateEnemy2Position(struct enemy2_t *enemy){
     enemy->prevPosX=(*enemy).posX;
     enemy->prevPosY=(*enemy).posY;
 
-    enemy->posY = (*enemy).posY + convertTo1814(1); // the y-position is set to the position below the previous position
+    enemy->posY = (*enemy).posY + (1 << FIX14_SHIFT); // the y-position is set to the position below the previous position
 
 }
 
 /*
-This function updates the position of enemy2
+This function updates the position of enemy3
 */
 void updateEnemy3Position(struct enemy3_t *enemy){
 
@@ -172,6 +199,64 @@ void updateEnemy3Position(struct enemy3_t *enemy){
     enemy->prevPosX=(*enemy).posX;
     enemy->prevPosY=(*enemy).posY;
 
-    enemy->posY = (*enemy).posY + convertTo1814(1); // the y-position is set to the position below the previous position
+    enemy->posY = (*enemy).posY + (1 << FIX14_SHIFT); // the y-position is set to the position below the previous position
 
 }
+
+/*
+This function checks whether enemy1 has been hit or not and returns 1 if there's a hit
+*/
+uint32_t isEnemyOneHit(struct enemy1_t *e, struct spaceshipBullet_t *b1, struct spaceshipBullet_t *b2, struct spaceshipBullet_t *b3, struct spaceshipBullet_t *b4, struct spaceshipBullet_t *b5, struct spaceshipShieldBullet_t *sb1, struct spaceshipShieldBullet_t *sb2){
+
+    uint32_t temp = 0;
+
+    if ((*e).drawEnemy1==(1<<FIX14_SHIFT) && (((*b1).posX<=(*e).posX+(1<<FIX14_SHIFT) && ((*b1).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b1).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b1).posY>=(*e).posY)))){
+
+        e->drawEnemy1=(0 << FIX14_SHIFT);
+        b1->drawBullet=(0 << FIX14_SHIFT);
+        temp = 1;
+
+     } else if ((*e).drawEnemy1==(1<<FIX14_SHIFT) && (((*b2).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b2).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b2).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b2).posY>=(*e).posY))){
+
+        e->drawEnemy1=(0 << FIX14_SHIFT);
+        b2->drawBullet=(0 << FIX14_SHIFT);
+        temp = 1;
+
+     } else if ((*e).drawEnemy1==(1<<FIX14_SHIFT) && (((*b3).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b3).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b3).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b3).posY>=(*e).posY))){
+
+        e->drawEnemy1=(0 << FIX14_SHIFT);
+        b3->drawBullet=(0 << FIX14_SHIFT);
+        temp = 1;
+
+     } else if ((*e).drawEnemy1==(1<<FIX14_SHIFT) && (((*b4).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b4).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b4).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b4).posY>=(*e).posY))){
+
+        e->drawEnemy1=(0 << FIX14_SHIFT);
+        b4->drawBullet=(0 << FIX14_SHIFT);
+        temp = 1;
+
+     } else if ((*e).drawEnemy1==(1<<FIX14_SHIFT) && (((*b5).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b5).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b5).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b5).posY>=(*e).posY))){
+
+        e->drawEnemy1=(0 << FIX14_SHIFT);
+        b5->drawBullet=(0 << FIX14_SHIFT);
+        temp = 1;
+
+     } else if ((*e).drawEnemy1==(1<<FIX14_SHIFT) && (((*sb1).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*sb1).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*sb1).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*sb1).posY>=(*e).posY))){
+
+        sb1->drawBullet=(0 << FIX14_SHIFT);
+        temp = 0;
+
+     } else if ((*e).drawEnemy1==(1<<FIX14_SHIFT) && (((*sb2).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*sb2).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*sb2).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*sb2).posY>=(*e).posY))){
+
+        sb2->drawBullet=(0 << FIX14_SHIFT);
+        temp = 0;
+
+     } else {
+        temp = 0;
+     }
+    return temp;
+}
+
+
+
+
+
