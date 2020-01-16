@@ -20,10 +20,13 @@ int32_t convertTo3200(int32_t i);
 // Functions to update the position of objects
 void updateSpaceshipPosition(struct spaceship_t *spaceship, char input);
 void updateSpaceshipBulletPosition(struct spaceshipBullet_t *bullet, struct spaceship_t *ship, char input);
+void updateSpaceshipShieldBulletPosition(struct spaceshipShieldBullet_t *bullet, struct spaceship_t *ship, char temp);
 void updateEnemyBulletPosition(struct enemyBullet_t *bullet, struct enemy1_t *enemy);
 void updateEnemy1Position(struct enemy1_t *enemy);
 void updateEnemy2Position(struct enemy2_t *enemy);
 void updateEnemy3Position(struct enemy3_t *enemy);
 
+// Functions to check if the objects have been hit by a bullet
+uint32_t isEnemyOneHit(struct enemy1_t *e, struct spaceshipBullet_t *b1, struct spaceshipBullet_t *b2, struct spaceshipBullet_t *b3, struct spaceshipBullet_t *b4, struct spaceshipBullet_t *b5, struct spaceshipShieldBullet_t *sb1, struct spaceshipShieldBullet_t *sb2);
 
 #endif
