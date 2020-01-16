@@ -998,10 +998,10 @@ This function draws the bullet fired from the spaceship
 void drawSpaceshipBullet(struct spaceshipBullet_t *bullet){
 
     if ((*bullet).posY < (2 << FIX14_SHIFT)){
-            (*bullet).drawBullet = (0 << FIX14_SHIFT);
+            (*bullet).drawBullet = 0;
     }
 
-    if ((*bullet).drawBullet >= (1 << FIX14_SHIFT)){
+    if ((*bullet).drawBullet == 1 ){
 
         // We convert the bullet's last position to 32.0 fixed point
         uint32_t prevX = convertTo3200((*bullet).prevPosX);
@@ -1026,10 +1026,10 @@ This function draws the bullet fired from the enemy
 */void drawEnemyBullet(struct enemyBullet_t *enemyBullet){
 
     if ((*enemyBullet).posY > convertTo1814(40)){
-            (*enemyBullet).drawBullet = (0 << FIX14_SHIFT);
+            (*enemyBullet).drawBullet = 0;
     }
 
-    if ((*enemyBullet).drawBullet >= (1 << FIX14_SHIFT)){
+    if ((*enemyBullet).drawBullet == 1 ){
 
         // We convert the bullet's last position to 32.0 fixed point
         uint32_t prevX = convertTo3200((*enemyBullet).prevPosX);
@@ -1055,8 +1055,8 @@ This function draws enemy1
 void drawEnemy1(struct enemy1_t *enemy){
 
     if (enemy->posY > (37 << FIX14_SHIFT)){
-        enemy->drawEnemy1 = (0 << FIX14_SHIFT);
-    } else if (enemy->drawEnemy1 >= (1 << FIX14_SHIFT)){
+        enemy->drawEnemy1 = 0;
+    } else if (enemy->drawEnemy1 == 1 ){
         // We convert the enemy's last position to 32.0 fixed point
         uint32_t prevX = convertTo3200((*enemy).prevPosX);
         uint32_t prevY = convertTo3200((*enemy).prevPosY);
@@ -1079,7 +1079,7 @@ void drawEnemy1(struct enemy1_t *enemy){
         printf("%c",219);
         gotoxy(curX, curY+1);
         printf("%c",219);
-    } else if (enemy->drawEnemy1 == (0 << FIX14_SHIFT)){
+    } else if (enemy->drawEnemy1 == 0){
 
         // We convert the enemy's position to 32.0 fixed point
         uint32_t curX = convertTo3200((*enemy).posX);
@@ -1099,9 +1099,9 @@ This function draws enemy2
 void drawEnemy2(struct enemy2_t *enemy){
 
     if (enemy->posY > (37 << FIX14_SHIFT)){
-        enemy->drawEnemy2 = (0 << FIX14_SHIFT);
+        enemy->drawEnemy2 = 0;
 
-    } else if (enemy->drawEnemy2 >= (1 << FIX14_SHIFT)){
+    } else if (enemy->drawEnemy2 == 1 ){
         // We convert the enemy's last position to 32.0 fixed point
         uint32_t prevX = convertTo3200((*enemy).prevPosX);
         uint32_t prevY = convertTo3200((*enemy).prevPosY);
@@ -1122,7 +1122,7 @@ void drawEnemy2(struct enemy2_t *enemy){
         gotoxy(curX+1, curY);
         printf("%c",219);
 
-    } else if (enemy->drawEnemy2 == (0 << FIX14_SHIFT)){
+    } else if (enemy->drawEnemy2 == 0 ){
 
         // We convert the enemy's position to 32.0 fixed point
         uint32_t curX = convertTo3200((*enemy).posX);
@@ -1141,9 +1141,9 @@ This function draws enemy3
 void drawEnemy3(struct enemy3_t *enemy){
 
     if (enemy->posY > (37 << FIX14_SHIFT)){
-        enemy->drawEnemy3 = (0 << FIX14_SHIFT);
+        enemy->drawEnemy3 = 0;
 
-    } else if (enemy->drawEnemy3 >= (1 << FIX14_SHIFT)){
+    } else if (enemy->drawEnemy3 == 1 ){
 
         // We convert the enemy's previous position to 32.0 fixed point
         uint32_t prevX = convertTo3200((*enemy).prevPosX);
