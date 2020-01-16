@@ -92,14 +92,14 @@ The bullet moves vertically upwards from where it was fired.
 */
 void updateSpaceshipBulletPosition(struct spaceshipBullet_t *bullet, struct spaceship_t *ship, char temp){
 
-    if (temp == 32 && bullet->drawBullet == 0 << FIX14_SHIFT){
+    if (temp == 32 && bullet->drawBullet == 0 ){
 
         bullet->posX = (*ship).posX; // the x-position is set to the middle of the spaceship
         bullet->posY = (*ship).posY- (2 << FIX14_SHIFT); // the y-position is set to the top of the spaceship
 
-        bullet->drawBullet = (1 << FIX14_SHIFT);
+        bullet->drawBullet = 1;
 
-    } else if ((*bullet).drawBullet >= (1 << FIX14_SHIFT)){
+    } else if ((*bullet).drawBullet == 1 ){
 
         // We set the current positions to previous position
         bullet->prevPosX=(*bullet).posX;
@@ -119,14 +119,14 @@ The bullet moves vertically upwards from where it was fired.
 */
 void updateSpaceshipShieldBulletPosition(struct spaceshipShieldBullet_t *bullet, struct spaceship_t *ship, char temp){
 
-    if ((temp == 'w' || temp == 'W') && bullet->drawBullet == 0 << FIX14_SHIFT){
+    if ( (temp == 'w' || temp == 'W') && bullet->drawBullet == 0 ){
 
         bullet->posX = (*ship).posX; // the x-position is set to the middle of the spaceship
         bullet->posY = (*ship).posY - (2 << FIX14_SHIFT); // the y-position is set to the top of the spaceship
 
-        bullet->drawBullet = convertTo1814(1);
+        bullet->drawBullet = 1;
 
-    } else if (bullet->drawBullet >= (1 << FIX14_SHIFT)){
+    } else if (bullet->drawBullet == 1 ){
 
         // We set the current positions to previous position
         bullet->prevPosX=(*bullet).posX;
