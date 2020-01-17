@@ -21,53 +21,28 @@ void initSpaceship(struct spaceship_t *spaceship){
 }
 
 /*
-This function initializes a spaceship bullet
+This function initializes a bullet
 */
-void initSpaceshipBullet(struct spaceshipBullet_t *bullet){
+void initBullet(struct bullet_t *bullet){
 
-    bullet->posX = 1 << FIX14_SHIFT; // Random values - they will be set to the top of the spaceship once the bullet is fired
-    bullet->posY = 1 << FIX14_SHIFT;
+    bullet->velX = 1 << FIX14_SHIFT;
+    bullet->velY = 1 << FIX14_SHIFT;
+    bullet->posX = 2 << FIX14_SHIFT; // Random values - they will be set to the top of the spaceship once the bullet is fired
+    bullet->posY = 2 << FIX14_SHIFT;
     bullet->timeAtPosition = 0 << FIX14_SHIFT;
     bullet->drawBullet = 0;
+
 }
 
 /*
-This function initializes an enemy bullet
+This function initializes an object (enemy or power up)
 */
-void initEnemyBullet(struct enemyBullet_t *bullet){
+void initEnemy(struct enemy_t *enemy){
 
-    bullet->posX = 1 << FIX14_SHIFT; // Random values - they will be set to the top of the enemy once the bullet is fired
-    bullet->posY = 1 << FIX14_SHIFT;
-    bullet->timeAtPosition = 0 << FIX14_SHIFT;
-    bullet->drawBullet = 0;
-}
-
-
-/*
-The following functions initialize the three types of enemies
-*/
-void initEnemy1(struct enemy1_t *enemy){
-
-    enemy->posX = randomNumber(3,68); // the x-position is generated randomly within the game window
-    enemy->posY = convertTo1814(2);
+    enemy->posX = randomNumber(4,66); // the x-position is generated randomly within the game window
+    enemy->posY = 2 << FIX14_SHIFT;
     enemy->timeAtPosition = 0 << FIX14_SHIFT;
-    enemy->drawEnemy1 = 0;
-}
-
-void initEnemy2(struct enemy2_t *enemy){
-
-    enemy->posX = randomNumber(3,68); // the x-position is generated randomly within the game window
-    enemy->posY = convertTo1814(2);
-    enemy->timeAtPosition = 0 << FIX14_SHIFT;
-    enemy->drawEnemy2 = 0;
-}
-
-void initEnemy3(struct enemy3_t *enemy){
-
-    enemy->posX = randomNumber(3,68); // the x-position is generated randomly within the game window
-    enemy->posY = convertTo1814(2);
-    enemy->timeAtPosition = 0 << FIX14_SHIFT;
-    enemy->drawEnemy3 = 0;
+    enemy->drawEnemy = 0;
 }
 
 
