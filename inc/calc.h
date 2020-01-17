@@ -14,20 +14,18 @@
 
 // General calc-functions
 uint32_t randomNumber(uint8_t lower, uint8_t upper);
-int32_t convertTo1814(int32_t i);
 int32_t convertTo3200(int32_t i);
 
 // Functions to update the position of objects
 void updateSpaceshipPosition(struct spaceship_t *spaceship, char input);
-void updateSpaceshipBulletPosition(struct spaceshipBullet_t *bullet, struct spaceship_t *ship, char input);
-void updateSpaceshipShieldBulletPosition(struct spaceshipShieldBullet_t *bullet, struct spaceship_t *ship, char temp);
-void updateEnemyBulletPosition(struct enemyBullet_t *bullet, struct enemy1_t *enemy);
-void updateEnemy1Position(struct enemy1_t *enemy);
-void updateEnemy2Position(struct enemy2_t *enemy);
-void updateEnemy3Position(struct enemy3_t *enemy);
+void updateSpaceshipBulletPosition(struct bullet_t *bullet, struct spaceship_t *ship, char input, uint32_t k);
+void updateSpaceshipShieldBulletPosition(struct bullet_t *bullet, struct spaceship_t *ship, char temp, uint32_t k);
+void updateEnemyBulletPosition(struct bullet_t *bullet, struct enemy_t *enemy, uint32_t k);
+void updateEnemyPosition(struct enemy_t *enemy, uint32_t k);
 
 // Functions to check if the objects have been hit by a bullet
-uint32_t isEnemyOneHit(struct enemy1_t *e, struct spaceshipBullet_t *b1, struct spaceshipBullet_t *b2, struct spaceshipBullet_t *b3, struct spaceshipBullet_t *b4, struct spaceshipBullet_t *b5, struct spaceshipShieldBullet_t *sb1, struct spaceshipShieldBullet_t *sb2);
-uint32_t isEnemyTwoHit(struct enemy2_t *e, struct spaceshipBullet_t *b1, struct spaceshipBullet_t *b2, struct spaceshipBullet_t *b3, struct spaceshipBullet_t *b4, struct spaceshipBullet_t *b5, struct spaceshipShieldBullet_t *sb1, struct spaceshipShieldBullet_t *sb2);
-
+uint32_t isEnemyOneHit(struct enemy_t *e, struct bullet_t *b1, struct bullet_t *b2, struct bullet_t *b3, struct bullet_t *b4, struct bullet_t *b5, struct bullet_t *sb1, struct bullet_t *sb2);
+uint32_t isEnemyTwoHit(struct enemy_t *e, struct bullet_t *b1, struct bullet_t *b2, struct bullet_t *b3, struct bullet_t *b4, struct bullet_t *b5, struct bullet_t *sb1, struct bullet_t *sb2);
+//uint32_t isEnemyThreeHit(struct enemy_t *e, struct bullet_t *b1, struct bullet_t *b2, struct bullet_t *b3, struct bullet_t *b4, struct bullet_t *b5, struct bullet_t *sb1, struct bullet_t *sb2);
+//uint32_t isSpaceshipHit(struct spaceship_t *s, struct bullet_t *b1, struct bullet_t *b2, struct bullet_t *b3);
 #endif
