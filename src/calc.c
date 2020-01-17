@@ -228,44 +228,44 @@ uint32_t isEnemyOneHit(struct enemy1_t *e, struct spaceshipBullet_t *b1, struct 
 
     uint32_t temp = 0;
 
-    if ((*e).drawEnemy1==(1<<FIX14_SHIFT) && (((*b1).posX<=(*e).posX+(1<<FIX14_SHIFT) && ((*b1).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b1).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b1).posY>=(*e).posY)))){
+    if ((*e).drawEnemy1==1 && (((*b1).posX<=(*e).posX+(1<<FIX14_SHIFT) && ((*b1).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b1).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b1).posY>=(*e).posY)))){
 
-        e->drawEnemy1=(0 << FIX14_SHIFT);
-        b1->drawBullet=(0 << FIX14_SHIFT);
+        e->drawEnemy1=0;
+        b1->drawBullet=0;
         temp = 1;
 
-     } else if ((*e).drawEnemy1==(1<<FIX14_SHIFT) && (((*b2).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b2).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b2).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b2).posY>=(*e).posY))){
+     } else if ((*e).drawEnemy1==1 && (((*b2).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b2).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b2).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b2).posY>=(*e).posY))){
 
-        e->drawEnemy1=(0 << FIX14_SHIFT);
-        b2->drawBullet=(0 << FIX14_SHIFT);
+        e->drawEnemy1=0;
+        b2->drawBullet=0;
         temp = 1;
 
-     } else if ((*e).drawEnemy1==(1<<FIX14_SHIFT) && (((*b3).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b3).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b3).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b3).posY>=(*e).posY))){
+     } else if ((*e).drawEnemy1==1 && (((*b3).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b3).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b3).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b3).posY>=(*e).posY))){
 
-        e->drawEnemy1=(0 << FIX14_SHIFT);
-        b3->drawBullet=(0 << FIX14_SHIFT);
+        e->drawEnemy1=0;
+        b3->drawBullet=0;
         temp = 1;
 
-     } else if ((*e).drawEnemy1==(1<<FIX14_SHIFT) && (((*b4).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b4).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b4).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b4).posY>=(*e).posY))){
+     } else if ((*e).drawEnemy1==1 && (((*b4).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b4).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b4).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b4).posY>=(*e).posY))){
 
-        e->drawEnemy1=(0 << FIX14_SHIFT);
-        b4->drawBullet=(0 << FIX14_SHIFT);
+        e->drawEnemy1=0;
+        b4->drawBullet=0;
         temp = 1;
 
-     } else if ((*e).drawEnemy1==(1<<FIX14_SHIFT) && (((*b5).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b5).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b5).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b5).posY>=(*e).posY))){
+     } else if ((*e).drawEnemy1==1 && (((*b5).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b5).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b5).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b5).posY>=(*e).posY))){
 
-        e->drawEnemy1=(0 << FIX14_SHIFT);
-        b5->drawBullet=(0 << FIX14_SHIFT);
+        e->drawEnemy1=0;
+        b5->drawBullet=0;
         temp = 1;
 
-     } else if ((*e).drawEnemy1==(1<<FIX14_SHIFT) && (((*sb1).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*sb1).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*sb1).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*sb1).posY>=(*e).posY))){
+     } else if ((*e).drawEnemy1==1 && (((*sb1).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*sb1).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*sb1).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*sb1).posY>=(*e).posY))){
 
-        sb1->drawBullet=(0 << FIX14_SHIFT);
+        sb1->drawBullet=0;
         temp = 0;
 
-     } else if ((*e).drawEnemy1==(1<<FIX14_SHIFT) && (((*sb2).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*sb2).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*sb2).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*sb2).posY>=(*e).posY))){
+     } else if ((*e).drawEnemy1==1 && (((*sb2).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*sb2).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*sb2).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*sb2).posY>=(*e).posY))){
 
-        sb2->drawBullet=(0 << FIX14_SHIFT);
+        sb2->drawBullet=0;
         temp = 0;
 
      } else {
@@ -281,44 +281,44 @@ uint32_t isEnemyTwoHit(struct enemy2_t *e, struct spaceshipBullet_t *b1, struct 
 
     uint32_t temp = 0;
 
-    if ((*e).drawEnemy2==(1<<FIX14_SHIFT) && ((*b1).posX<=(*e).posX+(1<<FIX14_SHIFT) && ((*b1).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*b1).posY){
+    if ((*e).drawEnemy2==1 && ((*b1).posX<=(*e).posX+(1<<FIX14_SHIFT) && ((*b1).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*b1).posY){
 
-        e->drawEnemy2=(0 << FIX14_SHIFT);
-        b1->drawBullet=(0 << FIX14_SHIFT);
+        e->drawEnemy2=0;
+        b1->drawBullet=0;
         temp = 1;
 
-     } else if ((*e).drawEnemy2==(1<<FIX14_SHIFT) && (((*b2).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b2).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*b2).posY){
+     } else if ((*e).drawEnemy2==1 && (((*b2).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b2).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*b2).posY){
 
-        e->drawEnemy2=(0 << FIX14_SHIFT);
-        b2->drawBullet=(0 << FIX14_SHIFT);
+        e->drawEnemy2=0;
+        b2->drawBullet=0;
         temp = 1;
 
-     } else if ((*e).drawEnemy2==(1<<FIX14_SHIFT) && (((*b3).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b3).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*b3).posY){
+     } else if ((*e).drawEnemy2==1 && (((*b3).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b3).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*b3).posY){
 
-        e->drawEnemy2=(0 << FIX14_SHIFT);
-        b3->drawBullet=(0 << FIX14_SHIFT);
+        e->drawEnemy2=0;
+        b3->drawBullet=0;
         temp = 1;
 
-     } else if ((*e).drawEnemy2==(1<<FIX14_SHIFT) && (((*b4).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b4).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*b4).posY){
+     } else if ((*e).drawEnemy2==1 && (((*b4).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b4).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*b4).posY){
 
-        e->drawEnemy2=(0 << FIX14_SHIFT);
-        b4->drawBullet=(0 << FIX14_SHIFT);
+        e->drawEnemy2=0;
+        b4->drawBullet=0;
         temp = 1;
 
-     } else if ((*e).drawEnemy2==(1<<FIX14_SHIFT) && (((*b5).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b5).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*b5).posY){
+     } else if ((*e).drawEnemy2==1 && (((*b5).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b5).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*b5).posY){
 
-        e->drawEnemy2=(0 << FIX14_SHIFT);
-        b5->drawBullet=(0 << FIX14_SHIFT);
+        e->drawEnemy2=0;
+        b5->drawBullet=0;
         temp = 1;
 
-     } else if ((*e).drawEnemy2==(1<<FIX14_SHIFT) && (((*sb1).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*sb1).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*sb1).posY){
+     } else if ((*e).drawEnemy2==1 && (((*sb1).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*sb1).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*sb1).posY){
 
-        sb1->drawBullet=(0 << FIX14_SHIFT);
+        sb1->drawBullet=0;
         temp = 0;
 
-     } else if ((*e).drawEnemy2==(1<<FIX14_SHIFT) && (((*sb2).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*sb2).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*sb2).posY){
+     } else if ((*e).drawEnemy2==1 && (((*sb2).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*sb2).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*sb2).posY){
 
-        sb2->drawBullet=(0 << FIX14_SHIFT);
+        sb2->drawBullet=0;
         temp = 0;
 
      } else {
