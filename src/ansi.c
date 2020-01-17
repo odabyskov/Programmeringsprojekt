@@ -256,7 +256,7 @@ void drawWindow(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, char* string_p, 
 
         uint8_t vertical4 = vertical3+1;
         gotoxy(vertical4,y1);
-        for (i=0; i<ekstraTegn;i++){
+        for (i=0; i<ekstraTegn+1;i++){
             printf("%c", 196);
         }
     }
@@ -278,10 +278,10 @@ void drawWindow(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, char* string_p, 
 /*
 Draw and enter the main menu
 */
-void mainmenu(){
+uint8_t mainmenu(){
     clrscr();
     uart_clear();
-    uint8_t menu = 1, input = 0;
+    uint8_t menu = 1, input = 0, returnvalue;
 
     /*
     Initialize the menu (start game is chosen as default)
@@ -299,10 +299,10 @@ void mainmenu(){
 
     drawBox(30,22,50,26);
     gotoxy(38,24);
-    printf("help");
+    printf("Help");
     drawBox(30,27,50,31);
     gotoxy(36,29);
-    printf("credits");
+    printf("Credits");
     drawBox(30,32,50,36);
     gotoxy(38,34);
     printf("Quit");
@@ -405,18 +405,19 @@ void mainmenu(){
 
     // If Enter is pressed leave the while loop & activate the chosen menu
     if (input == 32 && menu == 1){
-        getDifficulty();}
+        returnvalue = getDifficulty();}
     else if (input == 32 && menu == 2){
         getHelp();}
     else if (input == 32 && menu == 3){
         getCredits();}
     else if (input == 32 && menu == 4){
-        clrscr();
-        //exit(0);}
+        returnvalue = 0;
     }
+return returnvalue;
 }
+
 /*
-* This function draws the title
+This function draws the title
 */
 void drawTitle(uint8_t type){
     fgcolor(15);
@@ -470,7 +471,7 @@ void drawTitle(uint8_t type){
 }
 
 /*
-* This function updates start game box when selected
+This function updates start game box when selected
 */
 void drawmenuStart(){
     drawBox(30,22,50,26);
@@ -481,7 +482,7 @@ void drawmenuStart(){
 }
 
 /*
-* This function updates help box when selected
+This function updates help box when selected
 */
 void drawmenuHelp(){
         drawBox(30,17,50,21);
@@ -493,7 +494,7 @@ void drawmenuHelp(){
 }
 
 /*
-* This function updates credit box when selected
+This function updates credit box when selected
 */
 void drawmenuCredits(){
     drawBox(30,22,50,26);
@@ -505,7 +506,7 @@ void drawmenuCredits(){
 }
 
 /*
-* Thus function updates quit box when selected
+Thus function updates quit box when selected
 */
 void drawmenuQuit(){
     drawBox(30,27,50,31);
@@ -516,14 +517,14 @@ void drawmenuQuit(){
 }
 
 /*
-* This function makes you enter the help menu
+This function makes you enter the help menu
 */
 void getHelp(){
     clrscr();
     uart_clear();
     uint8_t input = 0;
 
-    
+
 //making the help window from our drawWindow function
 drawWindow(9, 3, 74, 38, " HELP! ", 1);
 
@@ -540,91 +541,75 @@ printf("one of our lives.");
 
 
 //how to move your ship
-gotoxy(15,12);
+gotoxy(15,11);
 printf("How to move your ship:");
 
 //Drawing our ship
-gotoxy(40,16);
+gotoxy(40,15);
 printf("%c",167);
-gotoxy(38,17);
+gotoxy(38,16);
 printf("%c%c%c%c%c",173,205,186,205,173);
 
 //how to go left
-gotoxy(15,17);
+gotoxy(15,16);
 printf("left press A <-");
 
 //how to go  right
-gotoxy(50,17);
+gotoxy(50,16);
 printf(" -> right press D");
 
 //how to shoot
-gotoxy(40,14);
+gotoxy(40,13);
 printf("%c",167);
-gotoxy(50,14);
+gotoxy(50,13);
 printf("to shoot press Space");
 
 //what kind of enemies do we have:
-gotoxy(15,21);
+gotoxy(15,18);
 printf("Your enemies:");
 
 
 //enemy 1:
-gotoxy(33, 23);
+gotoxy(33, 20);
 printf("*This enemy has a gun");
 
-gotoxy(19, 23);
+gotoxy(19, 20);
 printf("%c",219);
-gotoxy(18, 23);
+gotoxy(18, 20);
 printf("%c",219);
-gotoxy(20, 23);
+gotoxy(20, 20);
 printf("%c",219);
-gotoxy(19, 24);
+gotoxy(19, 21);
 printf("%c",219);
 
 //enemy 2:
-gotoxy(33, 28);
+gotoxy(33, 24);
 printf("*This enemy has a shield");
 
-gotoxy(19, 28);
+gotoxy(19, 24);
 printf("%c",219);
-gotoxy(18, 28);
+gotoxy(18, 24);
 printf("%c",219);
-gotoxy(20, 28);
+gotoxy(20, 24);
 printf("%c",219);
-gotoxy(19, 27);
+gotoxy(19, 23);
 printf("%c",219);
 
 //enemy 3:
-gotoxy(33, 31);
-printf("*This enemy will fall");
+gotoxy(33, 27);
+printf("*This enemy only fall");
 
-gotoxy(19, 31);
+gotoxy(19, 27);
 printf("%c",219);
-gotoxy(18, 31);
+gotoxy(18, 27);
 printf("%c",219);
-gotoxy(20, 31);
-printf("%c",219);
-
-
-//enemy 4:
-gotoxy(33, 35);
-printf("*This enemy has a gun and a shield");
-
-gotoxy(19, 35);
-printf("%c",219);
-gotoxy(18, 35);
-printf("%c",219);
-gotoxy(20, 35);
-printf("%c",219);
-gotoxy(19, 34);
-printf("%c",219);
-gotoxy(19, 36);
+gotoxy(20, 27);
 printf("%c",219);
 
     fgcolor(2);
-    drawBox(30,34,50,38);
+    drawBox(31,33,49,37);
     fgcolor(15);
-    gotoxy(36,36);
+    gotoxy(38,35);
     printf("Back");
 
     //while(input =! 32){
@@ -635,7 +620,7 @@ printf("%c",219);
 }
 
 /*
-* This function makes you enter the credits menu
+This function makes you enter the credits menu
 */
 void getCredits(){
     clrscr();
@@ -644,24 +629,28 @@ void getCredits(){
 
     drawWindow(22, 8, 57, 32, " Credits ", 1);
 
-    //bgcolor(1);
-    gotoxy(36,15);
-    printf("Oda");
-    //resetbgcolor();
+    gotoxy(30,12);
+    printf("Programming:");
+    gotoxy(30,14);
+    printf("Oda B. Aggerholm");
+    gotoxy(30,16);
+    printf("Patrick Strandberg");
+    gotoxy(30,18);
+    printf("Marc M. Guichard");
 
-    //bgcolor(2);
-    gotoxy(36,19);
-    printf("Patrick");
-    //resetbgcolor();
+    gotoxy(30,21);
+    printf("Teaching:");
+    gotoxy(30,23);
+    printf("Jose%cM.G. Merayo",239);
 
-    //bgcolor(3);
-    gotoxy(36,23);
-    printf("Marc");
-    //resetbgcolor();
+    gotoxy(30,26);
+    printf("Teaching Assistance:");
+    gotoxy(30,28);
+    printf("Mads F. Madsen");
 
     fgcolor(2);
     drawBox(30,34,50,38);
-    gotoxy(34,36);
+    gotoxy(38,36);
     fgcolor(15);
     printf("Back");
 
@@ -672,12 +661,12 @@ void getCredits(){
 }
 
 /*
-* This function makes you enter the difficulty menu
+This function makes you enter the difficulty menu
 */
-void getDifficulty(){
+uint8_t getDifficulty(){
     clrscr();
     uart_clear();
-    uint8_t menu = 2, input = 0;
+    uint8_t menu = 2, input = 0, returnvalue;
 
     // Initialize the menu (Normal is chosen as default)
     drawTitle(2);
@@ -795,18 +784,27 @@ void getDifficulty(){
     }
 
     }
-    if (menu == 1 & input == 32)
-        printf("Easy Mode");
-    else if (menu == 2 & input == 32)
-        printf("Normal Mode");
-    else if (menu == 3 & input == 32)
-        printf("Hard Mode");
-    else if (menu == 4 & input == 32)
+    if (menu == 1 & input == 32){
+        //printf("Easy Mode");
+        returnvalue = 1;
+    }
+    else if (menu == 2 & input == 32){
+        //printf("Normal Mode");
+        returnvalue = 2;
+    }
+    else if (menu == 3 & input == 32){
+        //printf("Hard Mode");
+        returnvalue = 3;
+    }
+    else if (menu == 4 & input == 32){
         mainmenu();
+    }
+    return returnvalue;
+
 }
 
 /*
-* This function draws the Easy difficulty box
+This function draws the Easy difficulty box
 */
 void drawmenuEasy(){
     drawBox(30,22,50,26);
@@ -817,7 +815,7 @@ void drawmenuEasy(){
 }
 
 /*
-* This function draws the Normal difficulty box
+This function draws the Normal difficulty box
 */
 void drawmenuNormal(){
     drawBox(30,17,50,21);
@@ -829,7 +827,7 @@ void drawmenuNormal(){
 }
 
 /*
-* This function draws the Hard difficulty box
+This function draws the Hard difficulty box
 */
 void drawmenuHard(){
     drawBox(30,22,50,26);
@@ -841,7 +839,7 @@ void drawmenuHard(){
 }
 
 /*
-* This function draws the main menu menubar
+This function draws the main menu menubar
 */
 void drawmenuMainMenu(){
     drawBox(30,27,50,31);
@@ -850,7 +848,6 @@ void drawmenuMainMenu(){
     drawBox(30,32,50,36);
     fgcolor(15);
 }
-
 
 
 
@@ -995,7 +992,7 @@ void drawSpaceship(struct spaceship_t *spaceship){
 /*
 This function draws the bullet fired from the spaceship
 */
-void drawSpaceshipBullet(struct spaceshipBullet_t *bullet){
+void drawSpaceshipBullet(struct bullet_t *bullet){
 
     if ((*bullet).posY < (2 << FIX14_SHIFT)){
             (*bullet).drawBullet = 0;
@@ -1022,13 +1019,46 @@ void drawSpaceshipBullet(struct spaceshipBullet_t *bullet){
 }
 
 /*
-This function draws the bullet fired from the enemy
-*/void drawEnemyBullet(struct enemyBullet_t *enemyBullet){
+This function draws the bullet fired from the spaceship that kills shielded enemies
+*/
+void drawSpaceshipShieldBullet(struct bullet_t *bullet){
 
-    if ((*enemyBullet).posY > convertTo1814(40)){
-            (*enemyBullet).drawBullet = 0;
+    if (bullet->posY < (2 << FIX14_SHIFT)){
+        bullet->drawBullet = 0;
+    } else if (bullet->drawBullet == 1){
+
+        // We convert the bullet's last position to 32.0 fixed point
+        uint32_t prevX = convertTo3200((*bullet).prevPosX);
+        uint32_t prevY = convertTo3200((*bullet).prevPosY);
+
+        // We delete the bullet at its last position
+        deleteSymbol(prevX, prevY);
+
+        // We convert the bullet's position to 32.0 fixed point
+        uint32_t curX = convertTo3200((*bullet).posX);
+        uint32_t curY = convertTo3200((*bullet).posY);
+
+        gotoxy(curX,curY);
+            if (curY > 2){
+                fgcolor(9); // Sets the bullet's color to red
+                printf("!"); // draws a bullet shaped like a !
+                fgcolor(15);
+            }
+    } else if (bullet->drawBullet == 0 ){
+        // We convert the bullet's position to 32.0 fixed point
+        uint32_t curX = convertTo3200((*bullet).posX);
+        uint32_t curY = convertTo3200((*bullet).posY);
+
+        // We delete the bullet
+        deleteSymbol(curX, curY);
     }
 
+
+}
+
+/*
+This function draws the bullet fired from the enemy
+*/void drawEnemyBullet(struct bullet_t *enemyBullet){
     if ((*enemyBullet).drawBullet == 1 ){
 
         // We convert the bullet's last position to 32.0 fixed point
@@ -1043,8 +1073,6 @@ This function draws the bullet fired from the enemy
         uint32_t curY = convertTo3200((*enemyBullet).posY);
 
         gotoxy(curX,curY);
-        //printf("%c", 004); // draws a bullet shaped like a diamond
-        if (curY < 39)
         printf("o"); // draws a bullet shaped like a diamond
     }
 }
@@ -1052,8 +1080,8 @@ This function draws the bullet fired from the enemy
 /*
 This function draws enemy1
 */
-void drawEnemy1(struct enemy1_t *enemy){
-    if (enemy->drawEnemy1 == 1 ){
+void drawEnemyOne(struct enemy_t *enemy){
+    if (enemy->drawEnemy == 1 ){
         // We convert the enemy's last position to 32.0 fixed point
         uint32_t prevX = convertTo3200((*enemy).prevPosX);
         uint32_t prevY = convertTo3200((*enemy).prevPosY);
@@ -1077,7 +1105,7 @@ void drawEnemy1(struct enemy1_t *enemy){
         gotoxy(curX, curY+1);
         printf("%c",219);
 
-    } else if (enemy->drawEnemy1 == 0){
+    } else if (enemy->drawEnemy == 0){
         // We convert the enemy's position to 32.0 fixed point
         uint32_t prevX = convertTo3200((*enemy).prevPosX);
         uint32_t prevY = convertTo3200((*enemy).prevPosY);
@@ -1093,8 +1121,8 @@ void drawEnemy1(struct enemy1_t *enemy){
 /*
 This function draws enemy2
 */
-void drawEnemy2(struct enemy2_t *enemy){
-    if (enemy->drawEnemy2 == 1 ){
+void drawEnemyTwo(struct enemy_t *enemy){
+    if (enemy->drawEnemy == 1 ){
         // We convert the enemy's last position to 32.0 fixed point
         uint32_t prevX = convertTo3200((*enemy).prevPosX);
         uint32_t prevY = convertTo3200((*enemy).prevPosY);
@@ -1115,7 +1143,7 @@ void drawEnemy2(struct enemy2_t *enemy){
         gotoxy(curX+1, curY);
         printf("%c",219);
 
-    } else if (enemy->drawEnemy2 == 0 ){
+    } else if (enemy->drawEnemy == 0 ){
 
         // We convert the enemy's position to 32.0 fixed point
         uint32_t prevX = convertTo3200((*enemy).prevPosX);
@@ -1131,8 +1159,8 @@ void drawEnemy2(struct enemy2_t *enemy){
 /*
 This function draws enemy3
 */
-void drawEnemy3(struct enemy3_t *enemy){
-    if (enemy->drawEnemy3 == 1 ){
+void drawEnemyThree(struct enemy_t *enemy){
+    if (enemy->drawEnemy == 1 ){
         // We convert the enemy's previous position to 32.0 fixed point
         uint32_t prevX = convertTo3200((*enemy).prevPosX);
         uint32_t prevY = convertTo3200((*enemy).prevPosY);
@@ -1164,7 +1192,7 @@ void drawEnemy3(struct enemy3_t *enemy){
         printf("%c%c%c",192,196,217);
         fgcolor(15);
 
-    } else if (enemy->drawEnemy3 == (0 << FIX14_SHIFT)){
+    } else if (enemy->drawEnemy == 0 ){
 
         // We convert the enemy's previous position to 32.0 fixed point
         uint32_t prevX = convertTo3200((*enemy).prevPosX);
