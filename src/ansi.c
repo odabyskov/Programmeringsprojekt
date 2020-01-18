@@ -1298,3 +1298,104 @@ printf("%c",219);
 
 }
 
+
+void getHealth(int8_t hits){
+
+    //printing lives
+    gotoxy(71,3);
+    printf("LIVES:");
+
+    if (hits==0){
+    //green
+    fgcolor(2);
+    gotoxy(72,4);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+    gotoxy(72,5);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+
+    //yellow
+    fgcolor(11);
+    gotoxy(72,6);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+    gotoxy(72,7);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+
+    //red
+    fgcolor(1);
+    gotoxy(72,8);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+    gotoxy(72,9);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+    fgcolor(15);
+}
+    if (hits==1){
+     //black
+    fgcolor(0);
+    gotoxy(72,4);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+    gotoxy(72,5);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+
+    //yellow
+    fgcolor(11);
+    gotoxy(72,6);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+    gotoxy(72,7);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+
+    //red
+    fgcolor(1);
+    gotoxy(72,8);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+    gotoxy(72,9);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+    fgcolor(15);
+}
+    if (hits==2){
+    //black
+    fgcolor(0);
+    gotoxy(72,4);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+    gotoxy(72,5);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+
+    //black
+    fgcolor(0);
+    gotoxy(72,6);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+    gotoxy(72,7);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+
+    //red
+    fgcolor(1);
+    gotoxy(72,8);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+    gotoxy(72,9);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+    fgcolor(15);
+}
+    if (hits==3){
+    //black
+    fgcolor(0);
+    gotoxy(72,4);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+    gotoxy(72,5);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+
+    //black
+    fgcolor(0);
+    gotoxy(72,6);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+    gotoxy(72,7);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+
+    //black
+    fgcolor(0);
+    gotoxy(72,8);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+    gotoxy(72,9);
+    printf("%c%c%c%c", 219, 219, 219, 219);
+    fgcolor(15);
+}
+
+}
