@@ -261,10 +261,11 @@ while (time > counter.time - (6 << FIX14_SHIFT) ){}
 */
 }
 
-
 //Game Over should be here
 
 }
-
+gotoxy(1,1);
+printf("Thank you for playing!);
+    
 while(1){}
 }
