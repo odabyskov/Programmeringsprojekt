@@ -34,6 +34,33 @@ int32_t convertTo3200(int32_t i) {
  return i >> 14;
  }
 
+/*
+This functions calculates sine to the angle given as argument
+*/
+int32_t calculateSin(int32_t deg){
+    int degr = (deg * 512)/360;
+    return (int32_t)(SIN[degr & 0x1FF]); // 0x1FF er den sidste plads aka. 0xFF37.
+
+}
+
+/*
+This functions calculates cosine to the angle given as argument
+*/
+int32_t calculateCos(int32_t deg){
+    return calculateSin(deg+90); // vi bruger ligning (6) fra noten
+}
+
+/*
+This function rotates the direction of a bullet with the angle given in the argument
+*/
+void rotateDirection(struct bullet_t *b, int deg){
+    int32_t x1 = (*b).velX;
+    int32_t y1 = (*b).velY;
+
+    b->velX = FIX14_MULT(x1,calculateCos(deg))-FIX14_MULT(y1,calculateSin(deg)); // Vi bruger den definerede multiplikationsfunktion (givet i opgaveteksten)
+    b->velY = FIX14_MULT(x1,calculateSin(deg))+FIX14_MULT(y1,calculateCos(deg));
+
+}
 
 /*
 *
@@ -97,8 +124,9 @@ void updateSpaceshipBulletPosition(struct bullet_t *bullet, struct spaceship_t *
         bullet->prevPosY=(*bullet).posY;
 
         // We update the current position
-        bullet->posX = (*bullet).posX; // the x-position is set to the middle of the spaceship
-        bullet->posY = (*bullet).posY - (1 << k); // the y-position is set to the position above the previous position
+        bullet->posX = (*bullet).prevPosX + (*bullet).velX; //(*bullet).posX;
+        bullet->posY = (*bullet).prevPosY - (*bullet).velY;
+        //FIX14_MULT((*bullet).prevPosY - (1 << k),(*bullet).velY); // the y-position is set to the position above the previous position
 
     }
 
@@ -162,17 +190,38 @@ void updateEnemyBulletPosition(struct bullet_t *enemyBullet, struct enemy_t *ene
 }
 
 /*
-This function updates the position of an enemy/power-up
+This function updates the position of an enemy
 */
 void updateEnemyPosition(struct enemy_t *enemy, uint32_t k){
+
     if ( (*enemy).drawEnemy == 1 ){
-    // We set the current positions to previous position
-    enemy->prevPosX = (*enemy).posX;
-    enemy->prevPosY = (*enemy).posY;
-    enemy->posY = (*enemy).posY + (1 << k); // the y-position is set to the position below the previous position
-    } else if ( (*enemy).drawEnemy == 0 ){
+        // We set the current positions to previous position
+        enemy->prevPosX = (*enemy).posX;
+        enemy->prevPosY = (*enemy).posY;
+        enemy->posY = (*enemy).posY + (1 << k); // the y-position is set to the position below the previous position
+    } else if ( (*enemy).drawEnemy == 0 ){ // (*enemy).posY > 36 << FIX14_SHIFT
         enemy->posX = randomNumber(4,66);
         enemy->posY = 2 << FIX14_SHIFT;
+    }
+}
+
+/*
+This function updates the position of a power-up
+*/
+void updateHeartPosition(struct enemy_t *heart, uint32_t k, uint32_t playerHits){
+
+    if ( (*heart).drawEnemy == 1 ){
+        // We set the current positions to previous position
+        heart->prevPosX = (*heart).posX;
+        heart->prevPosY = (*heart).posY;
+        heart->posY = (*heart).posY + (1 << k); // the y-position is set to the position below the previous position
+    } else if ( (*heart).drawEnemy == 0 && playerHits ==2){
+        heart->posX = randomNumber(4,66);
+        heart->posY = 2 << FIX14_SHIFT;
+        heart->drawEnemy=1;
+    }
+    if ((*heart).posY >= (37<<FIX14_SHIFT)){
+        heart->drawEnemy=0;
     }
 }
 
@@ -186,30 +235,40 @@ uint32_t isEnemyOneHit(struct enemy_t *e, struct bullet_t *b1, struct bullet_t *
     if ((*e).drawEnemy==1 && (((*b1).posX<=(*e).posX+(1<<FIX14_SHIFT) && ((*b1).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b1).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b1).posY>=(*e).posY)))){
 
         e->drawEnemy=0;
+        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posY=2 << FIX14_SHIFT;
         b1->drawBullet=0;
         temp = 1;
 
      } else if ((*e).drawEnemy==1 && (((*b2).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b2).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b2).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b2).posY>=(*e).posY))){
 
         e->drawEnemy=0;
+        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posY=2 << FIX14_SHIFT;
         b2->drawBullet=0;
         temp = 1;
 
      } else if ((*e).drawEnemy==1 && (((*b3).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b3).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b3).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b3).posY>=(*e).posY))){
 
         e->drawEnemy=0;
+        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posY=2 << FIX14_SHIFT;
         b3->drawBullet=0;
         temp = 1;
 
      } else if ((*e).drawEnemy==1 && (((*b4).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b4).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b4).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b4).posY>=(*e).posY))){
 
         e->drawEnemy=0;
+        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posY=2 << FIX14_SHIFT;
         b4->drawBullet=0;
         temp = 1;
 
      } else if ((*e).drawEnemy==1 && (((*b5).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b5).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b5).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b5).posY>=(*e).posY))){
 
         e->drawEnemy=0;
+        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posY=2 << FIX14_SHIFT;
         b5->drawBullet=0;
         temp = 1;
 
@@ -229,7 +288,6 @@ uint32_t isEnemyOneHit(struct enemy_t *e, struct bullet_t *b1, struct bullet_t *
     return temp;
 }
 
-
 /*
 This function checks whether enemy2 has been hit or not and returns 1 if there's a hit
 */
@@ -237,42 +295,52 @@ uint32_t isEnemyTwoHit(struct enemy_t *e, struct bullet_t *b1, struct bullet_t *
 
     uint32_t temp = 0;
 
-    if ((*e).drawEnemy==1 && ((*b1).posX<=(*e).posX+(1<<FIX14_SHIFT) && ((*b1).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*b1).posY){
+    if ((*e).drawEnemy==1 && ((*b1).posX<=(*e).posX+(1<<FIX14_SHIFT) && ((*b1).posX>=(*e).posX-(1<<FIX14_SHIFT))) && ((*b1).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b1).posY>=(*e).posY)){
 
         e->drawEnemy=0;
+        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posY=2 << FIX14_SHIFT;
         b1->drawBullet=0;
         temp = 1;
 
-     } else if ((*e).drawEnemy==1 && (((*b2).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b2).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*b2).posY){
+     } else if ((*e).drawEnemy==1 && (((*b2).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b2).posX>=(*e).posX-(1<<FIX14_SHIFT))) && ((*b2).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b2).posY>=(*e).posY)){
 
         e->drawEnemy=0;
+        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posY=2 << FIX14_SHIFT;
         b2->drawBullet=0;
         temp = 1;
 
-     } else if ((*e).drawEnemy==1 && (((*b3).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b3).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*b3).posY){
+     } else if ((*e).drawEnemy==1 && (((*b3).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b3).posX>=(*e).posX-(1<<FIX14_SHIFT))) && ((*b3).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b3).posY>=(*e).posY)){
 
         e->drawEnemy=0;
+        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posY=2 << FIX14_SHIFT;
         b3->drawBullet=0;
         temp = 1;
 
-     } else if ((*e).drawEnemy==1 && (((*b4).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b4).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*b4).posY){
+     } else if ((*e).drawEnemy==1 && (((*b4).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b4).posX>=(*e).posX-(1<<FIX14_SHIFT))) && ((*b4).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b4).posY>=(*e).posY)){
 
         e->drawEnemy=0;
+        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posY=2 << FIX14_SHIFT;
         b4->drawBullet=0;
         temp = 1;
 
-     } else if ((*e).drawEnemy==1 && (((*b5).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b5).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*b5).posY){
+     } else if ((*e).drawEnemy==1 && (((*b5).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b5).posX>=(*e).posX-(1<<FIX14_SHIFT))) && ((*b5).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b5).posY>=(*e).posY)){
 
         e->drawEnemy=0;
+        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posY=2 << FIX14_SHIFT;
         b5->drawBullet=0;
         temp = 1;
 
-     } else if ((*e).drawEnemy==1 && (((*sb1).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*sb1).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*sb1).posY){
+     } else if ((*e).drawEnemy==1 && (((*sb1).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*sb1).posX>=(*e).posX-(1<<FIX14_SHIFT))) && ((*sb1).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*sb1).posY>=(*e).posY)){
 
         sb1->drawBullet=0;
         temp = 0;
 
-     } else if ((*e).drawEnemy==1 && (((*sb2).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*sb2).posX>=(*e).posX-(1<<FIX14_SHIFT))) && (*e).posY==(*sb2).posY){
+     } else if ((*e).drawEnemy==1 && (((*sb2).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*sb2).posX>=(*e).posX-(1<<FIX14_SHIFT))) && ((*sb2).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*sb2).posY>=(*e).posY)){
 
         sb2->drawBullet=0;
         temp = 0;
@@ -284,58 +352,183 @@ uint32_t isEnemyTwoHit(struct enemy_t *e, struct bullet_t *b1, struct bullet_t *
 }
 
 /*
-        -- UNDER CONSTRUCTION --
 This function checks whether enemy3 has been hit or not and returns 1 if there's a hit
-* /
+*/
 uint32_t isEnemyThreeHit(struct enemy_t *e, struct bullet_t *b1, struct bullet_t *b2, struct bullet_t *b3, struct bullet_t *b4, struct bullet_t *b5, struct bullet_t *sb1, struct bullet_t *sb2){
 
     uint32_t temp = 0;
 
-    if ((*e).drawEnemy3==(1<<FIX14_SHIFT) && (((*b1).posX<=(*e).posX+(1<<FIX14_SHIFT) && ((*b1).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b1).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b1).posY>=(*e).posY)))){
+    if ((*e).drawEnemy==1 && (( (*e).posY+(3<<FIX14_SHIFT) <= (*b1).posY && (*e).posY+(8<<FIX14_SHIFT) >= (*b1).posY) && ((*e).posX-(6<<FIX14_SHIFT) <= (*b1).posX && (*e).posX > (*b1).posX))){
+        rotateDirection(&b1,-10);
+        temp = 0;
+    } else if ((*e).drawEnemy==1 && (( (*e).posY+(3<<FIX14_SHIFT) <= (*b1).posY && (*e).posY+(8<<FIX14_SHIFT) >= (*b1).posY) && ((*e).posX <= (*b1).posX && (*e).posX+(6<<FIX14_SHIFT) > (*b1).posX))){
+        rotateDirection(&b1,10);
+        temp = 0;
+    } else if ((*e).drawEnemy==1 && (( (*e).posY+(3<<FIX14_SHIFT) <= (*b2).posY && (*e).posY+(8<<FIX14_SHIFT) >= (*b2).posY) && ((*e).posX-(6<<FIX14_SHIFT) <= (*b2).posX && (*e).posX > (*b2).posX))){
+        rotateDirection(&b2,-10);
+        temp = 0;
+    } else if ((*e).drawEnemy==1 && (( (*e).posY+(3<<FIX14_SHIFT) <= (*b2).posY && (*e).posY+(8<<FIX14_SHIFT) >= (*b2).posY) && ((*e).posX <= (*b2).posX && (*e).posX+(6<<FIX14_SHIFT) > (*b2).posX))){
+        rotateDirection(&b2,10);
+        temp = 0;
+    } else if ((*e).drawEnemy==1 && (( (*e).posY+(3<<FIX14_SHIFT) <= (*b3).posY && (*e).posY+(8<<FIX14_SHIFT) >= (*b3).posY) && ((*e).posX-(6<<FIX14_SHIFT) <= (*b3).posX && (*e).posX > (*b3).posX))){
+        rotateDirection(&b3,-10);
+        temp = 0;
+    } else if ((*e).drawEnemy==1 && (( (*e).posY+(3<<FIX14_SHIFT) <= (*b3).posY && (*e).posY+(8<<FIX14_SHIFT) >= (*b3).posY) && ((*e).posX <= (*b3).posX && (*e).posX+(6<<FIX14_SHIFT) > (*b3).posX))){
+        rotateDirection(&b3,10);
+        temp = 0;
+    } else if ((*e).drawEnemy==1 && (( (*e).posY+(3<<FIX14_SHIFT) <= (*b4).posY && (*e).posY+(8<<FIX14_SHIFT) >= (*b4).posY) && ((*e).posX-(6<<FIX14_SHIFT) <= (*b4).posX && (*e).posX > (*b4).posX))){
+        rotateDirection(&b4,-10);
+        temp = 0;
+    } else if ((*e).drawEnemy==1 && (( (*e).posY+(3<<FIX14_SHIFT) <= (*b4).posY && (*e).posY+(8<<FIX14_SHIFT) >= (*b4).posY) && ((*e).posX <= (*b4).posX && (*e).posX+(6<<FIX14_SHIFT) > (*b4).posX))){
+        rotateDirection(&b4,10);
+        temp = 0;
+    } else if ((*e).drawEnemy==1 && (( (*e).posY+(3<<FIX14_SHIFT) <= (*b5).posY && (*e).posY+(8<<FIX14_SHIFT) >= (*b5).posY) && ((*e).posX-(6<<FIX14_SHIFT) <= (*b5).posX && (*e).posX > (*b5).posX))){
+        rotateDirection(&b5,-10);
+        temp = 0;
+    } else if ((*e).drawEnemy==1 && (( (*e).posY+(3<<FIX14_SHIFT) <= (*b5).posY && (*e).posY+(8<<FIX14_SHIFT) >= (*b5).posY) && ((*e).posX <= (*b5).posX && (*e).posX+(6<<FIX14_SHIFT) > (*b5).posX))){
+        rotateDirection(&b5,10);
+        temp = 0;
+    }
+    if ((*e).drawEnemy==1 && (((*sb1).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*sb1).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*sb1).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*sb1).posY>=(*e).posY))){
+
+        e->drawEnemy=0;
+        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posY=2 << FIX14_SHIFT;
+        sb1->drawBullet=0;
+        temp = 1;
+
+     } else if ((*e).drawEnemy==1 && (((*sb2).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*sb2).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*sb2).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*sb2).posY>=(*e).posY))){
+
+        e->drawEnemy=0;
+        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posY=2 << FIX14_SHIFT;
+        sb2->drawBullet=0;
+        temp = 1;
+
+     } else {
+        temp = 0;
+     }
+
+/*
+    if ((*e).drawEnemy==1 && (((*b1).posX<=(*e).posX+(1<<FIX14_SHIFT) && ((*b1).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b1).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b1).posY>=(*e).posY)))){
 
 
         b1->drawBullet=(0 << FIX14_SHIFT);
         temp = 0;
 
-     } else if ((*e).drawEnemy3==(1<<FIX14_SHIFT) && (((*b2).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b2).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b2).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b2).posY>=(*e).posY))){
+     } else if ((*e).drawEnemy==1 && (((*b2).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b2).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b2).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b2).posY>=(*e).posY))){
 
 
         b2->drawBullet=(0 << FIX14_SHIFT);
         temp = 0;
 
-     } else if ((*e).drawEnemy3==(1<<FIX14_SHIFT) && (((*b3).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b3).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b3).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b3).posY>=(*e).posY))){
+     } else if ((*e).drawEnemy==1 && (((*b3).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b3).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b3).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b3).posY>=(*e).posY))){
 
 
         b3->drawBullet=(0 << FIX14_SHIFT);
         temp = 0;
 
-     } else if ((*e).drawEnemy3==(1<<FIX14_SHIFT) && (((*b4).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b4).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b4).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b4).posY>=(*e).posY))){
+     } else if ((*e).drawEnemy==1 && (((*b4).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b4).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b4).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b4).posY>=(*e).posY))){
 
         b4->drawBullet=(0 << FIX14_SHIFT);
         temp = 0;
 
-     } else if ((*e).drawEnemy3==(1<<FIX14_SHIFT) && (((*b5).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b5).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b5).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b5).posY>=(*e).posY))){
+     } else if ((*e).drawEnemy==1 && (((*b5).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b5).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b5).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b5).posY>=(*e).posY))){
 
         b5->drawBullet=(0 << FIX14_SHIFT);
         temp = 0;
 
-     } else if ((*e).drawEnemy3==(1<<FIX14_SHIFT) && (((*sb1).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*sb1).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*sb1).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*sb1).posY>=(*e).posY))){
+     } else if ((*e).drawEnemy==1 && (((*sb1).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*sb1).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*sb1).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*sb1).posY>=(*e).posY))){
 
-        e->drawEnemy3=(0 << FIX14_SHIFT);
-        sb1->drawBullet=(0 << FIX14_SHIFT);
+        e->drawEnemy=0;
+        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posY=2 << FIX14_SHIFT;
+        sb1->drawBullet=0;
         temp = 1;
 
-     } else if ((*e).drawEnemy3==(1<<FIX14_SHIFT) && (((*sb2).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*sb2).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*sb2).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*sb2).posY>=(*e).posY))){
+     } else if ((*e).drawEnemy==1 && (((*sb2).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*sb2).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*sb2).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*sb2).posY>=(*e).posY))){
 
-        e->drawEnemy3=(0 << FIX14_SHIFT);
-        sb2->drawBullet=(0 << FIX14_SHIFT);
+        e->drawEnemy=0;
+        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posY=2 << FIX14_SHIFT;
+        sb2->drawBullet=0;
         temp = 1;
 
      } else {
         temp = 0;
      }
     return temp;
-} */
+    */
+}
+
+/*
+This function checks whether the power-up has been hit or not and returns 1 if there's a hit
+*/
+uint32_t isHeartHit(struct enemy_t *h, struct bullet_t *b1, struct bullet_t *b2, struct bullet_t *b3, struct bullet_t *b4, struct bullet_t *b5, struct bullet_t *sb1, struct bullet_t *sb2){
+
+    uint32_t temp = 0;
+
+    if ((*h).drawEnemy==1 && (((*b1).posX<=(*h).posX+(2<<FIX14_SHIFT) && ((*b1).posX>=(*h).posX-(1<<FIX14_SHIFT)) && ((*b1).posY<=(*h).posY+(1<<FIX14_SHIFT)) && ((*b1).posY>=(*h).posY)))){
+
+        h->drawEnemy=0;
+        h->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        h->posY=2 << FIX14_SHIFT;
+        b1->drawBullet=0;
+        temp = 1;
+
+     } else if ((*h).drawEnemy==1 && (((*b2).posX<=(*h).posX+(2<<FIX14_SHIFT)) && ((*b2).posX>=(*h).posX-(1<<FIX14_SHIFT)) && ((*b2).posY<=(*h).posY+(1<<FIX14_SHIFT)) && ((*b2).posY>=(*h).posY))){
+
+        h->drawEnemy=0;
+        h->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        h->posY=2 << FIX14_SHIFT;
+        b2->drawBullet=0;
+        temp = 1;
+
+     } else if ((*h).drawEnemy==1 && (((*b3).posX<=(*h).posX+(2<<FIX14_SHIFT)) && ((*b3).posX>=(*h).posX-(1<<FIX14_SHIFT)) && ((*b3).posY<=(*h).posY+(1<<FIX14_SHIFT)) && ((*b3).posY>=(*h).posY))){
+
+        h->drawEnemy=0;
+        h->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        h->posY=2 << FIX14_SHIFT;
+        b3->drawBullet=0;
+        temp = 1;
+
+     } else if ((*h).drawEnemy==1 && (((*b4).posX<=(*h).posX+(2<<FIX14_SHIFT)) && ((*b4).posX>=(*h).posX-(1<<FIX14_SHIFT)) && ((*b4).posY<=(*h).posY+(1<<FIX14_SHIFT)) && ((*b4).posY>=(*h).posY))){
+
+        h->drawEnemy=0;
+        h->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        h->posY=2 << FIX14_SHIFT;
+        b4->drawBullet=0;
+        temp = 1;
+
+     } else if ((*h).drawEnemy==1 && (((*b5).posX<=(*h).posX+(2<<FIX14_SHIFT)) && ((*b5).posX>=(*h).posX-(1<<FIX14_SHIFT)) && ((*b5).posY<=(*h).posY+(1<<FIX14_SHIFT)) && ((*b5).posY>=(*h).posY))){
+
+        h->drawEnemy=0;
+        h->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        h->posY=2 << FIX14_SHIFT;
+        b5->drawBullet=0;
+        temp = 1;
+
+     } else if ((*h).drawEnemy==1 && (((*sb1).posX<=(*h).posX+(2<<FIX14_SHIFT)) && ((*sb1).posX>=(*h).posX-(1<<FIX14_SHIFT)) && ((*sb1).posY<=(*h).posY+(1<<FIX14_SHIFT)) && ((*sb1).posY>=(*h).posY))){
+
+        h->drawEnemy=0;
+        h->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        h->posY=2 << FIX14_SHIFT;
+        sb1->drawBullet=0;
+        temp = 0;
+
+     } else if ((*h).drawEnemy==1 && (((*sb2).posX<=(*h).posX+(2<<FIX14_SHIFT)) && ((*sb2).posX>=(*h).posX-(1<<FIX14_SHIFT)) && ((*sb2).posY<=(*h).posY+(1<<FIX14_SHIFT)) && ((*sb2).posY>=(*h).posY))){
+
+        h->drawEnemy=0;
+        h->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        h->posY=2 << FIX14_SHIFT;
+        sb2->drawBullet=0;
+        temp = 0;
+
+     } else {
+        temp = 0;
+     }
+    return temp;
+}
 
 /*
 This function checks whether the player's spaceship has been hit or not and returns 1 if there's a hit
