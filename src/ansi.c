@@ -785,22 +785,18 @@ uint8_t getDifficulty(){
 
     }
     if (menu == 1 & input == 32){
-        //printf("Easy Mode");
         returnvalue = 1;
     }
     else if (menu == 2 & input == 32){
-        //printf("Normal Mode");
         returnvalue = 2;
     }
     else if (menu == 3 & input == 32){
-        //printf("Hard Mode");
         returnvalue = 3;
     }
     else if (menu == 4 & input == 32){
-        mainmenu();
+        returnvalue = mainmenu();
     }
     return returnvalue;
-
 }
 
 /*
