@@ -53,13 +53,16 @@ GPIOC->ODR |= (0x0001 << 7);
 //function that take an integer and sets the LEDs accordingly
 void setLED(uint8_t ledhits){
 
-//if
+
     if (ledhits == 1){                      //one hit turns on yellow (red and green)
         GPIOB->ODR &= ~(0x0001 << 4);       //turn on red by turning off the first bit(and-operation with inverse of one)
         GPIOC->ODR &= ~(0x0001 << 7);       //turn on green
+        GPIOA->ODR |= (0x0001 << 9);       //turn off blue
     }
     else if (ledhits == 2){                 //two hits turns on red
         GPIOB->ODR &= ~(0x0001 << 4);       //turn on red
+        GPIOA->ODR |= (0x0001 << 9);       //turn off blue
+        GPIOC->ODR |= (0x0001 << 7);        //turn off green
     }
     else if (ledhits == 3) {                //three hits and you are dead. white light (red, green and blue)
         GPIOB->ODR &= ~(0x0001 << 4);       //turn on red
@@ -67,7 +70,8 @@ void setLED(uint8_t ledhits){
         GPIOA->ODR &= ~(0x0001 << 9);       //turn on blue
     }
     else {
-    GPIOC->ODR &= ~(0x0001 << 7);           //zero hits equals green. green is default
+        GPIOC->ODR &= ~(0x0001 << 7);        //zero hits equals green. green is default
+        GPIOA->ODR |= (0x0001 << 9);         //turn off blue
+        GPIOB->ODR |= (0x0001 << 4);         //turn off red
     }
 }
-
