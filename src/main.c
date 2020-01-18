@@ -113,8 +113,8 @@ if (temp == 'b' || temp == 'B'){
     printf(" ");
     printf(" ");
     printf("C:/Users/LookBusy>");
-    clrscr();
 while(uart_get_count() < 1){}
+clrscr();
 }
 
 /*
