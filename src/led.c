@@ -4,8 +4,9 @@
 #include <stdint.h>
 #include <stdio.h>
 
-
-//function that initializes the the LEDS
+/*
+This function initializes the LEDs
+*/
 void initializeLED(){
 
 RCC->AHBENR |= RCC_AHBPeriph_GPIOA; // Enable clock for GPIO Port A
@@ -25,13 +26,13 @@ GPIOA->ODR |= (0x0001 << 9);
 RCC->AHBENR |= RCC_AHBPeriph_GPIOB; // Enable clock for GPIO Port B
 
 // Set pin PB4 to output
-GPIOB->OSPEEDR &= ~(0x00000003 << (4 * 2)); 
-GPIOB->OSPEEDR |= (0x00000002 << (4 * 2)); 
-GPIOB->OTYPER &= ~(0x0001 << (4)); 
-GPIOB->OTYPER |= (0x0000 << (4)); 
-GPIOB->MODER &= ~(0x00000003 << (4 * 2)); 
-GPIOB->MODER |= (0x00000001 << (4 * 2)); 
-    
+GPIOB->OSPEEDR &= ~(0x00000003 << (4 * 2));
+GPIOB->OSPEEDR |= (0x00000002 << (4 * 2));
+GPIOB->OTYPER &= ~(0x0001 << (4));
+GPIOB->OTYPER |= (0x0000 << (4));
+GPIOB->MODER &= ~(0x00000003 << (4 * 2));
+GPIOB->MODER |= (0x00000001 << (4 * 2));
+
 // Turning off the led
 GPIOB->ODR |= (0x0001 << 4);
 //
@@ -39,18 +40,20 @@ GPIOB->ODR |= (0x0001 << 4);
 RCC->AHBENR |= RCC_AHBPeriph_GPIOC; // Enable clock for GPIO Port C
 
 // Set pin PC7 to output
-GPIOC->OSPEEDR &= ~(0x00000003 << (7 * 2)); 
-GPIOC->OSPEEDR |= (0x00000002 << (7 * 2)); 
-GPIOC->OTYPER &= ~(0x0001 << (7)); 
-GPIOC->OTYPER |= (0x0000 << (7)); 
-GPIOC->MODER &= ~(0x00000003 << (7 * 2)); 
-GPIOC->MODER |= (0x00000001 << (7 * 2)); 
+GPIOC->OSPEEDR &= ~(0x00000003 << (7 * 2));
+GPIOC->OSPEEDR |= (0x00000002 << (7 * 2));
+GPIOC->OTYPER &= ~(0x0001 << (7));
+GPIOC->OTYPER |= (0x0000 << (7));
+GPIOC->MODER &= ~(0x00000003 << (7 * 2));
+GPIOC->MODER |= (0x00000001 << (7 * 2));
 
 // Turn off the led
 GPIOC->ODR |= (0x0001 << 7);
 }
 
-//function that take an integer and sets the LEDs accordingly
+/*
+This function takes an integer and sets the LEDs accordingly
+*/
 void setLED(uint8_t ledhits){
 
 
@@ -75,3 +78,4 @@ void setLED(uint8_t ledhits){
         GPIOB->ODR |= (0x0001 << 4);         //turn off red
     }
 }
+
