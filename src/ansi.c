@@ -1247,5 +1247,6 @@ fgcolor(15);
 printf("Press a key to start again");
 
 while(uart_get_count() < 1){}
-
+clrscr();
+	
 }
