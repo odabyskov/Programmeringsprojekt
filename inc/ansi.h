@@ -27,6 +27,7 @@ void drawEnemyBullet(struct bullet_t *bullet);
 void drawEnemyOne(struct enemy_t *enemy);
 void drawEnemyTwo(struct enemy_t *enemy);
 void drawEnemyThree(struct enemy_t *enemy);
+void drawHeart(struct enemy_t *heart);
 
 uint8_t mainmenu(); // enter the main menu
 void drawTitle(uint8_t type); // draw title
@@ -41,7 +42,9 @@ void drawmenuEasy(); // Draw the Easy box
 void drawmenuNormal(); // Draw the Normal box
 void drawmenuHard(); // Draw the Hard box
 void drawmenuMainMenu(); // Draw the main menu box
-void gameOver(); //Draw the game over screen
+
+void gameOver();
 void drawGameWindow(int8_t playerHits);
 void getHealth(int8_t hits);
+
 #endif
