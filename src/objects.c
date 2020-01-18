@@ -25,7 +25,7 @@ This function initializes a bullet
 */
 void initBullet(struct bullet_t *bullet){
 
-    bullet->velX = 1 << FIX14_SHIFT;
+    bullet->velX = 0 << FIX14_SHIFT;
     bullet->velY = 1 << FIX14_SHIFT;
     bullet->posX = 2 << FIX14_SHIFT; // Random values - they will be set to the top of the spaceship once the bullet is fired
     bullet->posY = 2 << FIX14_SHIFT;
@@ -44,5 +44,3 @@ void initEnemy(struct enemy_t *enemy){
     enemy->timeAtPosition = 0 << FIX14_SHIFT;
     enemy->drawEnemy = 0;
 }
-
-
