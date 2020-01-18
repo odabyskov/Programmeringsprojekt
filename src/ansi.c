@@ -546,7 +546,7 @@ printf("How to move your ship:");
 
 //Drawing our ship
 gotoxy(40,15);
-printf("%c",220);
+printf("%c",167);
 gotoxy(38,16);
 printf("%c%c%c%c%c",173,205,186,205,173);
 
@@ -785,18 +785,22 @@ uint8_t getDifficulty(){
 
     }
     if (menu == 1 & input == 32){
+        //printf("Easy Mode");
         returnvalue = 1;
     }
     else if (menu == 2 & input == 32){
+        //printf("Normal Mode");
         returnvalue = 2;
     }
     else if (menu == 3 & input == 32){
+        //printf("Hard Mode");
         returnvalue = 3;
     }
     else if (menu == 4 & input == 32){
-        returnvalue = mainmenu();
+        mainmenu();
     }
     return returnvalue;
+
 }
 
 /*
@@ -845,90 +849,6 @@ void drawmenuMainMenu(){
     fgcolor(15);
 }
 
-
-
-
-/*
-*
-*
-gameWindow and the two stat-windows is made by using the drawWindowfunction
-*
-*/
-void drawGameWindow(){
-
-//gameWindow is made
-drawWindow(2, 1, 68, 39,"GAME",1);
-
-//Heads-up display is made
-drawWindow(69, 1, 79, 22,"HUD",1);
-
-    //printing life
-    gotoxy(72,3);
-    printf("LIFE:");
-
-    //green
-    fgcolor(2);
-    gotoxy(72,4);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-
-    //yellow
-    fgcolor(11);
-    gotoxy(72,5);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-
-    //red
-    fgcolor(1);
-    gotoxy(72,6);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-    fgcolor(15);
-
-
-    //printing shield
-    gotoxy(71,8);
-    printf("SHIELD:");
-    gotoxy(72,9);
-    printf("%c%c%c%c", 218, 196, 196, 191);
-
-
-//Stats display is made
-drawWindow(69, 23, 79, 39,"STATS",1);
-
-
-    //printing enemy2
-    gotoxy(73, 25);
-    printf("%c",219);
-    gotoxy(74, 25);
-    printf("%c",219);
-    gotoxy(75, 25);
-    printf("%c",219);
-    gotoxy(74, 26);
-    printf("%c",219);
-    gotoxy(74, 24);
-    printf("%c",219);
-
-    //printing enemy1
-    gotoxy(73,29);
-    printf("%c",219);
-    gotoxy(74,29);
-    printf("%c",219);
-    gotoxy(75,29);
-    printf("%c",219);
-    gotoxy(74,30);
-    printf("%c",219);
-
-    //printing enemy3
-    gotoxy(73, 33);
-    printf("%c",219);
-    gotoxy(74, 33);
-    printf("%c",219);
-    gotoxy(75, 33);
-    printf("%c",219);
-    gotoxy(74, 32);
-    printf("%c",219);
-}
-
-
-
 /*
 *
 *
@@ -965,6 +885,7 @@ void drawSpaceship(struct spaceship_t *spaceship){
     uint32_t curX = convertTo3200((*spaceship).posX);
     uint32_t curY = convertTo3200((*spaceship).posY);
 
+    fgcolor(2); // Colors the spaceship blue
     gotoxy(curX,curY);
     printf("%c", 186);
     newY = curY - 1;
@@ -982,7 +903,7 @@ void drawSpaceship(struct spaceship_t *spaceship){
     newX = curX + 2;
     gotoxy(newX,curY);
     printf("%c", 173);
-
+    fgcolor(15);
 }
 
 /*
@@ -1010,7 +931,14 @@ void drawSpaceshipBullet(struct bullet_t *bullet){
         gotoxy(curX,curY);
         //printf("%c", 004); // draws a bullet shaped like a diamond
 	if (curY > 2)
-        printf("o"); // draws a bullet shaped like a diamond
+        printf("o"); // draws a bullet
+    } else if ((*bullet).drawBullet == 0){
+        // We convert the bullet's last position to 32.0 fixed point
+        uint32_t prevX = convertTo3200((*bullet).prevPosX);
+        uint32_t prevY = convertTo3200((*bullet).prevPosY);
+
+        // We delete the bullet at its last position
+        deleteSymbol(prevX, prevY);
     }
 }
 
@@ -1070,6 +998,13 @@ This function draws the bullet fired from the enemy
 
         gotoxy(curX,curY);
         printf("o"); // draws a bullet shaped like a diamond
+    } else if ((*enemyBullet).drawBullet == 0){
+        // We convert the bullet's last position to 32.0 fixed point
+        uint32_t prevX = convertTo3200((*enemyBullet).prevPosX);
+        uint32_t prevY = convertTo3200((*enemyBullet).prevPosY);
+
+        // We delete the bullet at its last position
+        deleteSymbol(prevX, prevY);
     }
 }
 
@@ -1092,6 +1027,7 @@ void drawEnemyOne(struct enemy_t *enemy){
         uint32_t curX = convertTo3200((*enemy).posX);
         uint32_t curY = convertTo3200((*enemy).posY);
 
+        fgcolor(9);
         gotoxy(curX, curY);
         printf("%c",219);
         gotoxy(curX-1, curY);
@@ -1100,6 +1036,7 @@ void drawEnemyOne(struct enemy_t *enemy){
         printf("%c",219);
         gotoxy(curX, curY+1);
         printf("%c",219);
+        fgcolor(15);
 
     } else if (enemy->drawEnemy == 0){
         // We convert the enemy's position to 32.0 fixed point
@@ -1132,12 +1069,14 @@ void drawEnemyTwo(struct enemy_t *enemy){
         uint32_t curX = convertTo3200((*enemy).posX);
         uint32_t curY = convertTo3200((*enemy).posY);
 
+        fgcolor(8); // Grey
         gotoxy(curX, curY);
         printf("%c",219);
         gotoxy(curX-1, curY);
         printf("%c",219);
         gotoxy(curX+1, curY);
         printf("%c",219);
+        fgcolor(15);
 
     } else if (enemy->drawEnemy == 0 ){
 
@@ -1174,6 +1113,7 @@ void drawEnemyThree(struct enemy_t *enemy){
         uint32_t curX = convertTo3200((*enemy).posX);
         uint32_t curY = convertTo3200((*enemy).posY);
 
+        fgcolor(5);
         gotoxy(curX, curY);
         printf("%c",219);
         gotoxy(curX-1, curY+1);
@@ -1182,6 +1122,7 @@ void drawEnemyThree(struct enemy_t *enemy){
         printf("%c",219);
         gotoxy(curX, curY+1);
         printf("%c",219);
+        fgcolor(15);
 
         fgcolor(6);
         gotoxy(curX-1, curY+2);
@@ -1205,6 +1146,60 @@ void drawEnemyThree(struct enemy_t *enemy){
     }
 }
 
+/*
+This function draws the heart-powerup
+*/
+void drawHeart(struct enemy_t *heart){
+    if (heart->drawEnemy == 1 ){
+        // We convert the heart's last position to 32.0 fixed point
+        uint32_t prevX = convertTo3200((*heart).prevPosX);
+        uint32_t prevY = convertTo3200((*heart).prevPosY);
+
+        // We delete the enemy at its last position
+        deleteSymbol(prevX, prevY);
+        deleteSymbol(prevX-1,prevY);
+        deleteSymbol(prevX+1,prevY);
+        deleteSymbol(prevX+2,prevY);
+        deleteSymbol(prevX,prevY+1);
+        deleteSymbol(prevX+1,prevY+1);
+
+        // We convert the heart's position to 32.0 fixed point
+        uint32_t curX = convertTo3200((*heart).posX);
+        uint32_t curY = convertTo3200((*heart).posY);
+
+        fgcolor(1);
+        gotoxy(curX-1, curY);
+        printf("%c",40);
+        gotoxy(curX, curY);
+        printf("%c",92);
+        gotoxy(curX+1, curY);
+        printf("%c",47);
+        gotoxy(curX+2, curY);
+        printf("%c",41);
+        gotoxy(curX, curY+1);
+        printf("%c",92);
+        gotoxy(curX+1, curY+1);
+        printf("%c",47);
+        fgcolor(15);
+
+    } else if (heart->drawEnemy == 0){
+        // We convert the heart's position to 32.0 fixed point
+        uint32_t curX = convertTo3200((*heart).prevPosX);
+        uint32_t curY = convertTo3200((*heart).prevPosY);
+
+        // We delete the heart at its last position
+        deleteSymbol(curX, curY);
+        deleteSymbol(curX-1,curY);
+        deleteSymbol(curX+1,curY);
+        deleteSymbol(curX+2,curY);
+        deleteSymbol(curX,curY+1);
+        deleteSymbol(curX+1,curY+1);
+    }
+}
+
+/*
+Game-over screen
+*/
 
 void gameOver(){
 
@@ -1248,7 +1243,7 @@ printf("Press a key to start again");
 
 while(uart_get_count() < 1){}
 clrscr();
-	
+
 }
 
 //Draw the gamewindow
@@ -1269,6 +1264,7 @@ gotoxy(72,20);
 printf("KILLS;");
 
 //printing enemy1
+fgcolor(9);
 gotoxy(74, 22);
 printf("%c",219);
 gotoxy(73, 22);
@@ -1277,16 +1273,20 @@ gotoxy(75, 22);
 printf("%c",219);
 gotoxy(74, 23);
 printf("%c",219);
+fgcolor(15);
 
 //printing enemy2
+fgcolor(8); // Grey
 gotoxy(74, 28);
 printf("%c",219);
 gotoxy(73, 28);
 printf("%c",219);
 gotoxy(75, 28);
 printf("%c",219);
+fgcolor(15);
 
 //printing enemy3
+fgcolor(5);
 gotoxy(74, 34);
 printf("%c",219);
 gotoxy(73, 34);
@@ -1295,6 +1295,12 @@ gotoxy(75, 34);
 printf("%c",219);
 gotoxy(74, 33);
 printf("%c",219);
+fgcolor(15);
+
+fgcolor(6);
+gotoxy(73, 35);
+printf("%c%c%c",192,196,217);
+fgcolor(15);
 
 }
 
@@ -1399,3 +1405,5 @@ void getHealth(int8_t hits){
 }
 
 }
+
+
