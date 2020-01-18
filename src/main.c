@@ -9,7 +9,7 @@
 
 // set flags
 char temp; // input flags
-int time = 0, hits = 0, iter = 0, difficulty; // time flag, damage flag and game state flag
+int time = 0, hits = 0, iter = 0, difficulty, playerHits; // time flag, damage flag and game state flag
 uint32_t velBullet = 13; // Velocity of the bullets (determined by shifting 1 tis number of places to the left)
 uint32_t velEnemy = 12; // Velocity of the enemies (determined by shifting 1 tis number of places to the left)
 
@@ -35,7 +35,8 @@ Initialize the game
 */
 setTimer();
 initCounter(&counter);
-
+playerHits = 0;
+    
 struct spaceship_t ship; // Spaceship
 
 struct bullet_t b1; // Regular bullets
@@ -92,20 +93,33 @@ drawGameWindow();
 /*
 Game Start
 */
-while(1){ // while not dead
+while(1){ 
+//while(playerHits < 3) // while not dead
 
 /*
 Input
 */
-//if (iter == 6){ //reset the micro game state
-    //iter = 0;
-    time = counter.time << FIX14_SHIFT;
-//}
-
+time = counter.time << FIX14_SHIFT;
 temp = uart_get_char(); // get player input a = 97, d = 100, space = 32
 uart_clear();
 
-iter++;
+/*
+Boss key screen
+*/
+if (temp == 'b' || temp == 'B'){
+    clrscr();
+    printf("Microsoft [Version 10.0.18362.535]");
+    printf("(c) 2019 Microsoft Corporation. Alle rettigheder forbeholdes");
+    printf(" ");
+    printf(" ");
+    printf("C:/Users/LookBusy>");
+    clrscr();
+while(uart_get_count() < 1){}
+}
+
+/*
+Calculation
+*/
 
 /*
 Spawn enemies in intervals
@@ -129,24 +143,6 @@ else if ( counter.time % 900 > 700 && counter.time % 900 < 712 )
 else if ( counter.time % 900 > 800 && counter.time % 900 < 812 )
     shield3.drawEnemy = 1;
 
-/*
-Boss key screen
-*/
-if (temp == 'b' || temp == 'B'){
-    clrscr();
-    
-    printf("Microsoft [Version 10.0.18362.535]");
-    printf("(c) 2019 Microsoft Corporation. Alle rettigheder forbeholdes");
-    printf(" ");
-    printf(" ");
-    printf("C:/Users/LookBusy>");
-    clrscr();
-while(uart_get_count() < 1){}
-}
-
-/*
-Calculation
-*/
     if (b1.drawBullet == 0 ){
         updateSpaceshipBulletPosition(&b1, &ship, temp, velBullet);
 
@@ -171,8 +167,6 @@ Calculation
 
 if (temp == 97 || temp == 100 )
     updateSpaceshipPosition(&ship, temp);
-
-//if (iter == 2 || iter == 4 || iter == 6){
     updateSpaceshipBulletPosition(&b1, &ship, 0, velBullet);
     updateSpaceshipBulletPosition(&b2, &ship, 0, velBullet);
     updateSpaceshipBulletPosition(&b3, &ship, 0, velBullet);
@@ -181,11 +175,6 @@ if (temp == 97 || temp == 100 )
     updateSpaceshipShieldBulletPosition(&sb1, &ship, 0, velBullet);
     updateSpaceshipShieldBulletPosition(&sb2, &ship, 0, velBullet);
 
-    updateEnemyBulletPosition(&eb1,&fighter1, velBullet);
-    updateEnemyBulletPosition(&eb2,&fighter2, velBullet);
-    updateEnemyBulletPosition(&eb3,&fighter3, velBullet);
-//}
-//if (iter == 6){
     updateEnemyPosition(&fighter1, velEnemy);
     updateEnemyPosition(&fighter2, velEnemy);
     updateEnemyPosition(&fighter3, velEnemy);
@@ -195,8 +184,11 @@ if (temp == 97 || temp == 100 )
     updateEnemyPosition(&shield1, velEnemy);
     updateEnemyPosition(&shield2, velEnemy);
     updateEnemyPosition(&shield3, velEnemy);
-//}
+    updateEnemyBulletPosition(&eb1,&fighter1, velBullet);
+    updateEnemyBulletPosition(&eb2,&fighter2, velBullet);
+    updateEnemyBulletPosition(&eb3,&fighter3, velBullet);
 
+    playerHits = playerHits + isSpaceshipHit(&ship,&fighter1,&fighter2,&fighter3,&grunt1,&grunt2,&grunt3,&shield1,&shield2,&shield3,&eb1,&eb2,&eb3);
 
 /*
 Drawing
@@ -226,7 +218,7 @@ drawEnemyBullet(&eb3);
 
 /*
 Debug
-*/
+* /
 gotoxy(3,2);
 printf("%d",counter.time);
 gotoxy(3,3);
@@ -235,34 +227,21 @@ gotoxy(3,4);
 printf("%d %d",sb1.drawBullet,sb2.drawBullet);
 gotoxy(3,5);
 printf("Difficulty: %d",difficulty);
+gotoxy(3,6);
+printf("Enemy bullets: %d %d %d",eb1.drawBullet,eb2.drawBullet,eb3.drawBullet);
+gotoxy(3,6);
+printf("Life: %d",3 - playerHits);
+*/
+    
 /*
 Wait for next tick
 */
 
-
 while (time > counter.time - (1 << FIX14_SHIFT));
-/*
-if (iter == 1)
-while (time > counter.time - (1 << FIX14_SHIFT)){}
-
-if (iter == 2)
-while (time > counter.time - (2 << FIX14_SHIFT) ){}
-
-if (iter == 3)
-while (time > counter.time - (3 << FIX14_SHIFT)){}
-
-if (iter == 4)
-while (time > counter.time - (4 << FIX14_SHIFT) ){}
-
-if (iter == 5)
-while (time > counter.time - (5 << FIX14_SHIFT) ){}
-
-if (iter == 6)
-while (time > counter.time - (6 << FIX14_SHIFT) ){}
-*/
 }
 
 gameOver();
+clrscr();
 
 }
 gotoxy(1,1);
