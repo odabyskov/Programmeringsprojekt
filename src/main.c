@@ -134,6 +134,7 @@ Boss key screen
 */
 if (temp == 'b' || temp == 'B'){
     clrscr();
+    
     printf("Microsoft [Version 10.0.18362.535]");
     printf("(c) 2019 Microsoft Corporation. Alle rettigheder forbeholdes");
     printf(" ");
@@ -261,7 +262,7 @@ while (time > counter.time - (6 << FIX14_SHIFT) ){}
 */
 }
 
-//Game Over should be here
+gameOver();
 
 }
 gotoxy(1,1);
