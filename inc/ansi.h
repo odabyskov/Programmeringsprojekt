@@ -41,5 +41,5 @@ void drawmenuEasy(); // Draw the Easy box
 void drawmenuNormal(); // Draw the Normal box
 void drawmenuHard(); // Draw the Hard box
 void drawmenuMainMenu(); // Draw the main menu box
-
+void gameOver(); //Draw the game over screen
 #endif
