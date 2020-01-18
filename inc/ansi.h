@@ -42,4 +42,6 @@ void drawmenuNormal(); // Draw the Normal box
 void drawmenuHard(); // Draw the Hard box
 void drawmenuMainMenu(); // Draw the main menu box
 void gameOver(); //Draw the game over screen
+void drawGameWindow(int8_t playerHits);
+void getHealth(int8_t hits);
 #endif
