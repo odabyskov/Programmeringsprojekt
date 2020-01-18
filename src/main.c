@@ -241,7 +241,6 @@ while (time > counter.time - (1 << FIX14_SHIFT));
 }
 
 gameOver();
-clrscr();
 
 }
 gotoxy(1,1);
