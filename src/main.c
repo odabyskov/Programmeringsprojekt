@@ -28,7 +28,7 @@ printf("spacebar to select the highlighted menubar.");
 difficulty = mainmenu();
 clrscr();
 
-while(1){ // while playing
+while(difficulty != 0){ // while playing
 
 /*
 Initialize the game
