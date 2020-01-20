@@ -33,7 +33,7 @@ printf("spacebar to select the highlighted menubar.");
 difficulty = mainmenu();
 clrscr();
 
-while(1){ // while playing
+while(difficulty != 0){ // while playing
 
 /*
 Initialize the game
@@ -251,8 +251,17 @@ if (temp == 97 || temp == 100 )
     setLED(playerHits);
 
 // Wait for next tick
-
-while (time > counter.time - (1 << FIX14_SHIFT));
+if ( time < 1000 << FIX14_SHIFT ){
+    while ( time > ( (counter.time - (6 >> 1) ) << FIX14_SHIFT) );
+} else if ( time < 2000 << FIX14_SHIFT ) {
+    while ( time > ( (counter.time - (5 >> 1) ) << FIX14_SHIFT) );
+} else if ( time < 3000 << FIX14_SHIFT ) {
+    while ( time > ( (counter.time - (4 >> 1) ) << FIX14_SHIFT) );
+} else if ( time < 4000 << FIX14_SHIFT ) {
+    while ( time > ( (counter.time - (3 >> 1) ) << FIX14_SHIFT) );
+} else if ( time < 5000 << FIX14_SHIFT ) {
+    while ( time > ( (counter.time - (2 >> 1) ) << FIX14_SHIFT) );
+}
 
 }
 
