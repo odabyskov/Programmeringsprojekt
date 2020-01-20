@@ -556,7 +556,7 @@ void getHelp(){
 
     //Drawing our ship
     gotoxy(40,15);
-    printf("%c",167);
+    printf("%c",220);
     gotoxy(38,16);
     printf("%c%c%c%c%c",173,205,186,205,173);
 
