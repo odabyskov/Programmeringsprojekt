@@ -286,28 +286,30 @@ uint8_t mainmenu(){
     /*
     Initialize the menu (start game is chosen as default)
     */
-    gotoxy(23,38);
-    printf("w/s = up/down  -  spacebar = select\n");
-    drawTitle(1);
+    while(input != 32 || menu == 2 || menu == 3 ){
 
-    fgcolor(2);
-    drawBox(30,17,50,21);
-    gotoxy(35,19);
-    fgcolor(15);
-    printf("Start Game");
+	    if (menu == 1){
+	        gotoxy(23,38);
+    		printf("w/s = up/down  -  spacebar = select\n");
+    		drawTitle(1);
 
-    drawBox(30,22,50,26);
-    gotoxy(38,24);
-    printf("Help");
-    drawBox(30,27,50,31);
-    gotoxy(36,29);
-    printf("Credits");
-    drawBox(30,32,50,36);
-    gotoxy(38,34);
-    printf("Quit");
+    		fgcolor(2);
+		drawBox(30,17,50,21);
+	    	gotoxy(35,19);
+    		fgcolor(15);
+    		printf("Start Game");
 
-    while(input != 32){
-
+    		drawBox(30,22,50,26);
+    		gotoxy(38,24);
+    		printf("Help");
+    		drawBox(30,27,50,31);
+   		gotoxy(36,29);
+   		printf("Credits");
+   		drawBox(30,32,50,36);
+    		gotoxy(38,34);
+    		printf("Quit");
+	    }
+		    
     // press s to choose the help menu, press enter to activate start game.
     while(input != 115 && input != 32 && menu == 1){
         input = uart_get_char();
@@ -400,15 +402,24 @@ uint8_t mainmenu(){
         uart_clear();
         }
     }
+	if (input == 32 && menu == 2){
+        	getHelp();
+        	clrscr();
+        	input = 0;
+        	menu = 1;
+    	}
+    	else if (input == 32 && menu == 3){
+        	getCredits();
+        	clrscr();
+        	input = 0;
+        	menu = 1;
+    	}
+	    
 } // end of while loop
 
     // If Enter is pressed leave the while loop & activate the chosen menu
-    if (input == 32 && menu == 1){
+if (input == 32 && menu == 1){
         returnvalue = getDifficulty();}
-    else if (input == 32 && menu == 2){
-        getHelp();}
-    else if (input == 32 && menu == 3){
-        getCredits();}
     else if (input == 32 && menu == 4){
         returnvalue = 0;
     }
@@ -641,7 +652,6 @@ void getHelp(){
     while(input != 32){
         input = uart_get_char();
     }
-    mainmenu();
 }
 
 /*
@@ -682,7 +692,6 @@ void getCredits(){
     while(input != 32){
         input = uart_get_char();
     }
-    mainmenu();
 }
 
 /*
