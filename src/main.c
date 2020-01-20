@@ -47,10 +47,35 @@ int main(void)
     //uart_init( 9600 );
     uart_init(115200);
 
-    difficulty=4;
+    difficulty=2;
 
-    while(difficulty != 0){ // while playing
+    while(difficulty != 0){ // exit when quit is pressed
+    
+            // Main menu
+            clrscr();
+            gotoxy(1,1);
+            printf("w/s to choose between menubars.\n");
+            printf("spacebar to select the highlighted menubar.");
+            difficulty = mainmenu();
+            clrscr();
+            playerHits = 0;
+        }
+      
+    while( difficulty != 0 && playerHits < 3 ){ // when game is over, return
+    /*
+    Game Start
+    */
 
+        /*
+        Initialize the game
+        */
+        drawGameWindow(0);
+        setTimer();
+        initCounter(&counter);
+        velBullet = 10 + difficulty; // Velocity of the bullets (determined by shifting 1 tis number of places to the left)
+        velEnemy = 9 + difficulty; // Velocity of the enemies (determined by shifting 1 tis number of places to the left)
+
+        
         // Initialize the player
         initSpaceship(&ship);
         drawSpaceship(&ship);
@@ -81,30 +106,7 @@ int main(void)
 
         // Initialize LED
         initializeLED();
-
-        /*
-        Initialize the game
-        */
-        setTimer();
-        initCounter(&counter);
-        velBullet = 10 + difficulty; // Velocity of the bullets (determined by shifting 1 tis number of places to the left)
-        velEnemy = 9 + difficulty; // Velocity of the enemies (determined by shifting 1 tis number of places to the left)
-
-        if (difficulty==4){ // Main menu
-
-            clrscr();
-            gotoxy(1,1);
-            printf("w/s to choose between menubars.\n");
-            printf("spacebar to select the highlighted menubar.");
-            difficulty = mainmenu();
-            clrscr();
-        }
-
-        drawGameWindow(0);
-        playerHits = 0;
-    /*
-    Game Start
-    */
+        
     while(playerHits<3 && difficulty !=0){ // while not dead
 
 
@@ -262,10 +264,11 @@ int main(void)
         difficulty=4; // return to main menu
 
     }
+    }
 
     clrscr();
     gotoxy(1,1);
     printf("Thank you for playing!");
 
-while(1){printf("hej");}
+while(1){}
 }
