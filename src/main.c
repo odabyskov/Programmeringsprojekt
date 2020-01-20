@@ -272,5 +272,8 @@ enemyThreeKilled=0;
 
 }
 
+gotoxy(1,1);
+printf("Thank you for playing");
+    
 while(1){}
 }
