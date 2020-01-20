@@ -12,38 +12,11 @@
 // set flags
 char temp; // input flags
 int time = 0, hits = 0, difficulty, playerHits; // time flag, damage flag and game state flag
+uint32_t velBullet, velEnemy; // Velocity of the bullets/enemies (determined by shifting 1 tis number of places to the left)
 uint32_t enemyOneKilled=0; // Kill-rate of enemy 1
 uint32_t enemyTwoKilled=0; // Kill-rate of enemy 2
 uint32_t enemyThreeKilled=0; // Kill-rate of enemy 3
 
-
-int main(void)
-{
-//uart_init( 9600 );
-uart_init(115200);
-
-/*
-mainmenu
-*/
-
-clrscr();
-gotoxy(1,1);
-printf("w/s to choose between menubars.\n");
-printf("spacebar to select the highlighted menubar.");
-difficulty = mainmenu();
-clrscr();
-
-while(difficulty != 0){ // while playing
-
-/*
-Initialize the game
-*/
-setTimer();
-initCounter(&counter);
-playerHits = 0;
-uint32_t velBullet = 10 + difficulty; // Velocity of the bullets (determined by shifting 1 tis number of places to the left)
-uint32_t velEnemy = 9 + difficulty; // Velocity of the enemies (determined by shifting 1 tis number of places to the left)
-    
 struct spaceship_t ship; // Spaceship
 
 struct bullet_t b1; // Regular bullets
@@ -68,44 +41,71 @@ struct enemy_t shield2;
 struct enemy_t shield3;
 struct enemy_t heart; // Power-up
 
-// Initialize the player
-initSpaceship(&ship);
-drawSpaceship(&ship);
 
-// Initialize the bullets
-initBullet(&b1);
-initBullet(&b2);
-initBullet(&b3);
-initBullet(&b4);
-initBullet(&b5);
-initBullet(&sb1);
-initBullet(&sb2);
-initBullet(&eb1);
-initBullet(&eb2);
-initBullet(&eb3);
+int main(void)
+{
+    //uart_init( 9600 );
+    uart_init(115200);
 
-// Initialize the enemies
-initEnemy(&fighter1); // enemy 1
-initEnemy(&fighter2);
-initEnemy(&fighter3);
-initEnemy(&grunt1); // enemy 2
-initEnemy(&grunt2);
-initEnemy(&grunt3);
-initEnemy(&shield1); // enemy 3
-initEnemy(&shield2);
-initEnemy(&shield3);
-initEnemy(&heart); // Power-up
+    difficulty=4;
 
-// Initialize LED
-initializeLED();
+while(difficulty != 0){ // while playing
 
-drawGameWindow(0);
+    // Initialize the player
+    initSpaceship(&ship);
+    drawSpaceship(&ship);
 
+    // Initialize the bullets
+    initBullet(&b1);
+    initBullet(&b2);
+    initBullet(&b3);
+    initBullet(&b4);
+    initBullet(&b5);
+    initBullet(&sb1);
+    initBullet(&sb2);
+    initBullet(&eb1);
+    initBullet(&eb2);
+    initBullet(&eb3);
 
+    // Initialize the enemies
+    initEnemy(&fighter1); // enemy 1
+    initEnemy(&fighter2);
+    initEnemy(&fighter3);
+    initEnemy(&grunt1); // enemy 2
+    initEnemy(&grunt2);
+    initEnemy(&grunt3);
+    initEnemy(&shield1); // enemy 3
+    initEnemy(&shield2);
+    initEnemy(&shield3);
+    initEnemy(&heart); // Power-up
+
+    // Initialize LED
+    initializeLED();
+
+    /*
+    Initialize the game
+    */
+    setTimer();
+    initCounter(&counter);
+    velBullet = 10 + difficulty; // Velocity of the bullets (determined by shifting 1 tis number of places to the left)
+    velEnemy = 9 + difficulty; // Velocity of the enemies (determined by shifting 1 tis number of places to the left)
+
+    if (difficulty==4){ // Main menu
+
+        clrscr();
+        gotoxy(1,1);
+        printf("w/s to choose between menubars.\n");
+        printf("spacebar to select the highlighted menubar.");
+        difficulty = mainmenu();
+        clrscr();
+    }
+
+    drawGameWindow(0);
+    playerHits = 0;
 /*
 Game Start
 */
-while(playerHits<3){ // while not dead
+while(playerHits<3 && difficulty !=0){ // while not dead
 
 
     //Input
@@ -135,18 +135,8 @@ while(playerHits<3){ // while not dead
     else if ( counter.time % 900 > 800 && counter.time % 900 < 812 )
         shield3.drawEnemy = 1;
 
-    // Boss key screen
-    if (temp == 'b' || temp == 'B'){
-        clrscr();
-        printf("Microsoft [Version 10.0.18362.535]");
-        printf("(c) 2019 Microsoft Corporation. Alle rettigheder forbeholdes");
-        printf(" ");
-        printf(" ");
-        printf("C:/Users/LookBusy>");
-        while(uart_get_count() < 1){}
-        clrscr();
-        drawGameWindow(0);
-    }
+    // Check for boss-key
+    bossKey(temp);
 
     // Calculation
     if (b1.drawBullet == 0 ){
@@ -265,15 +255,17 @@ if ( time < 1000 << FIX14_SHIFT ){
 
 }
 
-gameOver();
-enemyOneKilled=0;
-enemyTwoKilled=0;
-enemyThreeKilled=0;
+    gameOver(enemyOneKilled,enemyTwoKilled,enemyThreeKilled);
+    enemyOneKilled=0;
+    enemyTwoKilled=0;
+    enemyThreeKilled=0;
+    difficulty=4; // return to main menu
 
 }
 
-gotoxy(1,1);
-printf("Thank you for playing!");
-    
-while(1){}
+    clrscr();
+    gotoxy(1,1);
+    printf("Thank you for playing!");
+
+while(1){printf("hej");}
 }
