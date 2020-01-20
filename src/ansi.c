@@ -286,9 +286,8 @@ uint8_t mainmenu(){
     /*
     Initialize the menu (start game is chosen as default)
     */
-    gotoxy(1,1);
-    printf("w/s to choose between menubars.\n");
-    printf("spacebar to select the highlighted menubar.");
+    gotoxy(23,38);
+    printf("w/s = up/down  -  spacebar = select\n");
     drawTitle(1);
 
     fgcolor(2);
@@ -506,7 +505,7 @@ void drawmenuCredits(){
 }
 
 /*
-Thus function updates quit box when selected
+This function updates quit box when selected
 */
 void drawmenuQuit(){
     drawBox(30,27,50,31);
@@ -525,86 +524,112 @@ void getHelp(){
     uint8_t input = 0;
 
 
-//making the help window from our drawWindow function
-drawWindow(9, 3, 74, 38, " HELP! ", 1);
+    //making the help window from our drawWindow function
+    drawWindow(9, 3, 74, 38, " HELP! ", 1);
 
-//the meaning of the game
-gotoxy(15,5);
-printf("The object of this game is to shoot down the enemy");
-gotoxy(15,6);
-printf("battleships before they reaches your planet.");
+    //the meaning of the game
+    gotoxy(15,5);
+    printf("The object of this game is to shoot down the enemy");
+    gotoxy(15,6);
+    printf("battleships before they reach your planet.");
 
-gotoxy(15,8);
-printf("If you get shot or miss an enemy, you will loose");
-gotoxy(15,9);
-printf("one of our lives.");
-
-
-//how to move your ship
-gotoxy(15,11);
-printf("How to move your ship:");
-
-//Drawing our ship
-gotoxy(40,15);
-printf("%c",167);
-gotoxy(38,16);
-printf("%c%c%c%c%c",173,205,186,205,173);
-
-//how to go left
-gotoxy(15,16);
-printf("left press A <-");
-
-//how to go  right
-gotoxy(50,16);
-printf(" -> right press D");
-
-//how to shoot
-gotoxy(40,13);
-printf("%c",167);
-gotoxy(50,13);
-printf("to shoot press Space");
-
-//what kind of enemies do we have:
-gotoxy(15,18);
-printf("Your enemies:");
+    gotoxy(15,8);
+    printf("If you get shot or miss an enemy, you will loose");
+    gotoxy(15,9);
+    printf("one of your lives.");
 
 
-//enemy 1:
-gotoxy(33, 20);
-printf("*This enemy has a gun");
+    //how to move your ship
+    gotoxy(15,11);
+    printf("How to move your ship:");
 
-gotoxy(19, 20);
-printf("%c",219);
-gotoxy(18, 20);
-printf("%c",219);
-gotoxy(20, 20);
-printf("%c",219);
-gotoxy(19, 21);
-printf("%c",219);
+    //Drawing our ship
+    gotoxy(40,15);
+    printf("%c",167);
+    gotoxy(38,16);
+    printf("%c%c%c%c%c",173,205,186,205,173);
 
-//enemy 2:
-gotoxy(33, 24);
-printf("*This enemy has a shield");
+    //how to go left
+    gotoxy(15,16);
+    printf("left press A <-");
 
-gotoxy(19, 24);
-printf("%c",219);
-gotoxy(18, 24);
-printf("%c",219);
-gotoxy(20, 24);
-printf("%c",219);
-gotoxy(19, 23);
-printf("%c",219);
+    //how to go  right
+    gotoxy(50,16);
+    printf(" -> right press D");
 
-//enemy 3:
-gotoxy(33, 27);
-printf("*This enemy only fall");
+    //how to shoot
+    gotoxy(40,13);
+    printf("%c",167);
+    gotoxy(50,13);
+    printf("to shoot press Space");
 
-gotoxy(19, 27);
-printf("%c",219);
-gotoxy(18, 27);
-printf("%c",219);
-gotoxy(20, 27);
-printf("%c",219);
+    //what kind of enemies do we have:
+    gotoxy(15,18);
+    printf("Things you will meet in space:");
+
+    //enemy 1:
+    gotoxy(33, 21);
+    printf("*This enemy has a gun");
+
+    fgcolor(9);
+    gotoxy(19, 20);
+    printf("%c",219);
+    gotoxy(18, 20);
+    printf("%c",219);
+    gotoxy(20, 20);
+    printf("%c",219);
+    gotoxy(19, 21);
+    printf("%c",219);
+    fgcolor(15);
+
+    //enemy 2:
+    gotoxy(33, 24);
+    printf("*This enemy has a shield");
+
+    fgcolor(5);
+    gotoxy(19, 24);
+    printf("%c",219);
+    gotoxy(18, 24);
+    printf("%c",219);
+    gotoxy(20, 24);
+    printf("%c",219);
+    gotoxy(19, 23);
+    printf("%c",219);
+    fgcolor(6);
+    gotoxy(18, 25);
+    printf("%c%c%c",192,196,217);
+    fgcolor(15);
+
+    //enemy 3:
+    gotoxy(33, 27);
+    printf("*This enemy only falls");
+
+    fgcolor(8);
+    gotoxy(19, 27);
+    printf("%c",219);
+    gotoxy(18, 27);
+    printf("%c",219);
+    gotoxy(20, 27);
+    printf("%c",219);
+    fgcolor(15);
+
+    // Power-up
+    gotoxy(33, 30);
+    printf("*This power-up gives you an extra life");
+    fgcolor(1);
+    gotoxy(18, 29);
+    printf("%c",40);
+    gotoxy(19, 29);
+    printf("%c",92);
+    gotoxy(20, 29);
+    printf("%c",47);
+    gotoxy(21, 29);
+    printf("%c",41);
+    gotoxy(19, 30);
+    printf("%c",92);
+    gotoxy(20, 30);
+    printf("%c",47);
+    fgcolor(15);
 
     fgcolor(2);
     drawBox(31,33,49,37);
@@ -911,8 +936,9 @@ This function draws the bullet fired from the spaceship
 */
 void drawSpaceshipBullet(struct bullet_t *bullet){
 
-    if ((*bullet).posY < (2 << FIX14_SHIFT)){
+    if ((*bullet).posY < (2 << FIX14_SHIFT) || (*bullet).posX < (3 << FIX14_SHIFT) || (*bullet).posX > (67 << FIX14_SHIFT)){
             (*bullet).drawBullet = 0;
+
     }
 
     if ((*bullet).drawBullet == 1 ){
@@ -1200,53 +1226,102 @@ void drawHeart(struct enemy_t *heart){
 /*
 Game-over screen
 */
+void gameOver(uint32_t enemyOneKilled, uint32_t enemyTwoKilled, uint32_t enemyThreeKilled){
 
-void gameOver(){
+    clrscr();
 
-clrscr();
+    fgcolor(15);
+    gotoxy(23,4);
+    printf("  %c%c%c%c     %c%c%c    %c%c   %c%c  %c%c%c%c%c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+    gotoxy(23,5);
+    printf(" %c%c       %c%c %c%c   %c%c%c %c%c%c  %c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+    gotoxy(23,6);
+    printf("%c%c       %c%c   %c%c  %c%c%c%c%c%c%c  %c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+    gotoxy(23,7);
+    printf("%c%c  %c%c%c  %c%c   %c%c  %c%c %c %c%c  %c%c%c%c%c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+    gotoxy(23,8);
+    printf("%c%c   %c%c  %c%c%c%c%c%c%c  %c%c   %c%c  %c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+    gotoxy(23,9);
+    printf(" %c%c  %c%c  %c%c   %c%c  %c%c   %c%c  %c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+    gotoxy(23,10);
+    printf("  %c%c%c%c%c  %c%c   %c%c  %c%c   %c%c  %c%c%c%c%c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+    gotoxy(23,13);
+    printf(" %c%c%c%c%c   %c%c   %c%c  %c%c%c%c%c%c%c  %c%c%c%c%c%c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+    gotoxy(23,14);
+    printf("%c%c   %c%c  %c%c   %c%c  %c%c       %c%c   %c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+    gotoxy(23,15);
+    printf("%c%c   %c%c  %c%c   %c%c  %c%c       %c%c   %c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+    gotoxy(23,16);
+    printf("%c%c   %c%c  %c%c   %c%c  %c%c%c%c%c%c%c  %c%c  %c%c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+    gotoxy(23,17);
+    printf("%c%c   %c%c   %c%c %c%c   %c%c       %c%c%c%c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+    gotoxy(23,18);
+    printf("%c%c   %c%c    %c%c%c    %c%c       %c%c %c%c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+    gotoxy(23,19);
+    printf(" %c%c%c%c%c      %c     %c%c%c%c%c%c%c  %c%c  %c%c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
 
-fgcolor(15);
-gotoxy(23,5);
-printf("  %c%c%c%c     %c%c%c    %c%c   %c%c  %c%c%c%c%c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
-gotoxy(23,6);
-printf(" %c%c       %c%c %c%c   %c%c%c %c%c%c  %c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219);
-gotoxy(23,7);
-printf("%c%c       %c%c   %c%c  %c%c%c%c%c%c%c  %c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
-gotoxy(23,8);
-printf("%c%c  %c%c%c  %c%c   %c%c  %c%c %c %c%c  %c%c%c%c%c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
-gotoxy(23,9);
-printf("%c%c   %c%c  %c%c%c%c%c%c%c  %c%c   %c%c  %c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
-gotoxy(23,10);
-printf(" %c%c  %c%c  %c%c   %c%c  %c%c   %c%c  %c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219);
-gotoxy(23,11);
-printf("  %c%c%c%c%c  %c%c   %c%c  %c%c   %c%c  %c%c%c%c%c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
-gotoxy(23,16);
-printf(" %c%c%c%c%c   %c%c   %c%c  %c%c%c%c%c%c%c  %c%c%c%c%c%c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
-gotoxy(23,17);
-printf("%c%c   %c%c  %c%c   %c%c  %c%c       %c%c   %c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
-gotoxy(23,18);
-printf("%c%c   %c%c  %c%c   %c%c  %c%c       %c%c   %c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
-gotoxy(23,19);
-printf("%c%c   %c%c  %c%c   %c%c  %c%c%c%c%c%c%c  %c%c  %c%c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
-gotoxy(23,20);
-printf("%c%c   %c%c   %c%c %c%c   %c%c       %c%c%c%c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
-gotoxy(23,21);
-printf("%c%c   %c%c    %c%c%c    %c%c       %c%c %c%c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
-gotoxy(23,22);
-printf(" %c%c%c%c%c      %c     %c%c%c%c%c%c%c  %c%c  %c%c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
 
-fgcolor(2);
-drawBox(25,30,54,36);
-gotoxy(27,33);
-fgcolor(15);
-printf("Press a key to start again");
+    // Print the kill-rate
 
-while(uart_get_count() < 1){}
-clrscr();
+    gotoxy(36,24);
+    printf("KILL-RATE:");
+
+    fgcolor(9);
+    gotoxy(40, 27);
+    printf("%c",219);
+    gotoxy(39, 27);
+    printf("%c",219);
+    gotoxy(41, 27);
+    printf("%c",219);
+    gotoxy(40, 28);
+    printf("%c",219);
+    fgcolor(15);
+    gotoxy(40,30);
+    printf("%d",enemyOneKilled);
+
+    fgcolor(8); // Grey
+    gotoxy(32, 27);
+    printf("%c",219);
+    gotoxy(31, 27);
+    printf("%c",219);
+    gotoxy(33, 27);
+    printf("%c",219);
+    fgcolor(15);
+    gotoxy(32,30);
+    printf("%d",enemyTwoKilled);
+
+    fgcolor(5);
+    gotoxy(48, 26);
+    printf("%c",219);
+    gotoxy(47, 27);
+    printf("%c",219);
+    gotoxy(49, 27);
+    printf("%c",219);
+    gotoxy(48, 27);
+    printf("%c",219);
+    fgcolor(15);
+
+    fgcolor(6);
+    gotoxy(47, 28);
+    printf("%c%c%c",192,196,217);
+    fgcolor(15);
+    gotoxy(48,30);
+    printf("%d",enemyThreeKilled);
+
+    fgcolor(2);
+    drawBox(25,32,54,38);
+    gotoxy(27,35);
+    fgcolor(15);
+    printf("Press a key to start again");
+
+    while(uart_get_count() < 1){}
+    clrscr();
 
 }
 
-//Draw the gamewindow
+/*
+Draw the gamewindow
+*/
 void drawGameWindow(int8_t playerHits){
 
 //GAME-window:
@@ -1304,7 +1379,9 @@ fgcolor(15);
 
 }
 
-
+/*
+Get health
+*/
 void getHealth(int8_t hits){
 
     //printing lives
@@ -1406,4 +1483,21 @@ void getHealth(int8_t hits){
 
 }
 
+/*
+Boss-key. If 'b' is pressed while playing, the boss-key screen will be activated
+*/
+void bossKey(char temp){
+
+    if (temp == 'b' || temp == 'B'){
+        clrscr();
+        printf("Microsoft [Version 10.0.18362.535]");
+        printf("(c) 2019 Microsoft Corporation. Alle rettigheder forbeholdes");
+        printf(" ");
+        printf(" ");
+        printf("C:/Users/LookBusy>");
+        while(uart_get_count() < 1){}
+        clrscr();
+        drawGameWindow(0);
+    }
+}
 
