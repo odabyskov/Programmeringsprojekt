@@ -555,10 +555,12 @@ void getHelp(){
     printf("How to move your ship:");
 
     //Drawing our ship
+    fgcolor(2);
     gotoxy(40,15);
     printf("%c",220);
     gotoxy(38,16);
     printf("%c%c%c%c%c",173,205,186,205,173);
+    fgcolor(15);
 
     //how to go left
     gotoxy(15,16);
@@ -705,6 +707,7 @@ uint8_t getDifficulty(){
     // Initialize the menu (Normal is chosen as default)
     drawTitle(2);
 
+    fgcolor(15);
     drawBox(30,17,50,21);
     gotoxy(38,19);
     printf("Easy");
@@ -1236,7 +1239,7 @@ void drawHeart(struct enemy_t *heart){
 Game-over screen
 */
 void gameOver(uint32_t enemyOneKilled, uint32_t enemyTwoKilled, uint32_t enemyThreeKilled){
-
+    uint8_t input = 0;
     clrscr();
 
     fgcolor(15);
@@ -1318,12 +1321,14 @@ void gameOver(uint32_t enemyOneKilled, uint32_t enemyTwoKilled, uint32_t enemyTh
     printf("%d",enemyThreeKilled);
 
     fgcolor(2);
-    drawBox(25,32,54,38);
-    gotoxy(27,35);
+    drawBox(30,33,50,37);
+    gotoxy(34,35);
     fgcolor(15);
-    printf("Press a key to start again");
+    printf("Back to menu");
 
-    while(uart_get_count() < 1){}
+    while(input != 32){
+    input = uart_get_char();
+    }
     clrscr();
 
 }
