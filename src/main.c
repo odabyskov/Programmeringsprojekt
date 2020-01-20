@@ -59,7 +59,7 @@ int main(void)
             difficulty = mainmenu();
             clrscr();
             playerHits = 0;
-        }
+        
       
     while( difficulty != 0 && playerHits < 3 ){ // when game is over, return
     /*
