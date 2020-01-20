@@ -72,8 +72,8 @@ int main(void)
         drawGameWindow(0);
         setTimer();
         initCounter(&counter);
-        velBullet = 10 + difficulty; // Velocity of the bullets (determined by shifting 1 tis number of places to the left)
-        velEnemy = 9 + difficulty; // Velocity of the enemies (determined by shifting 1 tis number of places to the left)
+        velBullet = 11 + difficulty; // Velocity of the bullets (determined by shifting 1 tis number of places to the left)
+        velEnemy = 10 + difficulty; // Velocity of the enemies (determined by shifting 1 tis number of places to the left)
 
         
         // Initialize the player
