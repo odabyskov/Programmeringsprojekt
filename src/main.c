@@ -12,8 +12,6 @@
 // set flags
 char temp; // input flags
 int time = 0, hits = 0, iter = 0, difficulty, playerHits; // time flag, damage flag and game state flag
-uint32_t velBullet = 13; // Velocity of the bullets (determined by shifting 1 tis number of places to the left)
-uint32_t velEnemy = 12; // Velocity of the enemies (determined by shifting 1 tis number of places to the left)
 uint32_t enemyOneKilled=0; // Kill-rate of enemy 1
 uint32_t enemyTwoKilled=0; // Kill-rate of enemy 2
 uint32_t enemyThreeKilled=0; // Kill-rate of enemy 3
@@ -43,7 +41,9 @@ Initialize the game
 setTimer();
 initCounter(&counter);
 playerHits = 0;
-
+uint32_t velBullet = 10 + difficulty; // Velocity of the bullets (determined by shifting 1 tis number of places to the left)
+uint32_t velEnemy = 9 + difficulty; // Velocity of the enemies (determined by shifting 1 tis number of places to the left)
+    
 struct spaceship_t ship; // Spaceship
 
 struct bullet_t b1; // Regular bullets
