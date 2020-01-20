@@ -11,7 +11,7 @@
 
 // set flags
 char temp; // input flags
-int time = 0, hits = 0, iter = 0, difficulty, playerHits; // time flag, damage flag and game state flag
+int time = 0, hits = 0, difficulty, playerHits; // time flag, damage flag and game state flag
 uint32_t enemyOneKilled=0; // Kill-rate of enemy 1
 uint32_t enemyTwoKilled=0; // Kill-rate of enemy 2
 uint32_t enemyThreeKilled=0; // Kill-rate of enemy 3
