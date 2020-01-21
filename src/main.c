@@ -268,10 +268,10 @@ int main(void)
 
     clrscr();
     color = 0;
-    while(1){
+      while(uart_get_count() < 1){
         // create blinking text
         time = counter.time << FIX14_SHIFT;
-        if (color == 1){
+        if(color == 1){
             fgcolor(2);
             color = 0;
         } else {
@@ -284,4 +284,6 @@ int main(void)
         thankYou();
         while(time > counter.time - (1 << FIX14_SHIFT) ){}
     }
+     clrscr();
+     while(1){}
 }
