@@ -462,7 +462,7 @@ uint32_t isHeartHit(struct enemy_t *h, struct bullet_t *b1, struct bullet_t *b2,
         h->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
         h->posY=2 << FIX14_SHIFT;
         sb1->drawBullet=0;
-        temp = 0;
+        temp = 1;
 
      } else if ((*h).drawEnemy==1 && (((*sb2).posX<=(*h).posX+(2<<FIX14_SHIFT)) && ((*sb2).posX>=(*h).posX-(1<<FIX14_SHIFT)) && ((*sb2).posY<=(*h).posY+(1<<FIX14_SHIFT)) && ((*sb2).posY>=(*h).posY))){
 
@@ -470,7 +470,7 @@ uint32_t isHeartHit(struct enemy_t *h, struct bullet_t *b1, struct bullet_t *b2,
         h->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
         h->posY=2 << FIX14_SHIFT;
         sb2->drawBullet=0;
-        temp = 0;
+        temp = 1;
 
      } else {
         temp = 0;
