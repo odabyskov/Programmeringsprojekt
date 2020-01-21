@@ -263,8 +263,21 @@ int main(void){
     } // end of game
 
     clrscr();
-    gotoxy(1,1);
-    printf("Thank you for playing!"); // end screen
-    
-while(1){}
+    color = 0;
+    while(1){
+        // create red & green blinking text
+        time = counter.time << FIX14_SHIFT;
+        if (color == 1){
+            fgcolor(2);
+            color = 0;
+        } else {
+            fgcolor(1);
+            color = 1;
+        }
+        /*
+        draw end screen
+        */
+        thankYou();
+        while(time > counter.time - (1 << FIX14_SHIFT) ){}
+    }
 }
