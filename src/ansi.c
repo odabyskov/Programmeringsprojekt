@@ -281,146 +281,118 @@ Draw and enter the main menu
 uint8_t mainmenu(){
     clrscr();
     uart_clear();
-    uint8_t menu = 1, input = 0, returnvalue;
+    uint8_t menu = 1, input, returnvalue;
 
     /*
-    Initialize the menu (start game is chosen as default)
+    Initialize the main menu
     */
-    while(input != 32 || menu == 2 || menu == 3 ){
+    gotoxy(23,38);
+    printf("keyboard: w/s = up/down  -  spacebar = select");
+    gotoxy(23,40);
+    printf("Joystick: up/down - center = select");
+    drawTitle(1);
 
-	    if (menu == 1){
-	        gotoxy(23,38);
-    		printf("w/s = up/down  -  spacebar = select\n");
-    		drawTitle(1);
+    fgcolor(2);
+    drawBox(30,17,50,21);
+    gotoxy(35,19);
+    fgcolor(15);
+    printf("Start Game");
 
-    		fgcolor(2);
-		drawBox(30,17,50,21);
-	    	gotoxy(35,19);
-    		fgcolor(15);
-    		printf("Start Game");
+    drawBox(30,22,50,26);
+    gotoxy(38,24);
+    printf("Help");
+    drawBox(30,27,50,31);
+    gotoxy(36,29);
+    printf("Credits");
+    drawBox(30,32,50,36);
+    gotoxy(38,34);
+    printf("Quit");
 
-    		drawBox(30,22,50,26);
-    		gotoxy(38,24);
-    		printf("Help");
-    		drawBox(30,27,50,31);
-   		gotoxy(36,29);
-   		printf("Credits");
-   		drawBox(30,32,50,36);
-    		gotoxy(38,34);
-    		printf("Quit");
-	    }
+    while( (input != 32 && input != 16) || menu == 2 || menu == 3 ){
 
-    // press s to choose the help menu, press enter to activate start game.
-    while(input != 115 && input != 32 && menu == 1){
-        input = uart_get_char();
-        if (input == 115)
+    /*
+    Reinitialize the main menu, if we go back from help or credits
+    */
+    if (input == 32 || input == 16) {
+    gotoxy(23,38);
+    printf("keyboard: w/s = up/down  -  spacebar = select");
+    gotoxy(23,40);
+    printf("Joystick: up/down - center = select");
+    drawTitle(1);
+
+    drawBox(30,17,50,21);
+    gotoxy(35,19);
+    printf("Start Game");
+    drawBox(30,22,50,26);
+    gotoxy(38,24);
+    printf("Help");
+    drawBox(30,27,50,31);
+    gotoxy(36,29);
+    printf("Credits");
+    drawBox(30,32,50,36);
+    gotoxy(38,34);
+    printf("Quit");
+    }
+    // reset input
+    input = 0;
+
+    // get input from keyboard/joystick
+    if ( readJoystick() != 0 ){
+    input = readJoystick();
+    } else {
+    input = uart_get_char();
+    }
+    if ( input == 's' || input == 'S' || input == 2 ){
+        if ( menu < 4 ) {
             menu++;
-        if (input == 32)
-            break;
         }
-
-    if (menu == 2 && input != 32){
-    drawmenuHelp();
-    }
-
-    // Press w to choose start game, press s to choose credits, press enter to activate help
-    while (input != 115 && input != 119 && input != 32 && menu == 2){
-        input = uart_get_char();
-        if (input == 115)
-            menu++;
-        if (input == 119)
+    } else if ( input == 'w' || input == 'W' || input == 1 ){
+        if ( menu > 1 ) {
             menu--;
-        if (input == 32)
-            break;
+        }
     }
 
+    // check where we are in the menu
     switch (menu) {
         case 1: {
-            if (input == 32)
-                break;
-            if (input != 32){
-                input = 0;
-                uart_clear();
-                }
             drawmenuStart();
             break;
         }
 
-        case 3: {
-            if (input == 32)
-                break;
-            drawmenuCredits();
-            input = 0;
-            uart_clear();
-            break;
-        }
-    }
-
-    // Press w to go back to help, press s to go down to Quit game
-    while (input != 115 && input != 119 && input != 32 && menu == 3){
-        input = uart_get_char();
-        if (input == 115)
-            menu++;
-        if (input == 119)
-            menu--;
-        if (input == 32)
-            break;
-    }
-
-    switch (menu) {
         case 2: {
-            if (input == 32)
-                break;
             drawmenuHelp();
-            input=0;
-            uart_clear();
             break;
         }
+
+        case 3: {
+            drawmenuCredits();
+            break;
+        }
+
         case 4: {
-            if (input == 32)
-                break;
             drawmenuQuit();
-            input = 0;
-            uart_clear();
             break;
         }
+
     }
 
-    // Press w to go back to credits
-    while (input != 119 && input != 32 && menu == 4){
-    input = uart_get_char();
-        if (input == 119)
-            menu--;
-        if (input == 32)
-        break;
+    // if space/center is pressed we enter the help or credits menus (but don't leave the main menu)
+	if ( (input == 32 || input == 16) && menu == 2){
+        getHelp();
+        clrscr();
+        //menu = 1;
     }
-
-    if (menu == 3 && input != 32){
-        drawmenuCredits();
-        if (input != 32){
-        input = 0;
-        uart_clear();
-        }
+    else if ( (input == 32 || input == 16) && menu == 3){
+        getCredits();
+        clrscr();
+        //menu = 1;
     }
-	if (input == 32 && menu == 2){
-        	getHelp();
-        	clrscr();
-        	input = 0;
-        	menu = 1;
-    	}
-    	else if (input == 32 && menu == 3){
-        	getCredits();
-        	clrscr();
-        	input = 0;
-        	menu = 1;
-    	}
-
 } // end of while loop
 
-    // If Enter is pressed leave the while loop & activate the chosen menu
-if (input == 32 && menu == 1){
+    // If space/center is pressed leave the while loop & activate the chosen menu (we leave the main menu)
+if ( (input == 32 || input == 16) && menu == 1){
         returnvalue = getDifficulty();}
-    else if (input == 32 && menu == 4){
+    else if ( (input == 32 || input == 16) && menu == 4){
         returnvalue = 0;
     }
 return returnvalue;
@@ -556,30 +528,30 @@ void getHelp(){
 
     //Drawing our ship
     fgcolor(2);
-    gotoxy(38,15);
+    gotoxy(31,15);
     printf("%c",220);
-    gotoxy(36,16);
+    gotoxy(29,16);
     printf("%c%c%c%c%c",173,205,186,205,173);
     fgcolor(15);
 
     //how to go left
     gotoxy(15,16);
-    printf("left press A <-");
+    printf("left / A <-");
 
     //how to go  right
-    gotoxy(46,16);
-    printf(" -> right press D");
+    gotoxy(37,16);
+    printf(" -> right / D");
 
     //how to shoot
-    gotoxy(38,12);
-    printf("o  <-  Space shoots normal bullets");
+    gotoxy(31,12);
+    printf("o  <-  Space/center shoots normal bullets");
 
-    gotoxy(38,14);
+    gotoxy(31,14);
     fgcolor(1);
     printf("!");
     fgcolor(15);
-    gotoxy(39,14);
-    printf("  <-  w shoots special bullets");
+    gotoxy(32,14);
+    printf("  <-  w/up shoots special bullets");
 
     //what kind of enemies do we have:
     gotoxy(15,18);
@@ -662,9 +634,13 @@ void getHelp(){
     gotoxy(38,35);
     printf("Back");
 
-    //while(input =! 32){
-    while(input != 32){
-        input = uart_get_char();
+    // wait for user to leave
+    while( input != 32 && input != 16 ){
+        if ( readJoystick() != 0){
+            input = readJoystick();
+        } else {
+            input = uart_get_char();
+        }
     }
 }
 
@@ -703,8 +679,13 @@ void getCredits(){
     fgcolor(15);
     printf("Back");
 
-    while(input != 32){
-        input = uart_get_char();
+        // wait for user to leave
+    while( input != 32 && input != 16 ){
+        if ( readJoystick() != 0){
+            input = readJoystick();
+        } else {
+            input = uart_get_char();
+        }
     }
 }
 
@@ -737,115 +718,60 @@ uint8_t getDifficulty(){
     gotoxy(35,34);
     printf("Main Menu");
 
-    while(input != 32){
+    while( input != 32 && input != 16 ){
 
-    // Press s to go back to normal, press enter to activate easy difficulty.
-    while(input != 115 & input != 32 & menu == 1){
+        // get input from keyboard/joystick
+        if ( readJoystick() != 0 ){
+        input = readJoystick();
+        } else {
         input = uart_get_char();
-        if (input == 115)
-            menu++;
-        if (input == 32)
-            break;
-    }
-
-    if (menu == 2 & input != 32){
-    drawmenuNormal();
-    }
-
-    // Press w to choose the easy, press s to choose hard, press enter to activate normal difficulty
-    while (input != 115 & input != 119 & input != 32 & menu == 2){
-        input = uart_get_char();
-        if (input == 115)
-            menu++;
-        if (input == 119)
-            menu--;
-        if (input == 32)
-            break;
-    }
-
-    switch (menu) {
-        case 1: {
-            if (input == 32)
-                break;
-            if (input =! 32){
-                input = 0;
-                uart_clear();
+        }
+        if ( input == 's' || input == 'S' || input == 2 ){
+            if ( menu < 4 ) {
+                menu++;
             }
-            drawmenuEasy();
-            break;
+        } else if ( input == 'w' || input == 'W' || input == 1 ){
+            if ( menu > 1 ) {
+                menu--;
+            }
         }
 
-        case 3: {
-            if (input == 32)
+        switch (menu) {
+            case 1: {
+                drawmenuEasy();
                 break;
-            drawmenuHard();
-            input = 0;
-            uart_clear();
-            break;
-        }
-    }
+            }
 
-    /*
-    Press w to go back to Normal, press s to go down to Main Menu
-    */
-    while (input != 115 & input != 119 & input != 32 & menu == 3){
-        input = uart_get_char();
-        if (input == 115)
-            menu++;
-        if (input == 119)
-            menu--;
-        if (input == 32)
-            break;
-    }
-
-    switch (menu) {
-        case 2: {
-            if (input == 32)
+            case 2: {
+                drawmenuNormal();
                 break;
-            drawmenuNormal();
-            input=0;
-            uart_clear();
-            break;
-        }
-        case 4: {
-            if (input == 32)
+            }
+
+            case 3: {
+                drawmenuHard();
                 break;
-            drawmenuMainMenu();
-            input = 0;
-            uart_clear();
-            break;
+            }
+
+            case 4: {
+                drawmenuMainMenu();
+                break;
+            }
         }
     }
 
-    // Press w to go back to Hard, press enter to go back to main menu.
-    while (input != 119 & input != 32 & menu == 4){
-        input = uart_get_char();
-        if (input == 119)
-            menu--;
-        if (input == 32)
-        break;
-    }
-
-    if (menu == 3 & input != 32){
-        drawmenuHard();
-        input = 0;
-        uart_clear();
-    }
-
-    }
-    if (menu == 1 & input == 32){
+    if ( menu == 1 && ( input == 32 || input == 16 ) ){
         //printf("Easy Mode");
         returnvalue = 1;
     }
-    else if (menu == 2 & input == 32){
+    else if ( menu == 2 && ( input == 32 || input == 16 ) ){
         //printf("Normal Mode");
         returnvalue = 2;
     }
-    else if (menu == 3 & input == 32){
+    else if ( menu == 3 && ( input == 32 || input == 16 ) ){
         //printf("Hard Mode");
         returnvalue = 3;
     }
-    else if (menu == 4 & input == 32){
+    else {
         returnvalue = mainmenu();
     }
     return returnvalue;
