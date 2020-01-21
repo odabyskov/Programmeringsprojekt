@@ -49,6 +49,9 @@ int main(void)
 
     difficulty=2;
 
+    // Initialize joystick
+    initializeJoystick();
+    
     while(difficulty != 0){ // exit when quit is pressed
 
             // Main menu
@@ -110,10 +113,14 @@ int main(void)
     while(playerHits<3 && difficulty !=0){ // while not dead
 
 
-        //Input
+       //Input
         time = counter.time << FIX14_SHIFT;
 
-        temp = uart_get_char(); // get player input a = 97, d = 100, space = 32
+        if ( readJoystick() != 0 ){ // read joystick input
+            temp = readJoystick();
+        } else {
+        temp = uart_get_char(); // get player keyboard input a = 97, d = 100, space = 32
+        }
         uart_clear();
 
 
@@ -163,7 +170,7 @@ int main(void)
             updateSpaceshipShieldBulletPosition(&sb2, &ship, temp, velBullet);
         }
 
-        if (temp == 'a' || temp == 'A' || temp == 'd' || temp == 'D' )
+        if ( temp == 'a' || temp == 'A' || temp == 'd' || temp == 'D' || temp == 4 || temp == 8 )
             updateSpaceshipPosition(&ship, temp);
 
         updateSpaceshipBulletPosition(&b1, &ship, 0, velBullet);
