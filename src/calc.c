@@ -80,22 +80,22 @@ If the user presses the 'd'-key the spaceship moves one step to the right.
 */
 void updateSpaceshipPosition(struct spaceship_t *spaceship, char temp){
 
-    if (temp == 'a' || temp == 'A' || temp == 'd' || temp == 'D'){
+    if ( temp == 'a' || temp == 'A' || temp == 'd' || temp == 'D' || temp == 4 || temp == 8 ){
 
         // We set the current position to the previous position
         spaceship->prevPosX=(*spaceship).posX;
         spaceship->prevPosY=(*spaceship).posY;
 
         // We update current position
-        if(temp=='a' || temp == 'A'){
+        if( temp=='a' || temp == 'A' || temp == 4 ){
             if ((*spaceship).posX > (5 << FIX14_SHIFT)){
                 spaceship->posX = (*spaceship).prevPosX - (1 << FIX14_SHIFT);
             } else {
                 spaceship->posX = (5 << FIX14_SHIFT);
             }
         }
-        else if(temp=='d' || temp == 'D'){
-            if ((*spaceship).posX < (65 << FIX14_SHIFT)){
+         else if( temp=='d' || temp == 'D' || temp == 8 ){
+             if ((*spaceship).posX < (65 << FIX14_SHIFT)){
                 spaceship->posX = (*spaceship).prevPosX + (1 << FIX14_SHIFT);
             } else {
                 spaceship->posX = (65 << FIX14_SHIFT);
@@ -111,7 +111,7 @@ k determines what you shift - so if you want the position to change with 0.5 you
 */
 void updateSpaceshipBulletPosition(struct bullet_t *bullet, struct spaceship_t *ship, char temp, uint32_t k){
 
-    if (temp == 32 && bullet->drawBullet == 0 ){
+    if ( (temp == 32 || temp == 16) && bullet->drawBullet == 0 ){
 
         bullet->posX = (*ship).posX; // the x-position is set to the middle of the spaceship
         bullet->posY = (*ship).posY - (2 << FIX14_SHIFT); // the y-position is set to the top of the spaceship
@@ -138,7 +138,7 @@ k determines what you shift - so if you want the position to change with 0.5 you
 */
 void updateSpaceshipShieldBulletPosition(struct bullet_t *bullet, struct spaceship_t *ship, char temp, uint32_t k){
 
-    if ( (temp == 'w' || temp == 'W') && bullet->drawBullet == 0 ){
+    if ( (temp == 'w' || temp == 'W' || temp == 1) && bullet->drawBullet == 0 ){
 
         bullet->posX = (*ship).posX; // the x-position is set to the middle of the spaceship
         bullet->posY = (*ship).posY - (2 << FIX14_SHIFT); // the y-position is set to the top of the spaceship
