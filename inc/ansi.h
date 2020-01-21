@@ -43,9 +43,8 @@ void drawmenuNormal(); // Draw the Normal box
 void drawmenuHard(); // Draw the Hard box
 void drawmenuMainMenu(); // Draw the main menu box
 
-void gameOver(uint32_t enemyOneKilled, uint32_t enemyTwoKilled, uint32_t enemyThreeKilled);
+void gameOver();
 void drawGameWindow(int8_t playerHits);
 void getHealth(int8_t hits);
-void bossKey(char temp);
-void thankYou();
+
 #endif
