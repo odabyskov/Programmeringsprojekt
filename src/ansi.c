@@ -1347,58 +1347,58 @@ void gameOver(uint32_t enemyOneKilled, uint32_t enemyTwoKilled, uint32_t enemyTh
 //Draw the gamewindow
 void drawGameWindow(int8_t playerHits){
 
-//GAME-window:
-fgcolor(15);
-drawWindow(2, 1, 68, 39,"GAME",1);
+	//GAME-window:
+	fgcolor(15);
+	drawWindow(2, 1, 68, 39,"GAME",1);
 
 
-//STATS display:
-drawWindow(69, 1, 79, 39,"STATS",1);
+	//STATS display:
+	drawWindow(69, 1, 79, 39,"STATS",1);
 
-//
-getHealth(playerHits);
+	//
+	getHealth(playerHits);
 
-gotoxy(72,20);
-printf("KILLS;");
+	gotoxy(72,20);
+	printf("KILLS:");
 
-//printing enemy1
-fgcolor(9);
-gotoxy(74, 22);
-printf("%c",219);
-gotoxy(73, 22);
-printf("%c",219);
-gotoxy(75, 22);
-printf("%c",219);
-gotoxy(74, 23);
-printf("%c",219);
-fgcolor(15);
+	//printing enemy1
+	fgcolor(9);
+	gotoxy(74, 22);
+	printf("%c",219);
+	gotoxy(73, 22);
+	printf("%c",219);
+	gotoxy(75, 22);
+	printf("%c",219);
+	gotoxy(74, 23);
+	printf("%c",219);
+	fgcolor(15);
 
-//printing enemy2
-fgcolor(8); // Grey
-gotoxy(74, 28);
-printf("%c",219);
-gotoxy(73, 28);
-printf("%c",219);
-gotoxy(75, 28);
-printf("%c",219);
-fgcolor(15);
+	//printing enemy2
+	fgcolor(8); // Grey
+	gotoxy(74, 28);
+	printf("%c",219);
+	gotoxy(73, 28);
+	printf("%c",219);
+	gotoxy(75, 28);
+	printf("%c",219);
+	fgcolor(15);
 
-//printing enemy3
-fgcolor(5);
-gotoxy(74, 34);
-printf("%c",219);
-gotoxy(73, 34);
-printf("%c",219);
-gotoxy(75, 34);
-printf("%c",219);
-gotoxy(74, 33);
-printf("%c",219);
-fgcolor(15);
+	//printing enemy3
+	fgcolor(5);
+	gotoxy(74, 34);
+	printf("%c",219);
+	gotoxy(73, 34);
+	printf("%c",219);
+	gotoxy(75, 34);
+	printf("%c",219);
+	gotoxy(74, 33);
+	printf("%c",219);
+	fgcolor(15);
 
-fgcolor(6);
-gotoxy(73, 35);
-printf("%c%c%c",192,196,217);
-fgcolor(15);
+	fgcolor(6);
+	gotoxy(73, 35);
+	printf("%c%c%c",192,196,217);
+	fgcolor(15);
 
 }
 
