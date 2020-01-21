@@ -556,9 +556,9 @@ void getHelp(){
 
     //Drawing our ship
     fgcolor(2);
-    gotoxy(40,15);
+    gotoxy(38,15);
     printf("%c",220);
-    gotoxy(38,16);
+    gotoxy(36,16);
     printf("%c%c%c%c%c",173,205,186,205,173);
     fgcolor(15);
 
@@ -567,22 +567,30 @@ void getHelp(){
     printf("left press A <-");
 
     //how to go  right
-    gotoxy(50,16);
+    gotoxy(46,16);
     printf(" -> right press D");
 
     //how to shoot
-    gotoxy(40,13);
-    printf("%c",167);
-    gotoxy(50,13);
-    printf("to shoot press Space");
+    gotoxy(38,12);
+    printf("o  <-  Space shoots normal bullets");
+
+    gotoxy(38,14);
+    fgcolor(1);
+    printf("!");
+    fgcolor(15);
+    gotoxy(39,14);
+    printf("  <-  w shoots special bullets");
 
     //what kind of enemies do we have:
     gotoxy(15,18);
     printf("Things you will meet in space:");
 
     //enemy 1:
-    gotoxy(33, 21);
-    printf("*This enemy has a gun");
+    gotoxy(33, 20);
+    printf("*Shoots normal bullets");
+    gotoxy(34, 21);
+    printf("Immune to special bullets");
+
 
     fgcolor(9);
     gotoxy(19, 20);
@@ -597,7 +605,9 @@ void getHelp(){
 
     //enemy 2:
     gotoxy(33, 24);
-    printf("*This enemy has a shield");
+    printf("*Deflects normal bullets away");
+    gotoxy(34,25);
+    printf("Immune to normal bullets");
 
     fgcolor(5);
     gotoxy(19, 24);
@@ -615,7 +625,9 @@ void getHelp(){
 
     //enemy 3:
     gotoxy(33, 27);
-    printf("*This enemy only falls");
+    printf("*Only moves");
+    gotoxy(34, 28);
+    printf("Immune to special bullets");
 
     fgcolor(8);
     gotoxy(19, 27);
@@ -694,7 +706,6 @@ void getCredits(){
     while(input != 32){
         input = uart_get_char();
     }
-    mainmenu();
 }
 
 /*
@@ -835,7 +846,7 @@ uint8_t getDifficulty(){
         returnvalue = 3;
     }
     else if (menu == 4 & input == 32){
-        mainmenu();
+        returnvalue = mainmenu();
     }
     return returnvalue;
 
