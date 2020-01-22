@@ -14,10 +14,11 @@
 This function initializes the player's spaceship
 */
 void initSpaceship(struct spaceship_t *spaceship){
-
-    spaceship->posX = 32 << FIX14_SHIFT; // The x-position is generated randomly
-    spaceship->posY = 38 << FIX14_SHIFT; // The spaceship is drawn in the buttom of the window
-
+    spaceship->prevPosX = 40 << FIX14_SHIFT; // The spaceship starts in the middle of the screen
+    spaceship->prevPosY = 20 << FIX14_SHIFT; // 
+    
+    spaceship->posX = 32 << FIX14_SHIFT; // The spaceship is moved to the middle of the game screen
+    spaceship->posY = 38 << FIX14_SHIFT; // The spaceship is moved in the buttom of the window
 }
 
 /*
@@ -39,6 +40,8 @@ This function initializes an object (enemy or power up)
 */
 void initEnemy(struct enemy_t *enemy){
 
+    enemy->prevPosX = randomNumber(4,66); // The x-position is generated randomly within the game window
+    enemy->prevPosY = 2 << FIX14_SHIFT;
     enemy->posX = randomNumber(4,66); // The x-position is generated randomly within the game window
     enemy->posY = 2 << FIX14_SHIFT;
     enemy->timeAtPosition = 0 << FIX14_SHIFT;
