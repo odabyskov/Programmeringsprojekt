@@ -16,6 +16,9 @@
 *
 */
 
+/*
+This function sets the text color
+*/
 void fgcolor(uint8_t foreground) {
 /*  Value      foreground     Value     foreground
     ------------------------------------------------
@@ -28,21 +31,24 @@ void fgcolor(uint8_t foreground) {
       6        Cyan            14       Light Cyan
       7        Light Gray      15       White
 */
-  uint8_t type = 22;             // normal text
-	if (foreground > 7) {
-	  type = 1;                // bold text
-		foreground -= 8;
-	}
-  printf("%c[%d;%dm", ESC, type, foreground+30);
+    uint8_t type = 22;         // normal text
+    if (foreground > 7) {
+      type = 1;                // bold text
+        foreground -= 8;
+    }
+    printf("%c[%d;%dm", ESC, type, foreground+30);
 }
 
+/*
+This function sets the background color
+*/
 void bgcolor(uint8_t background) {
 /* IMPORTANT:   When you first use this function you cannot get back to true white background in HyperTerminal.
    Why is that? Because ANSI does not support true white background (ANSI white is gray to most human eyes).
                 The designers of HyperTerminal, however, preferred black text on white background, which is why
                 the colors are initially like that, but when the background color is first changed there is no
  	              way comming back.
-   Hint:        Use resetbgcolor(); clrscr(); to force HyperTerminal into gray text on black background.
+    Hint:      Use resetbgcolor(); clrscr(); to force HyperTerminal into gray text on black background.
     Value      Color
     ------------------
       0        Black
@@ -54,12 +60,15 @@ void bgcolor(uint8_t background) {
       6        Cyan
       7        Gray
 */
-  printf("%c[%dm", ESC, background+40);
+    printf("%c[%dm", ESC, background+40);
 }
 
+/*
+This function resets the background color
+*/
 void resetbgcolor() {
 // gray on black text, no underline, no blink, no reverse
-  printf("%c[m", ESC);
+    printf("%c[m", ESC);
 }
 
 /*
@@ -82,8 +91,8 @@ void clreol(){
 This function changes the coordinates of the cursor
 */
 void gotoxy(uint8_t x, uint8_t y){
-    uint8_t r=y;
-    uint8_t c=x;
+    uint8_t r=y; // rows
+    uint8_t c=x; // columns
     printf("%c[%d;%dH", ESC, r, c);
 }
 
@@ -143,130 +152,128 @@ void drawWindow(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, char* string_p, 
 
     // This part calculates the length of the string
     for (string_p; *(string_p+counter) != '\0'; counter++){
-    stringLength++;
+        stringLength++;
     }
 
     // This part checks if the string is too long to fit the box
     if (stringLength <= x2-4){
 
-    // This part decides the style
-    if (style==0){
+        // This part decides the style
+        if (style==0){
 
-        // This part draws the corners
-        gotoxy(x1,y1);
-        printf("%c\n",201);
-        gotoxy(x2,y1);
-        printf("%c", 187);
-        gotoxy(x1,y2);
-        printf("%c", 200);
-        gotoxy(x2,y2);
-        printf("%c", 188);
+            // This part draws the corners
+            gotoxy(x1,y1);
+            printf("%c\n",201);
+            gotoxy(x2,y1);
+            printf("%c", 187);
+            gotoxy(x1,y2);
+            printf("%c", 200);
+            gotoxy(x2,y2);
+            printf("%c", 188);
 
-        // This part draws the vertical sides of the box
-        uint8_t i;
-        for (i=y1+1; i<y2; i++){
-            gotoxy(x1, i);
-            printf("%c", 186);
-            gotoxy(x2, i);
-            printf("%c", 186);
+            // This part draws the vertical sides of the box
+            uint8_t i;
+            for (i=y1+1; i<y2; i++){
+                gotoxy(x1, i);
+                printf("%c", 186);
+                gotoxy(x2, i);
+                printf("%c", 186);
+            }
+
+            // This part draws the lower horizontal part of the box
+            for (i=x1+1; i<x2; i++){
+                gotoxy(i, y2);
+                printf("%c", 205);
+            }
+
+            // This part determines the length of the extra space to the right of the title
+            uint8_t ekstraTegn = x2-x1-4-stringLength;
+
+            // This part draws the leftmost part of the top of the box
+            uint8_t vertical1 = x1+1;
+            gotoxy(vertical1,y1);
+            printf("%c", 185);
+
+            // This part prints the title
+            uint8_t vertical2 = vertical1+1;
+            gotoxy(vertical2,y1);
+            for (i=0; i<stringLength; i++){
+                printf("%c", *string_p);
+                string_p++;
+            }
+
+            // This part draws the rightmost part of the top of the box
+            uint8_t vertical3 = vertical2+stringLength;
+            gotoxy(vertical3,y1);
+            printf("%c", 204);
+
+            uint8_t vertical4 = vertical3+1;
+            gotoxy(vertical4,y1);
+            for (i=0; i<ekstraTegn;i++){
+                printf("%c", 205);
+            }
+        } else {
+
+            // This part of the code does the same as the code we just described but with a different style
+
+            gotoxy(x1,y1);
+            printf("%c\n",218);
+            gotoxy(x2,y1);
+            printf("%c", 191);
+            gotoxy(x1,y2);
+            printf("%c", 192);
+            gotoxy(x2,y2);
+            printf("%c", 217);
+
+            // Sides
+            uint8_t i;
+            for (i=y1+1; i<y2; i++){
+                gotoxy(x1, i);
+                printf("%c", 179);
+                gotoxy(x2, i);
+                printf("%c", 179);
+            }
+
+            // Lower horizontal part
+            for (i=x1+1; i<x2; i++){
+                gotoxy(i, y2);
+                printf("%c", 196);
+            }
+
+            // Extra space to the left of the title
+            uint8_t ekstraTegn = x2-x1-4-stringLength;
+
+            // Leftmost part of top
+            uint8_t vertical1 = x1+1;
+            gotoxy(vertical1,y1);
+            printf("%c", 180);
+
+            // Title
+            uint8_t vertical2 = vertical1+1;
+            gotoxy(vertical2,y1);
+            for (i=0; i<stringLength; i++){
+                printf("%c", *string_p);
+                string_p++;
+            }
+
+            // Rightmost part of top
+            uint8_t vertical3 = vertical2+stringLength;
+            gotoxy(vertical3,y1);
+            printf("%c", 195);
+
+            uint8_t vertical4 = vertical3+1;
+            gotoxy(vertical4,y1);
+            for (i=0; i<ekstraTegn+1;i++){
+                printf("%c", 196);
+            }
         }
-
-        // This part draws the lower horizontal part of the box
-        for (i=x1+1; i<x2; i++){
-            gotoxy(i, y2);
-            printf("%c", 205);
-        }
-
-        // This part determines the length of the extra space to the right of the title
-        uint8_t ekstraTegn = x2-x1-4-stringLength;
-
-        // Vi tegner toppen af boksen
-
-        // This part draws the leftmost part of the top of the box
-        uint8_t vertical1 = x1+1;
-        gotoxy(vertical1,y1);
-        printf("%c", 185);
-
-        // This part prints the title
-        uint8_t vertical2 = vertical1+1;
-        gotoxy(vertical2,y1);
-        for (i=0; i<stringLength; i++){
-         printf("%c", *string_p);
-         string_p++;
-        }
-
-        // This part draws the rigthmost part of the top of the box
-        uint8_t vertical3 = vertical2+stringLength;
-        gotoxy(vertical3,y1);
-        printf("%c", 204);
-
-        uint8_t vertical4 = vertical3+1;
-        gotoxy(vertical4,y1);
-        for (i=0; i<ekstraTegn;i++){
-            printf("%c", 205);
-        }
-    } else {
-
-        // This part of the code does the same as the code we just described but with a different style
-
-        gotoxy(x1,y1);
-        printf("%c\n",218);
-        gotoxy(x2,y1);
-        printf("%c", 191);
-        gotoxy(x1,y2);
-        printf("%c", 192);
-        gotoxy(x2,y2);
-        printf("%c", 217);
-
-        // Sides
-        uint8_t i;
-        for (i=y1+1; i<y2; i++){
-            gotoxy(x1, i);
-            printf("%c", 179);
-            gotoxy(x2, i);
-            printf("%c", 179);
-        }
-
-        // Lower horizontal part
-        for (i=x1+1; i<x2; i++){
-            gotoxy(i, y2);
-            printf("%c", 196);
-        }
-
-        // Extra space to the left of the title
-        uint8_t ekstraTegn = x2-x1-4-stringLength;
-
-        // Leftmost part of top
-        uint8_t vertical1 = x1+1;
-        gotoxy(vertical1,y1);
-        printf("%c", 180);
-
-        // Title
-        uint8_t vertical2 = vertical1+1;
-        gotoxy(vertical2,y1);
-        for (i=0; i<stringLength; i++){
-         printf("%c", *string_p);
-         string_p++;
-        }
-
-        // Rightmost part of top
-        uint8_t vertical3 = vertical2+stringLength;
-        gotoxy(vertical3,y1);
-        printf("%c", 195);
-
-        uint8_t vertical4 = vertical3+1;
-        gotoxy(vertical4,y1);
-        for (i=0; i<ekstraTegn+1;i++){
-            printf("%c", 196);
-        }
-    }
     } else {
         printf("The title is too long!");
     }
-
 }
 
 /*
+*
 *
 *
 * The following functions are used to draw the main menu
@@ -276,20 +283,21 @@ void drawWindow(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, char* string_p, 
 */
 
 /*
-Draw and enter the main menu
+Draw and enter the main menu.
+The returnvalue is used to set the level of the game.
 */
 uint8_t mainmenu(){
     clrscr();
     uart_clear();
     uint8_t menu = 1, input, returnvalue;
 
-    /*
-    Initialize the main menu
-    */
-    gotoxy(23,38);
-    printf("keyboard: w/s = up/down  -  spacebar = select");
-    gotoxy(23,40);
-    printf("Joystick: up/down - center = select");
+
+    // Initialize the main menu
+    fgcolor(15);
+    gotoxy(17,38);
+    printf("Keyboard: w/s = up/down  -  spacebar = select");
+    gotoxy(21,39);
+    printf("Joystick: up/down  -  center = select");
     drawTitle(1);
 
     fgcolor(2);
@@ -310,38 +318,38 @@ uint8_t mainmenu(){
 
     while( (input != 32 && input != 16) || menu == 2 || menu == 3 ){
 
-    /*
-    Reinitialize the main menu, if we go back from help or credits
-    */
+    // Reinitialize the main menu, if we go back from help or credits
     if (input == 32 || input == 16) {
-    gotoxy(23,38);
-    printf("keyboard: w/s = up/down  -  spacebar = select");
-    gotoxy(23,40);
-    printf("Joystick: up/down - center = select");
-    drawTitle(1);
+        gotoxy(23,38);
+        printf("keyboard: w/s = up/down  -  spacebar = select");
+        gotoxy(23,40);
+        printf("Joystick: up/down - center = select");
+        drawTitle(1);
 
-    drawBox(30,17,50,21);
-    gotoxy(35,19);
-    printf("Start Game");
-    drawBox(30,22,50,26);
-    gotoxy(38,24);
-    printf("Help");
-    drawBox(30,27,50,31);
-    gotoxy(36,29);
-    printf("Credits");
-    drawBox(30,32,50,36);
-    gotoxy(38,34);
-    printf("Quit");
+        drawBox(30,17,50,21);
+        gotoxy(35,19);
+        printf("Start Game");
+        drawBox(30,22,50,26);
+        gotoxy(38,24);
+        printf("Help");
+        drawBox(30,27,50,31);
+        gotoxy(36,29);
+        printf("Credits");
+        drawBox(30,32,50,36);
+        gotoxy(38,34);
+        printf("Quit");
     }
-    // reset input
+
+    // Reset input
     input = 0;
 
-    // get input from keyboard/joystick
+    // Get input from keyboard/joystick
     if ( readJoystick() != 0 ){
-    input = readJoystick();
+        input = readJoystick();
     } else {
-    input = uart_get_char();
+        input = uart_get_char();
     }
+
     if ( input == 's' || input == 'S' || input == 2 ){
         if ( menu < 4 ) {
             menu++;
@@ -352,7 +360,7 @@ uint8_t mainmenu(){
         }
     }
 
-    // check where we are in the menu
+    // Check where we are in the menu
     switch (menu) {
         case 1: {
             drawmenuStart();
@@ -373,29 +381,27 @@ uint8_t mainmenu(){
             drawmenuQuit();
             break;
         }
-
     }
 
-    // if space/center is pressed we enter the help or credits menus (but don't leave the main menu)
+    // If space/center is pressed we enter the help or credits menus (but don't leave the main menu)
 	if ( (input == 32 || input == 16) && menu == 2){
         getHelp();
         clrscr();
-        //menu = 1;
     }
     else if ( (input == 32 || input == 16) && menu == 3){
         getCredits();
         clrscr();
-        //menu = 1;
     }
 } // end of while loop
 
     // If space/center is pressed leave the while loop & activate the chosen menu (we leave the main menu)
-if ( (input == 32 || input == 16) && menu == 1){
-        returnvalue = getDifficulty();}
-    else if ( (input == 32 || input == 16) && menu == 4){
+    if ( (input == 32 || input == 16) && menu == 1){
+        returnvalue = getDifficulty();
+    } else if ( (input == 32 || input == 16) && menu == 4){
         returnvalue = 0;
     }
-return returnvalue;
+
+    return returnvalue;
 }
 
 /*
@@ -425,6 +431,7 @@ void drawTitle(uint8_t type){
         printf("%c %c %c %c  %c %c  %c %c  %c  %c  %c  %c %c  %c",219,219,219,219,219,219,219,219,219,219,219,219,219,219);
         gotoxy(23,14);
         printf(" %c %c  %c  %c %c  %c %c  %c %c%c%c  %c%c  %c  %c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);}
+
     if (type == 2){
         gotoxy(26,4);
         printf(" %c%c  %c  %c  %c%c   %c%c   %c%c%c %c%c%c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
@@ -467,12 +474,12 @@ void drawmenuStart(){
 This function updates help box when selected
 */
 void drawmenuHelp(){
-        drawBox(30,17,50,21);
-        drawBox(30,27,50,31);
+    drawBox(30,17,50,21);
+    drawBox(30,27,50,31);
 
-        fgcolor(2);
-        drawBox(30,22,50,26);
-        fgcolor(15);
+    fgcolor(2);
+    drawBox(30,22,50,26);
+    fgcolor(15);
 }
 
 /*
@@ -506,11 +513,10 @@ void getHelp(){
     uart_clear();
     uint8_t input = 0;
 
-
-    //making the help window from our drawWindow function
+    // Making the help window from our drawWindow function
     drawWindow(9, 3, 74, 38, " HELP! ", 1);
 
-    //the meaning of the game
+    // Brief explanation of rules
     gotoxy(15,5);
     printf("The object of this game is to shoot down the enemy");
     gotoxy(15,6);
@@ -522,11 +528,11 @@ void getHelp(){
     printf("one of your lives.");
 
 
-    //how to move your ship
+    // How to move your ship
     gotoxy(15,11);
     printf("How to move your ship:");
 
-    //Drawing our ship
+    // Drawing our ship
     fgcolor(2);
     gotoxy(31,15);
     printf("%c",220);
@@ -534,15 +540,15 @@ void getHelp(){
     printf("%c%c%c%c%c",173,205,186,205,173);
     fgcolor(15);
 
-    //how to go left
+    // How to go left
     gotoxy(15,16);
     printf("left / A <-");
 
-    //how to go  right
+    // How to go right
     gotoxy(37,16);
     printf(" -> right / D");
 
-    //how to shoot
+    // How to shoot
     gotoxy(31,12);
     printf("o  <-  Space/center shoots normal bullets");
 
@@ -553,16 +559,15 @@ void getHelp(){
     gotoxy(32,14);
     printf("  <-  w/up shoots special bullets");
 
-    //what kind of enemies do we have:
+    // What kind of enemies do we have:
     gotoxy(15,18);
     printf("Things you will meet in space:");
 
-    //enemy 1:
+    // Enemy 1
     gotoxy(33, 20);
     printf("*Shoots normal bullets");
     gotoxy(34, 21);
     printf("Immune to special bullets");
-
 
     fgcolor(9);
     gotoxy(19, 20);
@@ -575,7 +580,7 @@ void getHelp(){
     printf("%c",219);
     fgcolor(15);
 
-    //enemy 2:
+    // Enemy 2
     gotoxy(33, 24);
     printf("*Deflects normal bullets away");
     gotoxy(34,25);
@@ -595,7 +600,7 @@ void getHelp(){
     printf("%c%c%c",192,196,217);
     fgcolor(15);
 
-    //enemy 3:
+    // Enemy 3
     gotoxy(33, 27);
     printf("*Only moves");
     gotoxy(34, 28);
@@ -634,7 +639,7 @@ void getHelp(){
     gotoxy(38,35);
     printf("Back");
 
-    // wait for user to leave
+    // Wait for user to leave the menu
     while( input != 32 && input != 16 ){
         if ( readJoystick() != 0){
             input = readJoystick();
@@ -664,12 +669,12 @@ void getCredits(){
     printf("Marc M. Guichard");
 
     gotoxy(30,21);
-    printf("Teaching:");
+    printf("Lecturer:");
     gotoxy(30,23);
-    printf("Jose%cM.G. Merayo",239);
+    printf("Jose M. G. Merayo");
 
     gotoxy(30,26);
-    printf("Teaching Assistance:");
+    printf("Teaching Assistant:");
     gotoxy(30,28);
     printf("Mads F. Madsen");
 
@@ -679,7 +684,7 @@ void getCredits(){
     fgcolor(15);
     printf("Back");
 
-        // wait for user to leave
+    // Wait for user to leave menu
     while( input != 32 && input != 16 ){
         if ( readJoystick() != 0){
             input = readJoystick();
@@ -720,12 +725,13 @@ uint8_t getDifficulty(){
 
     while( input != 32 && input != 16 ){
 
-        // get input from keyboard/joystick
+        // Get input from keyboard/joystick
         if ( readJoystick() != 0 ){
-        input = readJoystick();
+            input = readJoystick();
         } else {
-        input = uart_get_char();
+            input = uart_get_char();
         }
+
         if ( input == 's' || input == 'S' || input == 2 ){
             if ( menu < 4 ) {
                 menu++;
@@ -736,6 +742,7 @@ uint8_t getDifficulty(){
             }
         }
 
+        // Switch between the different buttons in the menu
         switch (menu) {
             case 1: {
                 drawmenuEasy();
@@ -760,22 +767,15 @@ uint8_t getDifficulty(){
     }
 
     if ( menu == 1 && ( input == 32 || input == 16 ) ){
-        //printf("Easy Mode");
         returnvalue = 1;
-    }
-    else if ( menu == 2 && ( input == 32 || input == 16 ) ){
-        //printf("Normal Mode");
+    } else if ( menu == 2 && ( input == 32 || input == 16 ) ){
         returnvalue = 2;
-    }
-    else if ( menu == 3 && ( input == 32 || input == 16 ) ){
-        //printf("Hard Mode");
+    } else if ( menu == 3 && ( input == 32 || input == 16 ) ){
         returnvalue = 3;
-    }
-    else {
+    } else {
         returnvalue = mainmenu();
     }
     return returnvalue;
-
 }
 
 /*
@@ -851,7 +851,6 @@ void drawSpaceship(struct spaceship_t *spaceship){
     deleteSymbol(prevX+1,prevY);
     deleteSymbol(prevX+2,prevY);
 
-
     // We define x- and y-components to use in the gotoxy-function
     uint8_t newX;
     uint8_t newY;
@@ -878,7 +877,7 @@ void drawSpaceship(struct spaceship_t *spaceship){
     newX = curX + 2;
     gotoxy(newX,curY);
     printf("%c", 173);
-    fgcolor(15);
+    fgcolor(15); // Resets the text color to white
 }
 
 /*
@@ -886,11 +885,13 @@ This function draws the bullet fired from the spaceship
 */
 void drawSpaceshipBullet(struct bullet_t *bullet){
 
-    if ((*bullet).posY < (2 << FIX14_SHIFT) || (*bullet).posX < (3 << FIX14_SHIFT) || (*bullet).posX > (67 << FIX14_SHIFT)){
+    // Delete the bullet if it is outside the game window
+    if ((*bullet).posY < (3 << FIX14_SHIFT) || (*bullet).posX < (3 << FIX14_SHIFT) || (*bullet).posX > (67 << FIX14_SHIFT)){
             (*bullet).drawBullet = 0;
 
     }
 
+    // Delete the bullet at its previous position and draws it at its current position
     if ((*bullet).drawBullet == 1 ){
 
         // We convert the bullet's last position to 32.0 fixed point
@@ -905,9 +906,9 @@ void drawSpaceshipBullet(struct bullet_t *bullet){
         uint32_t curY = convertTo3200((*bullet).posY);
 
         gotoxy(curX,curY);
-        //printf("%c", 004); // draws a bullet shaped like a diamond
-	if (curY > 2)
-        printf("o"); // draws a bullet
+        if (curY > 2){
+            printf("o"); // Draws a bullet
+        }
     } else if ((*bullet).drawBullet == 0){
         // We convert the bullet's last position to 32.0 fixed point
         uint32_t prevX = convertTo3200((*bullet).prevPosX);
@@ -923,9 +924,12 @@ This function draws the bullet fired from the spaceship that kills shielded enem
 */
 void drawSpaceshipShieldBullet(struct bullet_t *bullet){
 
-    if (bullet->posY < (2 << FIX14_SHIFT)){
+    // Delete bullet if it is outside the game window
+    if (bullet->posY < (3 << FIX14_SHIFT)){
         bullet->drawBullet = 0;
-    } else if (bullet->drawBullet == 1){
+    }
+
+    if (bullet->drawBullet == 1){
 
         // We convert the bullet's last position to 32.0 fixed point
         uint32_t prevX = convertTo3200((*bullet).prevPosX);
@@ -945,20 +949,26 @@ void drawSpaceshipShieldBullet(struct bullet_t *bullet){
                 fgcolor(15);
             }
     } else if (bullet->drawBullet == 0 ){
-        // We convert the bullet's position to 32.0 fixed point
-        uint32_t curX = convertTo3200((*bullet).posX);
-        uint32_t curY = convertTo3200((*bullet).posY);
 
-        // We delete the bullet
-        deleteSymbol(curX, curY);
+        // We convert the bullet's last position to 32.0 fixed point
+        uint32_t prevX = convertTo3200((*bullet).prevPosX);
+        uint32_t prevY = convertTo3200((*bullet).prevPosY);
+
+        // We delete the bullet at its last position
+        deleteSymbol(prevX, prevY);
     }
-
-
 }
 
 /*
 This function draws the bullet fired from the enemy
-*/void drawEnemyBullet(struct bullet_t *enemyBullet){
+*/
+void drawEnemyBullet(struct bullet_t *enemyBullet){
+
+    // Delete the bullet if it is outside the game window
+    if ((*enemyBullet).posY > (38 << FIX14_SHIFT) || (*enemyBullet).posX < (3 << FIX14_SHIFT) || (*enemyBullet).posX > (67 << FIX14_SHIFT)){
+            (*enemyBullet).drawBullet = 0;
+    }
+
     if ((*enemyBullet).drawBullet == 1 ){
 
         // We convert the bullet's last position to 32.0 fixed point
@@ -973,7 +983,8 @@ This function draws the bullet fired from the enemy
         uint32_t curY = convertTo3200((*enemyBullet).posY);
 
         gotoxy(curX,curY);
-        printf("o"); // draws a bullet shaped like a diamond
+        printf("o"); // draws a bullet
+
     } else if ((*enemyBullet).drawBullet == 0){
         // We convert the bullet's last position to 32.0 fixed point
         uint32_t prevX = convertTo3200((*enemyBullet).prevPosX);
@@ -988,6 +999,7 @@ This function draws the bullet fired from the enemy
 This function draws enemy1
 */
 void drawEnemyOne(struct enemy_t *enemy){
+
     if (enemy->drawEnemy == 1 ){
         // We convert the enemy's last position to 32.0 fixed point
         uint32_t prevX = convertTo3200((*enemy).prevPosX);
@@ -999,11 +1011,12 @@ void drawEnemyOne(struct enemy_t *enemy){
         deleteSymbol(prevX+1,prevY);
         deleteSymbol(prevX,prevY+1);
 
-        // We convert the bullet's position to 32.0 fixed point
+        // We convert the enemy's position to 32.0 fixed point
         uint32_t curX = convertTo3200((*enemy).posX);
         uint32_t curY = convertTo3200((*enemy).posY);
 
-        fgcolor(9);
+        // We draw the enemy
+        fgcolor(9); // Light red
         gotoxy(curX, curY);
         printf("%c",219);
         gotoxy(curX-1, curY);
@@ -1012,7 +1025,7 @@ void drawEnemyOne(struct enemy_t *enemy){
         printf("%c",219);
         gotoxy(curX, curY+1);
         printf("%c",219);
-        fgcolor(15);
+        fgcolor(15); // Reset to white
 
     } else if (enemy->drawEnemy == 0){
         // We convert the enemy's position to 32.0 fixed point
@@ -1031,6 +1044,7 @@ void drawEnemyOne(struct enemy_t *enemy){
 This function draws enemy2
 */
 void drawEnemyTwo(struct enemy_t *enemy){
+
     if (enemy->drawEnemy == 1 ){
         // We convert the enemy's last position to 32.0 fixed point
         uint32_t prevX = convertTo3200((*enemy).prevPosX);
@@ -1041,10 +1055,11 @@ void drawEnemyTwo(struct enemy_t *enemy){
         deleteSymbol(prevX-1,prevY);
         deleteSymbol(prevX+1,prevY);
 
-        // We convert the bullet's position to 32.0 fixed point
+        // We convert the enemy's position to 32.0 fixed point
         uint32_t curX = convertTo3200((*enemy).posX);
         uint32_t curY = convertTo3200((*enemy).posY);
 
+        // We draw the enemy
         fgcolor(8); // Grey
         gotoxy(curX, curY);
         printf("%c",219);
@@ -1052,7 +1067,7 @@ void drawEnemyTwo(struct enemy_t *enemy){
         printf("%c",219);
         gotoxy(curX+1, curY);
         printf("%c",219);
-        fgcolor(15);
+        fgcolor(15); // Reset to white
 
     } else if (enemy->drawEnemy == 0 ){
 
@@ -1071,6 +1086,7 @@ void drawEnemyTwo(struct enemy_t *enemy){
 This function draws enemy3
 */
 void drawEnemyThree(struct enemy_t *enemy){
+
     if (enemy->drawEnemy == 1 ){
         // We convert the enemy's previous position to 32.0 fixed point
         uint32_t prevX = convertTo3200((*enemy).prevPosX);
@@ -1089,7 +1105,8 @@ void drawEnemyThree(struct enemy_t *enemy){
         uint32_t curX = convertTo3200((*enemy).posX);
         uint32_t curY = convertTo3200((*enemy).posY);
 
-        fgcolor(5);
+        // W draw the enemy
+        fgcolor(5); // Purple
         gotoxy(curX, curY);
         printf("%c",219);
         gotoxy(curX-1, curY+1);
@@ -1098,12 +1115,12 @@ void drawEnemyThree(struct enemy_t *enemy){
         printf("%c",219);
         gotoxy(curX, curY+1);
         printf("%c",219);
-        fgcolor(15);
+        fgcolor(15); // Reset to white
 
-        fgcolor(6);
+        fgcolor(6); // Cyan
         gotoxy(curX-1, curY+2);
         printf("%c%c%c",192,196,217);
-        fgcolor(15);
+        fgcolor(15); // Reset to white
 
     } else if (enemy->drawEnemy == 0 ){
 
@@ -1123,15 +1140,16 @@ void drawEnemyThree(struct enemy_t *enemy){
 }
 
 /*
-This function draws the heart-powerup
+This function draws the heart power-up
 */
 void drawHeart(struct enemy_t *heart){
+
     if (heart->drawEnemy == 1 ){
         // We convert the heart's last position to 32.0 fixed point
         uint32_t prevX = convertTo3200((*heart).prevPosX);
         uint32_t prevY = convertTo3200((*heart).prevPosY);
 
-        // We delete the enemy at its last position
+        // We delete the heart at its last position
         deleteSymbol(prevX, prevY);
         deleteSymbol(prevX-1,prevY);
         deleteSymbol(prevX+1,prevY);
@@ -1143,7 +1161,7 @@ void drawHeart(struct enemy_t *heart){
         uint32_t curX = convertTo3200((*heart).posX);
         uint32_t curY = convertTo3200((*heart).posY);
 
-        fgcolor(1);
+        fgcolor(1); // Red
         gotoxy(curX-1, curY);
         printf("%c",40);
         gotoxy(curX, curY);
@@ -1156,7 +1174,7 @@ void drawHeart(struct enemy_t *heart){
         printf("%c",92);
         gotoxy(curX+1, curY+1);
         printf("%c",47);
-        fgcolor(15);
+        fgcolor(15); // Reset to white
 
     } else if (heart->drawEnemy == 0){
         // We convert the heart's position to 32.0 fixed point
@@ -1172,8 +1190,20 @@ void drawHeart(struct enemy_t *heart){
         deleteSymbol(curX+1,curY+1);
     }
 }
+
 /*
-Game-over screen
+*
+*
+*
+* The following functions draws the different screens used in the game (game-over, game window etc.)
+*
+*
+*
+*/
+
+/*
+This function draws the game-over screen
+The inputs are the kill-rates of the different types of enemies
 */
 void gameOver(uint32_t enemyOneKilled, uint32_t enemyTwoKilled, uint32_t enemyThreeKilled){
     uint8_t input = 0;
@@ -1209,13 +1239,12 @@ void gameOver(uint32_t enemyOneKilled, uint32_t enemyTwoKilled, uint32_t enemyTh
     gotoxy(23,19);
     printf(" %c%c%c%c%c      %c     %c%c%c%c%c%c%c  %c%c  %c%c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
 
-
     // Print the kill-rate
-
     gotoxy(36,24);
     printf("KILL-RATE:");
 
-    fgcolor(9);
+    // Enemy1
+    fgcolor(9); // Light red
     gotoxy(40, 27);
     printf("%c",219);
     gotoxy(39, 27);
@@ -1224,10 +1253,11 @@ void gameOver(uint32_t enemyOneKilled, uint32_t enemyTwoKilled, uint32_t enemyTh
     printf("%c",219);
     gotoxy(40, 28);
     printf("%c",219);
-    fgcolor(15);
+    fgcolor(15); // Reset to white
     gotoxy(40,30);
-    printf("%d",enemyOneKilled);
+    printf("%d",enemyOneKilled); // Kill-rate
 
+    // Enemy2
     fgcolor(8); // Grey
     gotoxy(32, 27);
     printf("%c",219);
@@ -1235,11 +1265,12 @@ void gameOver(uint32_t enemyOneKilled, uint32_t enemyTwoKilled, uint32_t enemyTh
     printf("%c",219);
     gotoxy(33, 27);
     printf("%c",219);
-    fgcolor(15);
+    fgcolor(15); // Reset to white
     gotoxy(32,30);
-    printf("%d",enemyTwoKilled);
+    printf("%d",enemyTwoKilled); // Kill-rate
 
-    fgcolor(5);
+    // Enemy3
+    fgcolor(5); // Purple
     gotoxy(48, 26);
     printf("%c",219);
     gotoxy(47, 27);
@@ -1248,47 +1279,54 @@ void gameOver(uint32_t enemyOneKilled, uint32_t enemyTwoKilled, uint32_t enemyTh
     printf("%c",219);
     gotoxy(48, 27);
     printf("%c",219);
-    fgcolor(15);
+    fgcolor(15); // Reset to white
 
-    fgcolor(6);
+    fgcolor(6); // Cyan
     gotoxy(47, 28);
     printf("%c%c%c",192,196,217);
-    fgcolor(15);
+    fgcolor(15); // Reset to white
     gotoxy(48,30);
-    printf("%d",enemyThreeKilled);
+    printf("%d",enemyThreeKilled); // Kill-rate
 
-    fgcolor(2);
+    // Draw the back-to-menu-button
+    fgcolor(2); // Green
     drawBox(30,33,50,37);
     gotoxy(34,35);
-    fgcolor(15);
+    fgcolor(15); // Reset to white
     printf("Back to menu");
 
-    while(input != 32){
-    input = uart_get_char();
+    while(input != 32 && input != 16){
+        if (readJoystick() != 0){
+            input = readJoystick();
+        } else {
+            input = uart_get_char();
+        }
     }
     clrscr();
 
 }
 
-//Draw the gamewindow
+/*
+This function draws the game window
+The input tells how many lives the player has left
+*/
 void drawGameWindow(int8_t playerHits){
 
-	//GAME-window:
+	// Game window:
 	fgcolor(15);
 	drawWindow(2, 1, 68, 39,"GAME",1);
 
-
-	//STATS display:
+	// Stats display:
 	drawWindow(69, 1, 79, 39,"STATS",1);
 
-	//
+	// Determine the amount of lives left
 	getHealth(playerHits);
 
 	gotoxy(72,20);
 	printf("KILLS:");
 
-	//printing enemy1
-	fgcolor(9);
+	// Print enemy1
+	fgcolor(9); // Light red
 	gotoxy(74, 22);
 	printf("%c",219);
 	gotoxy(73, 22);
@@ -1297,9 +1335,9 @@ void drawGameWindow(int8_t playerHits){
 	printf("%c",219);
 	gotoxy(74, 23);
 	printf("%c",219);
-	fgcolor(15);
+	fgcolor(15); // Reset to white
 
-	//printing enemy2
+	// Print enemy2
 	fgcolor(8); // Grey
 	gotoxy(74, 28);
 	printf("%c",219);
@@ -1307,10 +1345,10 @@ void drawGameWindow(int8_t playerHits){
 	printf("%c",219);
 	gotoxy(75, 28);
 	printf("%c",219);
-	fgcolor(15);
+	fgcolor(15); // Reset to white
 
-	//printing enemy3
-	fgcolor(5);
+	// Print enemy3
+	fgcolor(5); // Purple
 	gotoxy(74, 34);
 	printf("%c",219);
 	gotoxy(73, 34);
@@ -1319,119 +1357,108 @@ void drawGameWindow(int8_t playerHits){
 	printf("%c",219);
 	gotoxy(74, 33);
 	printf("%c",219);
-	fgcolor(15);
+	fgcolor(15); // Reset to white
 
-	fgcolor(6);
+	fgcolor(6); // Cyan
 	gotoxy(73, 35);
 	printf("%c%c%c",192,196,217);
-	fgcolor(15);
-
-}
-
-
-void getHealth(int8_t hits){
-
-    //printing lives
-    gotoxy(71,3);
-    printf("LIVES:");
-
-    if (hits==0){
-    //green
-    fgcolor(2);
-    gotoxy(72,4);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-    gotoxy(72,5);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-
-    //yellow
-    fgcolor(11);
-    gotoxy(72,6);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-    gotoxy(72,7);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-
-    //red
-    fgcolor(1);
-    gotoxy(72,8);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-    gotoxy(72,9);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-    fgcolor(15);
-}
-    if (hits==1){
-     //black
-    fgcolor(0);
-    gotoxy(72,4);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-    gotoxy(72,5);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-
-    //yellow
-    fgcolor(11);
-    gotoxy(72,6);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-    gotoxy(72,7);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-
-    //red
-    fgcolor(1);
-    gotoxy(72,8);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-    gotoxy(72,9);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-    fgcolor(15);
-}
-    if (hits==2){
-    //black
-    fgcolor(0);
-    gotoxy(72,4);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-    gotoxy(72,5);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-
-    //black
-    fgcolor(0);
-    gotoxy(72,6);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-    gotoxy(72,7);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-
-    //red
-    fgcolor(1);
-    gotoxy(72,8);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-    gotoxy(72,9);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-    fgcolor(15);
-}
-    if (hits==3){
-    //black
-    fgcolor(0);
-    gotoxy(72,4);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-    gotoxy(72,5);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-
-    //black
-    fgcolor(0);
-    gotoxy(72,6);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-    gotoxy(72,7);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-
-    //black
-    fgcolor(0);
-    gotoxy(72,8);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-    gotoxy(72,9);
-    printf("%c%c%c%c", 219, 219, 219, 219);
-    fgcolor(15);
-}
+	fgcolor(15); // Reset to white
 
 }
 
 /*
-Boss-key. If 'b' is pressed while playing, the boss-key screen will be activated
+This function updates the health-bar in the game window
+*/
+void getHealth(int8_t hits){
+
+    // Print lives
+    gotoxy(71,3);
+    printf("LIVES:");
+
+    if (hits==0){ // If three lives
+        fgcolor(2); // Green
+        gotoxy(72,4);
+        printf("%c%c%c%c", 219, 219, 219, 219);
+        gotoxy(72,5);
+        printf("%c%c%c%c", 219, 219, 219, 219);
+
+        fgcolor(11);  // Yellow
+        gotoxy(72,6);
+        printf("%c%c%c%c", 219, 219, 219, 219);
+        gotoxy(72,7);
+        printf("%c%c%c%c", 219, 219, 219, 219);
+
+        fgcolor(1);  // Red
+        gotoxy(72,8);
+        printf("%c%c%c%c", 219, 219, 219, 219);
+        gotoxy(72,9);
+        printf("%c%c%c%c", 219, 219, 219, 219);
+        fgcolor(15); // Reset to white
+
+    } else if (hits==1){ // If two lives
+        fgcolor(0); // Black
+        gotoxy(72,4);
+        printf("%c%c%c%c", 219, 219, 219, 219);
+        gotoxy(72,5);
+        printf("%c%c%c%c", 219, 219, 219, 219);
+
+        fgcolor(11); // Yellow
+        gotoxy(72,6);
+        printf("%c%c%c%c", 219, 219, 219, 219);
+        gotoxy(72,7);
+        printf("%c%c%c%c", 219, 219, 219, 219);
+
+        fgcolor(1); // Red
+        gotoxy(72,8);
+        printf("%c%c%c%c", 219, 219, 219, 219);
+        gotoxy(72,9);
+        printf("%c%c%c%c", 219, 219, 219, 219);
+        fgcolor(15); // Reset to white
+
+    } else if (hits==2){ // If one life
+        fgcolor(0); // Black
+        gotoxy(72,4);
+        printf("%c%c%c%c", 219, 219, 219, 219);
+        gotoxy(72,5);
+        printf("%c%c%c%c", 219, 219, 219, 219);
+
+        fgcolor(0); // Black
+        gotoxy(72,6);
+        printf("%c%c%c%c", 219, 219, 219, 219);
+        gotoxy(72,7);
+        printf("%c%c%c%c", 219, 219, 219, 219);
+
+        fgcolor(1); // Red
+        gotoxy(72,8);
+        printf("%c%c%c%c", 219, 219, 219, 219);
+        gotoxy(72,9);
+        printf("%c%c%c%c", 219, 219, 219, 219);
+        fgcolor(15); // Reset to white
+
+    } else if (hits==3){ // If 0 lives
+        fgcolor(0); // Black
+        gotoxy(72,4);
+        printf("%c%c%c%c", 219, 219, 219, 219);
+        gotoxy(72,5);
+        printf("%c%c%c%c", 219, 219, 219, 219);
+
+        fgcolor(0); // Black
+        gotoxy(72,6);
+        printf("%c%c%c%c", 219, 219, 219, 219);
+        gotoxy(72,7);
+        printf("%c%c%c%c", 219, 219, 219, 219);
+
+        fgcolor(0); // Black
+        gotoxy(72,8);
+        printf("%c%c%c%c", 219, 219, 219, 219);
+        gotoxy(72,9);
+        printf("%c%c%c%c", 219, 219, 219, 219);
+        fgcolor(15);
+    }
+}
+
+/*
+Boss-key. If 'b' or 'B' is pressed while playing, the boss-key screen will be activated
 */
 void bossKey(char temp){
 

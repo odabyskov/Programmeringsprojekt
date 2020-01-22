@@ -16,9 +16,8 @@
 */
 
 /*
-This function generates a 18.14 fixed point random number in the range from lower to upper
+This function generates a random 18.14 fixed point number in the range from lower to upper
 */
-
 uint32_t randomNumber(uint8_t lower, uint8_t upper){
 
     uint32_t random = ((rand() % (upper - lower + 1)) + lower) << FIX14_SHIFT;
@@ -35,19 +34,18 @@ int32_t convertTo3200(int32_t i) {
  }
 
 /*
-This functions calculates sine to the angle given as argument
+This function calculates sine to the angle given as argument
 */
 int32_t calculateSin(int32_t deg){
     int degr = (deg * 512)/360;
-    return (int32_t)(SIN[degr & 0x1FF]); // 0x1FF er den sidste plads aka. 0xFF37.
-
+    return (int32_t)(SIN[degr & 0x1FF]);
 }
 
 /*
-This functions calculates cosine to the angle given as argument
+This function calculates cosine to the angle given as argument
 */
 int32_t calculateCos(int32_t deg){
-    return calculateSin(deg+90); // vi bruger ligning (6) fra noten
+    return calculateSin(deg+90); // Cosine to an angle equals sine to the angle plus 90 degrees
 }
 
 /*
@@ -57,7 +55,7 @@ void rotateDirection(struct bullet_t *b, int deg){
     int32_t x1 = (*b).velX;
     int32_t y1 = (*b).velY;
 
-    b->velX = FIX14_MULT(x1,calculateCos(deg))-FIX14_MULT(y1,calculateSin(deg)); // Vi bruger den definerede multiplikationsfunktion (givet i opgaveteksten)
+    b->velX = FIX14_MULT(x1,calculateCos(deg))-FIX14_MULT(y1,calculateSin(deg));
     b->velY = FIX14_MULT(x1,calculateSin(deg))+FIX14_MULT(y1,calculateCos(deg));
 
 }
@@ -75,8 +73,8 @@ void rotateDirection(struct bullet_t *b, int deg){
 
 /*
 This function updates the position of the spaceship according to the input from the user.
-If the user presses the 'a'-key the spaceship moves one step to the left.
-If the user presses the 'd'-key the spaceship moves one step to the right.
+If the user presses the 'a'-key or pulls the joystick left the spaceship moves one step to the left.
+If the user presses the 'd'-key or pulls the joystick to the right the spaceship moves one step to the right.
 */
 void updateSpaceshipPosition(struct spaceship_t *spaceship, char temp){
 
@@ -113,8 +111,8 @@ void updateSpaceshipBulletPosition(struct bullet_t *bullet, struct spaceship_t *
 
     if ( (temp == 32 || temp == 16) && bullet->drawBullet == 0 ){
 
-        bullet->posX = (*ship).posX; // the x-position is set to the middle of the spaceship
-        bullet->posY = (*ship).posY - (2 << FIX14_SHIFT); // the y-position is set to the top of the spaceship
+        bullet->posX = (*ship).posX; // The x-position is set to the middle of the spaceship
+        bullet->posY = (*ship).posY - (2 << FIX14_SHIFT); // The y-position is set to the top of the spaceship
         bullet->drawBullet = 1;
         bullet->velX = 0 << FIX14_SHIFT;
         bullet->velY = 1 << FIX14_SHIFT;
@@ -140,8 +138,8 @@ void updateSpaceshipShieldBulletPosition(struct bullet_t *bullet, struct spacesh
 
     if ( (temp == 'w' || temp == 'W' || temp == 1) && bullet->drawBullet == 0 ){
 
-        bullet->posX = (*ship).posX; // the x-position is set to the middle of the spaceship
-        bullet->posY = (*ship).posY - (2 << FIX14_SHIFT); // the y-position is set to the top of the spaceship
+        bullet->posX = (*ship).posX; // The x-position is set to the middle of the spaceship
+        bullet->posY = (*ship).posY - (2 << FIX14_SHIFT); // The y-position is set to the top of the spaceship
 
         bullet->drawBullet = 1;
 
@@ -152,8 +150,8 @@ void updateSpaceshipShieldBulletPosition(struct bullet_t *bullet, struct spacesh
         bullet->prevPosY=(*bullet).posY;
 
         // We update the current position
-        bullet->posX = (*bullet).posX; // the x-position is set to the middle of the spaceship
-        bullet->posY = (*bullet).posY - (1 << k); // the y-position is set to the position above the previous position
+        bullet->posX = (*bullet).posX; // The x-position is set to the middle of the spaceship
+        bullet->posY = (*bullet).posY - (1 << k); // The y-position is set to the position above the previous position
 
     }
 }
@@ -166,9 +164,11 @@ void updateEnemyBulletPosition(struct bullet_t *enemyBullet, struct enemy_t *ene
 
     if ( (*enemyBullet).drawBullet == 0 && (*enemy).drawEnemy == 1 ){
 
-        enemyBullet->posX = (*enemy).posX; // the x-position is set to the middle of the enemy
-        enemyBullet->posY = (*enemy).posY + (2 << FIX14_SHIFT); // the y-position is set to the bottom of the enemy
+        enemyBullet->posX = (*enemy).posX; // The x-position is set to the middle of the enemy
+        enemyBullet->posY = (*enemy).posY + (2 << FIX14_SHIFT); // The y-position is set to the bottom of the enemy
         enemyBullet->drawBullet = 1;
+        enemyBullet->velX = 0 << FIX14_SHIFT;
+        enemyBullet->velY = 1 << FIX14_SHIFT;
 
     } else if ( (*enemyBullet).drawBullet == 1 ){
 
@@ -177,15 +177,15 @@ void updateEnemyBulletPosition(struct bullet_t *enemyBullet, struct enemy_t *ene
         enemyBullet->prevPosY=(*enemyBullet).posY;
 
         // We update the current position
-        enemyBullet->posX = (*enemyBullet).posX; // the x-position is set to the middle of the enemy
-        enemyBullet->posY = (*enemyBullet).posY + (1 << k); // the y-position is set to the position below the previous position
+        enemyBullet->posX = (*enemyBullet).prevPosX + (*enemyBullet).velX; // The x-position is set to the middle of the enemy
+        enemyBullet->posY = (*enemyBullet).posY + ((*enemyBullet).velY >> 14-k); // The y-position is set to the position below the previous position
 
     }
 
     if ((*enemyBullet).posY > 38 << FIX14_SHIFT ){
             (*enemyBullet).drawBullet = 0;
-    }
 
+    }
 }
 
 /*
@@ -197,8 +197,10 @@ void updateEnemyPosition(struct enemy_t *enemy, uint32_t k){
         // We set the current positions to previous position
         enemy->prevPosX = (*enemy).posX;
         enemy->prevPosY = (*enemy).posY;
-        enemy->posY = (*enemy).posY + (1 << k); // the y-position is set to the position below the previous position
-    } else if ( (*enemy).drawEnemy == 0 ){ // (*enemy).posY > 36 << FIX14_SHIFT
+        enemy->posY = (*enemy).posY + (1 << k); // The y-position is set to the position below the previous position
+
+    } else if ( (*enemy).drawEnemy == 0 ){ // If the enemy has been killed or made it to the planet,
+                                           // it is initialized at a random position in the top of the screen
         enemy->posX = randomNumber(4,66);
         enemy->posY = 2 << FIX14_SHIFT;
     }
@@ -213,7 +215,8 @@ void updateHeartPosition(struct enemy_t *heart, uint32_t k, uint32_t playerHits)
         // We set the current positions to previous position
         heart->prevPosX = (*heart).posX;
         heart->prevPosY = (*heart).posY;
-        heart->posY = (*heart).posY + (1 << k); // the y-position is set to the position below the previous position
+        heart->posY = (*heart).posY + (1 << k); // The y-position is set to the position below the previous position
+
     } else if ( (*heart).drawEnemy == 0 && playerHits ==2){
         heart->posX = randomNumber(4,65);
         heart->posY = 2 << FIX14_SHIFT;
@@ -225,6 +228,17 @@ void updateHeartPosition(struct enemy_t *heart, uint32_t k, uint32_t playerHits)
 }
 
 /*
+*
+*
+*
+* The following functions check whether the different objects have
+* been hit by a bullet.
+*
+*
+*
+*/
+
+/*
 This function checks whether enemy1 has been hit or not and returns 1 if there's a hit
 */
 uint32_t isEnemyOneHit(struct enemy_t *e, struct bullet_t *b1, struct bullet_t *b2, struct bullet_t *b3, struct bullet_t *b4, struct bullet_t *b5, struct bullet_t *sb1, struct bullet_t *sb2){
@@ -234,7 +248,7 @@ uint32_t isEnemyOneHit(struct enemy_t *e, struct bullet_t *b1, struct bullet_t *
     if ((*e).drawEnemy==1 && (((*b1).posX<=(*e).posX+(1<<FIX14_SHIFT) && ((*b1).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b1).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b1).posY>=(*e).posY)))){
 
         e->drawEnemy=0;
-        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posX=randomNumber(4,66); // The x-position is generated randomly within the game window
         e->posY=2 << FIX14_SHIFT;
         b1->drawBullet=0;
         temp = 1;
@@ -242,7 +256,7 @@ uint32_t isEnemyOneHit(struct enemy_t *e, struct bullet_t *b1, struct bullet_t *
      } else if ((*e).drawEnemy==1 && (((*b2).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b2).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b2).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b2).posY>=(*e).posY))){
 
         e->drawEnemy=0;
-        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posX=randomNumber(4,66); // The x-position is generated randomly within the game window
         e->posY=2 << FIX14_SHIFT;
         b2->drawBullet=0;
         temp = 1;
@@ -250,7 +264,7 @@ uint32_t isEnemyOneHit(struct enemy_t *e, struct bullet_t *b1, struct bullet_t *
      } else if ((*e).drawEnemy==1 && (((*b3).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b3).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b3).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b3).posY>=(*e).posY))){
 
         e->drawEnemy=0;
-        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posX=randomNumber(4,66); // The x-position is generated randomly within the game window
         e->posY=2 << FIX14_SHIFT;
         b3->drawBullet=0;
         temp = 1;
@@ -258,7 +272,7 @@ uint32_t isEnemyOneHit(struct enemy_t *e, struct bullet_t *b1, struct bullet_t *
      } else if ((*e).drawEnemy==1 && (((*b4).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b4).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b4).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b4).posY>=(*e).posY))){
 
         e->drawEnemy=0;
-        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posX=randomNumber(4,66); // The x-position is generated randomly within the game window
         e->posY=2 << FIX14_SHIFT;
         b4->drawBullet=0;
         temp = 1;
@@ -266,7 +280,7 @@ uint32_t isEnemyOneHit(struct enemy_t *e, struct bullet_t *b1, struct bullet_t *
      } else if ((*e).drawEnemy==1 && (((*b5).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b5).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*b5).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b5).posY>=(*e).posY))){
 
         e->drawEnemy=0;
-        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posX=randomNumber(4,66); // The x-position is generated randomly within the game window
         e->posY=2 << FIX14_SHIFT;
         b5->drawBullet=0;
         temp = 1;
@@ -297,7 +311,7 @@ uint32_t isEnemyTwoHit(struct enemy_t *e, struct bullet_t *b1, struct bullet_t *
     if ((*e).drawEnemy==1 && ((*b1).posX<=(*e).posX+(1<<FIX14_SHIFT) && ((*b1).posX>=(*e).posX-(1<<FIX14_SHIFT))) && ((*b1).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b1).posY>=(*e).posY)){
 
         e->drawEnemy=0;
-        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posX=randomNumber(4,66); // The x-position is generated randomly within the game window
         e->posY=2 << FIX14_SHIFT;
         b1->drawBullet=0;
         temp = 1;
@@ -305,7 +319,7 @@ uint32_t isEnemyTwoHit(struct enemy_t *e, struct bullet_t *b1, struct bullet_t *
      } else if ((*e).drawEnemy==1 && (((*b2).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b2).posX>=(*e).posX-(1<<FIX14_SHIFT))) && ((*b2).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b2).posY>=(*e).posY)){
 
         e->drawEnemy=0;
-        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posX=randomNumber(4,66); // The x-position is generated randomly within the game window
         e->posY=2 << FIX14_SHIFT;
         b2->drawBullet=0;
         temp = 1;
@@ -313,7 +327,7 @@ uint32_t isEnemyTwoHit(struct enemy_t *e, struct bullet_t *b1, struct bullet_t *
      } else if ((*e).drawEnemy==1 && (((*b3).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b3).posX>=(*e).posX-(1<<FIX14_SHIFT))) && ((*b3).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b3).posY>=(*e).posY)){
 
         e->drawEnemy=0;
-        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posX=randomNumber(4,66); // The x-position is generated randomly within the game window
         e->posY=2 << FIX14_SHIFT;
         b3->drawBullet=0;
         temp = 1;
@@ -321,7 +335,7 @@ uint32_t isEnemyTwoHit(struct enemy_t *e, struct bullet_t *b1, struct bullet_t *
      } else if ((*e).drawEnemy==1 && (((*b4).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b4).posX>=(*e).posX-(1<<FIX14_SHIFT))) && ((*b4).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b4).posY>=(*e).posY)){
 
         e->drawEnemy=0;
-        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posX=randomNumber(4,66); // The x-position is generated randomly within the game window
         e->posY=2 << FIX14_SHIFT;
         b4->drawBullet=0;
         temp = 1;
@@ -329,7 +343,7 @@ uint32_t isEnemyTwoHit(struct enemy_t *e, struct bullet_t *b1, struct bullet_t *
      } else if ((*e).drawEnemy==1 && (((*b5).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*b5).posX>=(*e).posX-(1<<FIX14_SHIFT))) && ((*b5).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*b5).posY>=(*e).posY)){
 
         e->drawEnemy=0;
-        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posX=randomNumber(4,66); // The x-position is generated randomly within the game window
         e->posY=2 << FIX14_SHIFT;
         b5->drawBullet=0;
         temp = 1;
@@ -353,10 +367,11 @@ uint32_t isEnemyTwoHit(struct enemy_t *e, struct bullet_t *b1, struct bullet_t *
 /*
 This function checks whether enemy3 has been hit or not and returns 1 if there's a hit
 */
-uint32_t isEnemyThreeHit(struct enemy_t *e, struct bullet_t *b1, struct bullet_t *b2, struct bullet_t *b3, struct bullet_t *b4, struct bullet_t *b5, struct bullet_t *sb1, struct bullet_t *sb2){
+uint32_t isEnemyThreeHit(struct enemy_t *e, struct bullet_t *b1, struct bullet_t *b2, struct bullet_t *b3, struct bullet_t *b4, struct bullet_t *b5, struct bullet_t *sb1, struct bullet_t *sb2, struct bullet_t *eb1, struct bullet_t *eb2, struct bullet_t *eb3){
 
     uint32_t temp = 0;
 
+    // Player bullets
     if ((*e).drawEnemy==1 && (( (*e).posY+(3<<FIX14_SHIFT) <= (*b1).posY && (*e).posY+(11<<FIX14_SHIFT) >= (*b1).posY) && ((*e).posX-(6<<FIX14_SHIFT) <= (*b1).posX && (*e).posX > (*b1).posX))){
         rotateDirection(b1,5);
         temp = 0;
@@ -388,10 +403,33 @@ uint32_t isEnemyThreeHit(struct enemy_t *e, struct bullet_t *b1, struct bullet_t
         rotateDirection(b5,355);
         temp = 0;
     }
+
+    // Enemy bullets
+    if ((*e).drawEnemy==1 && (( (*e).posY+(3<<FIX14_SHIFT) <= (*eb1).posY && (*e).posY+(11<<FIX14_SHIFT) >= (*eb1).posY) && ((*e).posX-(6<<FIX14_SHIFT) <= (*eb1).posX && (*e).posX > (*eb1).posX))){
+        rotateDirection(eb1,5);
+        temp = 0;
+    } else if ((*e).drawEnemy==1 && (( (*e).posY+(3<<FIX14_SHIFT) <= (*eb1).posY && (*e).posY+(11<<FIX14_SHIFT) >= (*eb1).posY) && ((*e).posX <= (*eb1).posX && (*e).posX+(6<<FIX14_SHIFT) >= (*eb1).posX))){
+        rotateDirection(eb1,355);
+        temp = 0;
+    } else if ((*e).drawEnemy==1 && (( (*e).posY+(3<<FIX14_SHIFT) <= (*eb2).posY && (*e).posY+(11<<FIX14_SHIFT) >= (*eb2).posY) && ((*e).posX-(6<<FIX14_SHIFT) <= (*eb2).posX && (*e).posX > (*eb2).posX))){
+        rotateDirection(eb2,5);
+        temp = 0;
+    } else if ((*e).drawEnemy==1 && (( (*e).posY+(3<<FIX14_SHIFT) <= (*eb2).posY && (*e).posY+(11<<FIX14_SHIFT) >= (*eb2).posY) && ((*e).posX <= (*eb2).posX && (*e).posX+(6<<FIX14_SHIFT) >= (*eb2).posX))){
+        rotateDirection(eb2,355);
+        temp = 0;
+    } else if ((*e).drawEnemy==1 && (( (*e).posY+(3<<FIX14_SHIFT) <= (*eb3).posY && (*e).posY+(11<<FIX14_SHIFT) >= (*eb3).posY) && ((*e).posX-(6<<FIX14_SHIFT) <= (*eb3).posX && (*e).posX > (*eb3).posX))){
+        rotateDirection(eb3,5);
+        temp = 0;
+    } else if ((*e).drawEnemy==1 && (( (*e).posY+(3<<FIX14_SHIFT) <= (*eb3).posY && (*e).posY+(11<<FIX14_SHIFT) >= (*eb3).posY) && ((*e).posX <= (*eb3).posX && (*e).posX+(6<<FIX14_SHIFT) >= (*eb3).posX))){
+        rotateDirection(eb3,355);
+        temp = 0;
+    }
+
+    // Shield-buster bullets
     if ((*e).drawEnemy==1 && (((*sb1).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*sb1).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*sb1).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*sb1).posY>=(*e).posY))){
 
         e->drawEnemy=0;
-        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posX=randomNumber(4,66); // The x-position is generated randomly within the game window
         e->posY=2 << FIX14_SHIFT;
         sb1->drawBullet=0;
         temp = 1;
@@ -399,7 +437,7 @@ uint32_t isEnemyThreeHit(struct enemy_t *e, struct bullet_t *b1, struct bullet_t
      } else if ((*e).drawEnemy==1 && (((*sb2).posX<=(*e).posX+(1<<FIX14_SHIFT)) && ((*sb2).posX>=(*e).posX-(1<<FIX14_SHIFT)) && ((*sb2).posY<=(*e).posY+(1<<FIX14_SHIFT)) && ((*sb2).posY>=(*e).posY))){
 
         e->drawEnemy=0;
-        e->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        e->posX=randomNumber(4,66); // The x-position is generated randomly within the game window
         e->posY=2 << FIX14_SHIFT;
         sb2->drawBullet=0;
         temp = 1;
@@ -419,7 +457,7 @@ uint32_t isHeartHit(struct enemy_t *h, struct bullet_t *b1, struct bullet_t *b2,
     if ((*h).drawEnemy==1 && (((*b1).posX<=(*h).posX+(2<<FIX14_SHIFT) && ((*b1).posX>=(*h).posX-(1<<FIX14_SHIFT)) && ((*b1).posY<=(*h).posY+(1<<FIX14_SHIFT)) && ((*b1).posY>=(*h).posY)))){
 
         h->drawEnemy=0;
-        h->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        h->posX=randomNumber(4,66); // The x-position is generated randomly within the game window
         h->posY=2 << FIX14_SHIFT;
         b1->drawBullet=0;
         temp = 1;
@@ -427,7 +465,7 @@ uint32_t isHeartHit(struct enemy_t *h, struct bullet_t *b1, struct bullet_t *b2,
      } else if ((*h).drawEnemy==1 && (((*b2).posX<=(*h).posX+(2<<FIX14_SHIFT)) && ((*b2).posX>=(*h).posX-(1<<FIX14_SHIFT)) && ((*b2).posY<=(*h).posY+(1<<FIX14_SHIFT)) && ((*b2).posY>=(*h).posY))){
 
         h->drawEnemy=0;
-        h->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        h->posX=randomNumber(4,66); // The x-position is generated randomly within the game window
         h->posY=2 << FIX14_SHIFT;
         b2->drawBullet=0;
         temp = 1;
@@ -435,7 +473,7 @@ uint32_t isHeartHit(struct enemy_t *h, struct bullet_t *b1, struct bullet_t *b2,
      } else if ((*h).drawEnemy==1 && (((*b3).posX<=(*h).posX+(2<<FIX14_SHIFT)) && ((*b3).posX>=(*h).posX-(1<<FIX14_SHIFT)) && ((*b3).posY<=(*h).posY+(1<<FIX14_SHIFT)) && ((*b3).posY>=(*h).posY))){
 
         h->drawEnemy=0;
-        h->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        h->posX=randomNumber(4,66); // The x-position is generated randomly within the game window
         h->posY=2 << FIX14_SHIFT;
         b3->drawBullet=0;
         temp = 1;
@@ -443,7 +481,7 @@ uint32_t isHeartHit(struct enemy_t *h, struct bullet_t *b1, struct bullet_t *b2,
      } else if ((*h).drawEnemy==1 && (((*b4).posX<=(*h).posX+(2<<FIX14_SHIFT)) && ((*b4).posX>=(*h).posX-(1<<FIX14_SHIFT)) && ((*b4).posY<=(*h).posY+(1<<FIX14_SHIFT)) && ((*b4).posY>=(*h).posY))){
 
         h->drawEnemy=0;
-        h->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        h->posX=randomNumber(4,66); // The x-position is generated randomly within the game window
         h->posY=2 << FIX14_SHIFT;
         b4->drawBullet=0;
         temp = 1;
@@ -451,7 +489,7 @@ uint32_t isHeartHit(struct enemy_t *h, struct bullet_t *b1, struct bullet_t *b2,
      } else if ((*h).drawEnemy==1 && (((*b5).posX<=(*h).posX+(2<<FIX14_SHIFT)) && ((*b5).posX>=(*h).posX-(1<<FIX14_SHIFT)) && ((*b5).posY<=(*h).posY+(1<<FIX14_SHIFT)) && ((*b5).posY>=(*h).posY))){
 
         h->drawEnemy=0;
-        h->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        h->posX=randomNumber(4,66); // The x-position is generated randomly within the game window
         h->posY=2 << FIX14_SHIFT;
         b5->drawBullet=0;
         temp = 1;
@@ -459,7 +497,7 @@ uint32_t isHeartHit(struct enemy_t *h, struct bullet_t *b1, struct bullet_t *b2,
      } else if ((*h).drawEnemy==1 && (((*sb1).posX<=(*h).posX+(2<<FIX14_SHIFT)) && ((*sb1).posX>=(*h).posX-(1<<FIX14_SHIFT)) && ((*sb1).posY<=(*h).posY+(1<<FIX14_SHIFT)) && ((*sb1).posY>=(*h).posY))){
 
         h->drawEnemy=0;
-        h->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        h->posX=randomNumber(4,66); // The x-position is generated randomly within the game window
         h->posY=2 << FIX14_SHIFT;
         sb1->drawBullet=0;
         temp = 1;
@@ -467,7 +505,7 @@ uint32_t isHeartHit(struct enemy_t *h, struct bullet_t *b1, struct bullet_t *b2,
      } else if ((*h).drawEnemy==1 && (((*sb2).posX<=(*h).posX+(2<<FIX14_SHIFT)) && ((*sb2).posX>=(*h).posX-(1<<FIX14_SHIFT)) && ((*sb2).posY<=(*h).posY+(1<<FIX14_SHIFT)) && ((*sb2).posY>=(*h).posY))){
 
         h->drawEnemy=0;
-        h->posX=randomNumber(4,66); // the x-position is generated randomly within the game window
+        h->posX=randomNumber(4,66); // The x-position is generated randomly within the game window
         h->posY=2 << FIX14_SHIFT;
         sb2->drawBullet=0;
         temp = 1;
@@ -479,14 +517,14 @@ uint32_t isHeartHit(struct enemy_t *h, struct bullet_t *b1, struct bullet_t *b2,
 }
 
 /*
-This function checks whether the player's spaceship has been hit or not and returns 1 if there's a hit
+This function checks whether the player's spaceship has been hit or not
+or if an enemy has reached the planet. It returns 1 if one of these cases occur.
 */
 uint32_t isSpaceshipHit(struct spaceship_t *s,struct enemy_t *e1,struct enemy_t *e2, struct enemy_t *e3,struct enemy_t *e4,struct enemy_t *e5,struct enemy_t *e6,struct enemy_t *e7,struct enemy_t *e8,struct enemy_t *e9,struct bullet_t *eb1,struct bullet_t *eb2,struct bullet_t *eb3){
 
     uint32_t temp = 0;
-/*
-Player is hit by enemy bullets
-*/
+
+    // Check if player has been hit by bullet
     if ( (*eb1).drawBullet == 1 && ( ( (*eb1).posX <= (*s).posX+(2<<FIX14_SHIFT) && ( (*eb1).posX>=(*s).posX-(2<<FIX14_SHIFT) ) && ((*eb1).posY <= (*s).posY+(1<<FIX14_SHIFT)) && ((*eb1).posY >= (*s).posY-(1<<FIX14_SHIFT) ) ) ) ){
         eb1->drawBullet = 0;
         temp = 1;
@@ -498,9 +536,8 @@ Player is hit by enemy bullets
     } else if ( (*eb3).drawBullet == 1 && ( ( (*eb3).posX <= (*s).posX+(2<<FIX14_SHIFT) && ( (*eb3).posX>=(*s).posX-(2<<FIX14_SHIFT) ) && ((*eb3).posY <= (*s).posY+(1<<FIX14_SHIFT)) && ((*eb3).posY >= (*s).posY-(1<<FIX14_SHIFT) ) ) ) ){
         eb3->drawBullet = 0;
         temp = 1;
-/*
-Enemy players reaches bottom of the screen
-*/
+
+    // Check if enemy players reach bottom of the screen
     } if ( (*e1).drawEnemy == 1 && (*e1).posY >= (38<<FIX14_SHIFT)){
         e1->drawEnemy = 0;
         temp = 1;

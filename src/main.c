@@ -11,7 +11,7 @@
 
 // set flags
 char temp; // input flags
-int time = 0, hits = 0, difficulty, playerHits, color; // time flag, damage flag and game state flag
+int time = 0, hits = 0, difficulty, playerHits, color; // Time flag, game state flag, damage flag
 uint32_t velBullet, velEnemy; // Velocity of the bullets/enemies (determined by shifting 1 tis number of places to the left)
 uint32_t enemyOneKilled=0; // Kill-rate of enemy 1
 uint32_t enemyTwoKilled=0; // Kill-rate of enemy 2
@@ -44,14 +44,16 @@ struct enemy_t heart; // Power-up
 
 int main(void)
 {
-    //uart_init( 9600 );
     uart_init(115200);
 
     difficulty=2;
 
+    // Initialize LED
+    initializeLED();
+
     // Initialize joystick
     initializeJoystick();
-    
+
     while(difficulty != 0){ // exit when quit is pressed
 
             // Main menu
@@ -64,20 +66,7 @@ int main(void)
             playerHits = 0;
 
 
-    while( difficulty != 0 && playerHits < 3 ){ // when game is over, return
-    /*
-    Game Start
-    */
-
-        /*
-        Initialize the game
-        */
-        drawGameWindow(0);
-        setTimer();
-        initCounter(&counter);
-        velBullet = 11 + difficulty; // Velocity of the bullets (determined by shifting 1 tis number of places to the left)
-        velEnemy = 10 + difficulty; // Velocity of the enemies (determined by shifting 1 tis number of places to the left)
-
+        while( difficulty != 0 && playerHits < 3 ){ // Game start, return when game is over
 
         // Initialize the player
         initSpaceship(&ship);
@@ -107,176 +96,183 @@ int main(void)
         initEnemy(&shield3);
         initEnemy(&heart); // Power-up
 
-        // Initialize LED
-        initializeLED();
+        // Initialize the game
+        drawGameWindow(0);
+        setTimer();
+        initCounter(&counter);
+        velBullet = 11 + difficulty; // Velocity of the bullets (determined by shifting 1 tis number of places to the left)
+        velEnemy = 10 + difficulty; // Velocity of the enemies (determined by shifting 1 tis number of places to the left)
 
-    while(playerHits<3 && difficulty !=0){ // while not dead
+
+            while(playerHits<3 && difficulty !=0){ // while not dead
 
 
-       //Input
-        time = counter.time << FIX14_SHIFT;
+                //Input
+                time = counter.time << FIX14_SHIFT;
 
-        if ( readJoystick() != 0 ){ // read joystick input
-            temp = readJoystick();
-        } else {
-        temp = uart_get_char(); // get player keyboard input a = 97, d = 100, space = 32
+                if ( readJoystick() != 0 ){ // Read joystick input
+                    temp = readJoystick();
+                } else {
+                    temp = uart_get_char(); // Get player keyboard input a = 97, d = 100, space = 32
+                }
+                uart_clear();
+
+
+                // Spawn enemies in intervals
+                if ( counter.time % 900 > 0 && counter.time % 900 < 12 )
+                    grunt1.drawEnemy = 1;
+                else if ( counter.time % 900 > 100 && counter.time % 900 < 112 )
+                    grunt2.drawEnemy = 1;
+                else if ( counter.time % 900 > 200 && counter.time % 900 < 212 )
+                    fighter1.drawEnemy = 1;
+                else if ( counter.time % 900 > 300 && counter.time % 900 < 312 )
+                    shield1.drawEnemy = 1;
+                else if ( counter.time % 900 > 400 && counter.time % 900 < 412 )
+                    grunt3.drawEnemy = 1;
+                else if ( counter.time % 900 > 500 && counter.time % 900 < 512 )
+                    shield2.drawEnemy = 1;
+                else if ( counter.time % 900 > 600 && counter.time % 900 < 612 )
+                    fighter2.drawEnemy = 1;
+                else if ( counter.time % 900 > 700 && counter.time % 900 < 712 )
+                    fighter3.drawEnemy = 1;
+                else if ( counter.time % 900 > 800 && counter.time % 900 < 812 )
+                    shield3.drawEnemy = 1;
+
+                // Check for boss-key
+                bossKey(temp);
+
+                // Calculation
+                if (b1.drawBullet == 0 ){
+                    updateSpaceshipBulletPosition(&b1, &ship, temp, velBullet);
+
+                }else if (b2.drawBullet == 0 ){
+                    updateSpaceshipBulletPosition(&b2, &ship, temp, velBullet);
+
+                }else if (b3.drawBullet == 0 ){
+                    updateSpaceshipBulletPosition(&b3, &ship, temp, velBullet);
+
+                }else if (b4.drawBullet == 0 ){
+                    updateSpaceshipBulletPosition(&b4, &ship, temp, velBullet);
+
+                }else if (b5.drawBullet == 0 ){
+                    updateSpaceshipBulletPosition(&b5, &ship, temp, velBullet);
+                }
+                if (sb1.drawBullet == 0){
+                    updateSpaceshipShieldBulletPosition(&sb1, &ship, temp, velBullet);
+
+                } else if (sb2.drawBullet == 0){
+                    updateSpaceshipShieldBulletPosition(&sb2, &ship, temp, velBullet);
+                }
+
+                if ( temp == 'a' || temp == 'A' || temp == 'd' || temp == 'D' || temp == 4 || temp == 8 )
+                    updateSpaceshipPosition(&ship, temp);
+
+                // Update the positions of the objects
+                updateSpaceshipBulletPosition(&b1, &ship, 0, velBullet);
+                updateSpaceshipBulletPosition(&b2, &ship, 0, velBullet);
+                updateSpaceshipBulletPosition(&b3, &ship, 0, velBullet);
+                updateSpaceshipBulletPosition(&b4, &ship, 0, velBullet);
+                updateSpaceshipBulletPosition(&b5, &ship, 0, velBullet);
+                updateSpaceshipShieldBulletPosition(&sb1, &ship, 0, velBullet);
+                updateSpaceshipShieldBulletPosition(&sb2, &ship, 0, velBullet);
+
+                updateEnemyBulletPosition(&eb1,&fighter1,velBullet);
+                updateEnemyBulletPosition(&eb2,&fighter2,velBullet);
+                updateEnemyBulletPosition(&eb3,&fighter3,velBullet);
+
+                updateEnemyPosition(&fighter1, velEnemy);
+                updateEnemyPosition(&fighter2, velEnemy);
+                updateEnemyPosition(&fighter3, velEnemy);
+                updateEnemyPosition(&grunt1, velEnemy);
+                updateEnemyPosition(&grunt2, velEnemy);
+                updateEnemyPosition(&grunt3, velEnemy);
+                updateEnemyPosition(&shield1, velEnemy);
+                updateEnemyPosition(&shield2, velEnemy);
+                updateEnemyPosition(&shield3, velEnemy);
+
+                updateHeartPosition(&heart, velEnemy, playerHits);
+
+                // Kill-rates
+                enemyOneKilled += isEnemyOneHit(&fighter1,&b1,&b2,&b3,&b4,&b5,&sb1,&sb2);
+                enemyOneKilled += isEnemyOneHit(&fighter2,&b1,&b2,&b3,&b4,&b5,&sb1,&sb2);
+                enemyOneKilled += isEnemyOneHit(&fighter3,&b1,&b2,&b3,&b4,&b5,&sb1,&sb2);
+                enemyTwoKilled += isEnemyTwoHit(&grunt1,&b1,&b2,&b3,&b4,&b5,&sb1,&sb2);
+                enemyTwoKilled += isEnemyTwoHit(&grunt2,&b1,&b2,&b3,&b4,&b5,&sb1,&sb2);
+                enemyTwoKilled += isEnemyTwoHit(&grunt3,&b1,&b2,&b3,&b4,&b5,&sb1,&sb2);
+                enemyThreeKilled += isEnemyThreeHit(&shield1,&b1,&b2,&b3,&b4,&b5,&sb1,&sb2,&eb1,&eb2,&eb3);
+                enemyThreeKilled += isEnemyThreeHit(&shield2,&b1,&b2,&b3,&b4,&b5,&sb1,&sb2,&eb1,&eb2,&eb3);
+                enemyThreeKilled += isEnemyThreeHit(&shield3,&b1,&b2,&b3,&b4,&b5,&sb1,&sb2,&eb1,&eb2,&eb3);
+
+                playerHits += isSpaceshipHit(&ship,&fighter1,&fighter2,&fighter3,&grunt1,&grunt2,&grunt3,&shield1,&shield2,&shield3,&eb1,&eb2,&eb3);
+                playerHits -= isHeartHit(&heart,&b1,&b2,&b3,&b4,&b5,&sb1,&sb2);
+
+                // Draw the objects
+                drawSpaceship(&ship);
+                drawSpaceshipBullet(&b1);
+                drawSpaceshipBullet(&b2);
+                drawSpaceshipBullet(&b3);
+                drawSpaceshipBullet(&b4);
+                drawSpaceshipBullet(&b5);
+                drawSpaceshipShieldBullet(&sb1);
+                drawSpaceshipShieldBullet(&sb2);
+
+                drawEnemyOne(&fighter1);
+                drawEnemyOne(&fighter2);
+                drawEnemyOne(&fighter3);
+                drawEnemyTwo(&grunt1);
+                drawEnemyTwo(&grunt2);
+                drawEnemyTwo(&grunt3);
+                drawEnemyThree(&shield1);
+                drawEnemyThree(&shield2);
+                drawEnemyThree(&shield3);
+
+                drawHeart(&heart);
+
+                drawEnemyBullet(&eb1);
+                drawEnemyBullet(&eb2);
+                drawEnemyBullet(&eb3);
+
+
+                // Print kill-rates
+                gotoxy(74,25);
+                printf("%d", enemyOneKilled);
+                gotoxy(74,30);
+                printf("%d", enemyTwoKilled);
+                gotoxy(74,36);
+                printf("%d", enemyThreeKilled);
+
+                getHealth(playerHits);
+                setLED(playerHits);
+
+                // Wait for next tick
+                if ( time < 1000 << FIX14_SHIFT ){
+                    while ( time > ( (counter.time - (6 >> 1) ) << FIX14_SHIFT) );
+                } else if ( time < 2000 << FIX14_SHIFT ) {
+                    while ( time > ( (counter.time - (5 >> 1) ) << FIX14_SHIFT) );
+                } else if ( time < 3000 << FIX14_SHIFT ) {
+                    while ( time > ( (counter.time - (4 >> 1) ) << FIX14_SHIFT) );
+                } else if ( time < 4000 << FIX14_SHIFT ) {
+                    while ( time > ( (counter.time - (3 >> 1) ) << FIX14_SHIFT) );
+                } else if ( time < 5000 << FIX14_SHIFT ) {
+                    while ( time > ( (counter.time - (2 >> 1) ) << FIX14_SHIFT) );
+                }
+
+            }
+
+            // Game over
+            gameOver(enemyOneKilled,enemyTwoKilled,enemyThreeKilled);
+            enemyOneKilled=0;
+            enemyTwoKilled=0;
+            enemyThreeKilled=0;
+            difficulty=4; // return to main menu
+
         }
-        uart_clear();
-
-
-        //Spawn enemies in intervals
-        if ( counter.time % 900 > 0 && counter.time % 900 < 12 )
-            grunt1.drawEnemy = 1;
-        else if ( counter.time % 900 > 100 && counter.time % 900 < 112 )
-            grunt2.drawEnemy = 1;
-        else if ( counter.time % 900 > 200 && counter.time % 900 < 212 )
-            fighter1.drawEnemy = 1;
-        else if ( counter.time % 900 > 300 && counter.time % 900 < 312 )
-            shield1.drawEnemy = 1;
-        else if ( counter.time % 900 > 400 && counter.time % 900 < 412 )
-            grunt3.drawEnemy = 1;
-        else if ( counter.time % 900 > 500 && counter.time % 900 < 512 )
-            shield2.drawEnemy = 1;
-        else if ( counter.time % 900 > 600 && counter.time % 900 < 612 )
-            fighter2.drawEnemy = 1;
-        else if ( counter.time % 900 > 700 && counter.time % 900 < 712 )
-            fighter3.drawEnemy = 1;
-        else if ( counter.time % 900 > 800 && counter.time % 900 < 812 )
-            shield3.drawEnemy = 1;
-
-        // Check for boss-key
-        bossKey(temp);
-
-        // Calculation
-        if (b1.drawBullet == 0 ){
-            updateSpaceshipBulletPosition(&b1, &ship, temp, velBullet);
-
-        }else if (b2.drawBullet == 0 ){
-            updateSpaceshipBulletPosition(&b2, &ship, temp, velBullet);
-
-        }else if (b3.drawBullet == 0 ){
-            updateSpaceshipBulletPosition(&b3, &ship, temp, velBullet);
-
-        }else if (b4.drawBullet == 0 ){
-            updateSpaceshipBulletPosition(&b4, &ship, temp, velBullet);
-
-        }else if (b5.drawBullet == 0 ){
-            updateSpaceshipBulletPosition(&b5, &ship, temp, velBullet);
-        }
-        if (sb1.drawBullet == 0){
-            updateSpaceshipShieldBulletPosition(&sb1, &ship, temp, velBullet);
-
-        } else if (sb2.drawBullet == 0){
-            updateSpaceshipShieldBulletPosition(&sb2, &ship, temp, velBullet);
-        }
-
-        if ( temp == 'a' || temp == 'A' || temp == 'd' || temp == 'D' || temp == 4 || temp == 8 )
-            updateSpaceshipPosition(&ship, temp);
-
-        updateSpaceshipBulletPosition(&b1, &ship, 0, velBullet);
-        updateSpaceshipBulletPosition(&b2, &ship, 0, velBullet);
-        updateSpaceshipBulletPosition(&b3, &ship, 0, velBullet);
-        updateSpaceshipBulletPosition(&b4, &ship, 0, velBullet);
-        updateSpaceshipBulletPosition(&b5, &ship, 0, velBullet);
-        updateSpaceshipShieldBulletPosition(&sb1, &ship, 0, velBullet);
-        updateSpaceshipShieldBulletPosition(&sb2, &ship, 0, velBullet);
-
-        updateEnemyBulletPosition(&eb1,&fighter1,velBullet);
-        updateEnemyBulletPosition(&eb2,&fighter2,velBullet);
-        updateEnemyBulletPosition(&eb3,&fighter3,velBullet);
-
-        updateEnemyPosition(&fighter1, velEnemy);
-        updateEnemyPosition(&fighter2, velEnemy);
-        updateEnemyPosition(&fighter3, velEnemy);
-        updateEnemyPosition(&grunt1, velEnemy);
-        updateEnemyPosition(&grunt2, velEnemy);
-        updateEnemyPosition(&grunt3, velEnemy);
-        updateEnemyPosition(&shield1, velEnemy);
-        updateEnemyPosition(&shield2, velEnemy);
-        updateEnemyPosition(&shield3, velEnemy);
-
-        updateHeartPosition(&heart, velEnemy, playerHits);
-
-        // Kill-rates
-        enemyOneKilled += isEnemyOneHit(&fighter1,&b1,&b2,&b3,&b4,&b5,&sb1,&sb2);
-        enemyOneKilled += isEnemyOneHit(&fighter2,&b1,&b2,&b3,&b4,&b5,&sb1,&sb2);
-        enemyOneKilled += isEnemyOneHit(&fighter3,&b1,&b2,&b3,&b4,&b5,&sb1,&sb2);
-        enemyTwoKilled += isEnemyTwoHit(&grunt1,&b1,&b2,&b3,&b4,&b5,&sb1,&sb2);
-        enemyTwoKilled += isEnemyTwoHit(&grunt2,&b1,&b2,&b3,&b4,&b5,&sb1,&sb2);
-        enemyTwoKilled += isEnemyTwoHit(&grunt3,&b1,&b2,&b3,&b4,&b5,&sb1,&sb2);
-        enemyThreeKilled += isEnemyThreeHit(&shield1,&b1,&b2,&b3,&b4,&b5,&sb1,&sb2);
-        enemyThreeKilled += isEnemyThreeHit(&shield2,&b1,&b2,&b3,&b4,&b5,&sb1,&sb2);
-        enemyThreeKilled += isEnemyThreeHit(&shield3,&b1,&b2,&b3,&b4,&b5,&sb1,&sb2);
-
-        playerHits += isSpaceshipHit(&ship,&fighter1,&fighter2,&fighter3,&grunt1,&grunt2,&grunt3,&shield1,&shield2,&shield3,&eb1,&eb2,&eb3);
-        playerHits -= isHeartHit(&heart,&b1,&b2,&b3,&b4,&b5,&sb1,&sb2);
-
-        // Drawing
-        drawSpaceship(&ship);
-        drawSpaceshipBullet(&b1);
-        drawSpaceshipBullet(&b2);
-        drawSpaceshipBullet(&b3);
-        drawSpaceshipBullet(&b4);
-        drawSpaceshipBullet(&b5);
-        drawSpaceshipShieldBullet(&sb1);
-        drawSpaceshipShieldBullet(&sb2);
-
-        drawEnemyOne(&fighter1);
-        drawEnemyOne(&fighter2);
-        drawEnemyOne(&fighter3);
-        drawEnemyTwo(&grunt1);
-        drawEnemyTwo(&grunt2);
-        drawEnemyTwo(&grunt3);
-        drawEnemyThree(&shield1);
-        drawEnemyThree(&shield2);
-        drawEnemyThree(&shield3);
-
-        drawHeart(&heart);
-
-        drawEnemyBullet(&eb1);
-        drawEnemyBullet(&eb2);
-        drawEnemyBullet(&eb3);
-
-
-        // Print kill-rates
-        gotoxy(74,25);
-        printf("%d", enemyOneKilled);
-        gotoxy(74,30);
-        printf("%d", enemyTwoKilled);
-        gotoxy(74,36);
-        printf("%d", enemyThreeKilled);
-
-        getHealth(playerHits);
-        setLED(playerHits);
-
-        // Wait for next tick
-        if ( time < 1000 << FIX14_SHIFT ){
-            while ( time > ( (counter.time - (6 >> 1) ) << FIX14_SHIFT) );
-        } else if ( time < 2000 << FIX14_SHIFT ) {
-            while ( time > ( (counter.time - (5 >> 1) ) << FIX14_SHIFT) );
-        } else if ( time < 3000 << FIX14_SHIFT ) {
-            while ( time > ( (counter.time - (4 >> 1) ) << FIX14_SHIFT) );
-        } else if ( time < 4000 << FIX14_SHIFT ) {
-            while ( time > ( (counter.time - (3 >> 1) ) << FIX14_SHIFT) );
-        } else if ( time < 5000 << FIX14_SHIFT ) {
-            while ( time > ( (counter.time - (2 >> 1) ) << FIX14_SHIFT) );
-        }
-
-    }
-
-        gameOver(enemyOneKilled,enemyTwoKilled,enemyThreeKilled);
-        enemyOneKilled=0;
-        enemyTwoKilled=0;
-        enemyThreeKilled=0;
-        difficulty=4; // return to main menu
-
-    }
     }
 
     clrscr();
     color = 0;
-      while(uart_get_count() < 1){
-        // create blinking text
+      while(uart_get_count() < 1 && readJoystick() == 0){
+        // Create blinking text
         time = counter.time << FIX14_SHIFT;
         if(color == 1){
             fgcolor(2);
@@ -285,9 +281,8 @@ int main(void)
             fgcolor(1);
             color = 1;
         }
-        /*
-        Thank you for playing screen
-        */
+
+        //Thank you for playing screen
         thankYou();
         while(time > counter.time - (1 << FIX14_SHIFT) ){}
     }
