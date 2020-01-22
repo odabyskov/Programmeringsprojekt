@@ -5,7 +5,6 @@
 #define _LED_H_
 
 void initializeLED();
-
 void setLED(uint8_t ledhits);
 
 #endif

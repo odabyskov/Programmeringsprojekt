@@ -4,7 +4,9 @@
 #ifndef _TIMING_H_
 #define _TIMING_H_
 
-
+/*
+This struct is used to control the timing of the game
+*/
 struct counter_t{
 
     uint32_t time;

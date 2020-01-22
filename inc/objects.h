@@ -10,19 +10,22 @@
 
 /*
 *
+*
+*
 * The structures defined below represents the objects in the game
-* (enemies, spaceship, bullets etc.).
+* (enemies, spaceship, bullets, power-up).
+*
+*
 *
 */
-
 
 /*
 This struct represents the player's spaceship. posX and posY are the center coordinates of the spaceship
 */
 struct spaceship_t {
-    uint32_t prevPosX; // previous position
+    uint32_t prevPosX; // Previous position
     uint32_t prevPosY;
-    uint32_t posX; // current position
+    uint32_t posX; // Current position
     uint32_t posY;
 };
 
@@ -32,11 +35,11 @@ If drawBullet is 0, the bullet is not drawn. If drawBullet is equal to
 or greater than 1, the bullet is drawn.
 */
 struct bullet_t {
-    uint32_t velX; // velocity
+    uint32_t velX; // Velocity
     uint32_t velY;
-    uint32_t prevPosX; // previous position
+    uint32_t prevPosX; // Previous position
     uint32_t prevPosY;
-    uint32_t posX; // current position
+    uint32_t posX; // Current position
     uint32_t posY;
     uint32_t timeAtPosition;
     uint32_t drawBullet;
@@ -46,15 +49,14 @@ struct bullet_t {
 The following struct represent the enemies and powerup.
 posX and posY are the center coordinates of the enemy.
 */
-
-struct enemy_t { // This enemy shoots bullets
-    uint32_t prevPosX; // previous position
+struct enemy_t {
+    uint32_t prevPosX; // Previous position
     uint32_t prevPosY;
-    uint32_t posX; // current position
+    uint32_t posX; // Current position
     uint32_t posY;
     uint32_t timeAtPosition;
-    uint32_t drawEnemy;
-    uint32_t shoot;
+    uint32_t drawEnemy; // Should the enemy be drawn
+    uint32_t shoot; // Should the enemy shoot
 };
 
 

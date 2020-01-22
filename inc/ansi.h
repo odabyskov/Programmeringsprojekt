@@ -19,6 +19,22 @@ void deleteSymbol(uint8_t x, uint8_t y);
 void drawBox(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2);
 void drawWindow(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, char* string_p, uint8_t style);
 
+
+// Functions to draw the main menu
+uint8_t mainmenu();
+void drawTitle(uint8_t type);
+void drawmenuStart();
+void drawmenuHelp();
+void drawmenuCredits();
+void drawmenuQuit();
+void getHelp();
+void getCredits();
+uint8_t getDifficulty();
+void drawmenuEasy();
+void drawmenuNormal();
+void drawmenuHard();
+void drawmenuMainMenu();
+
 // Functions to draw objects on Putty
 void drawSpaceship(struct spaceship_t *spaceship);
 void drawSpaceshipBullet(struct bullet_t *bullet);
@@ -29,22 +45,12 @@ void drawEnemyTwo(struct enemy_t *enemy);
 void drawEnemyThree(struct enemy_t *enemy);
 void drawHeart(struct enemy_t *heart);
 
-uint8_t mainmenu(); // enter the main menu
-void drawTitle(uint8_t type); // draw title
-void drawmenuStart(); // update start menu when selected
-void drawmenuHelp(); //  update help menu when selected
-void drawmenuCredits(); // update credit menu when selected
-void drawmenuQuit(); // update quit menu when selected
-void getHelp(); //enter the help menu
-void getCredits(); //enter the credits menu
-uint8_t getDifficulty(); // Enter the difficulty menu
-void drawmenuEasy(); // Draw the Easy box
-void drawmenuNormal(); // Draw the Normal box
-void drawmenuHard(); // Draw the Hard box
-void drawmenuMainMenu(); // Draw the main menu box
-
-void gameOver();
+// Functions to draw game screens
+void gameOver(uint32_t enemyOneKilled, uint32_t enemyTwoKilled, uint32_t enemyThreeKilled);
 void drawGameWindow(int8_t playerHits);
 void getHealth(int8_t hits);
+void bossKey(char temp);
+void thankYou();
+
 
 #endif
